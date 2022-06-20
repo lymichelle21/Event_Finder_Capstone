@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.parse.SignUpCallback;
 
 public class SignUpActivity extends AppCompatActivity {
     @Override

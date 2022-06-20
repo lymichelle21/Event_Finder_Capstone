@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
+
+        checkIfLoggedIn();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +69,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void checkIfLoggedIn() {
+        if (ParseUser.getCurrentUser() != null) {
+            goMainActivity();
+        }
+    }
 
     private void goMainActivity() {
         Intent i = new Intent(this, MainActivity.class);
