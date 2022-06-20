@@ -12,7 +12,7 @@
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="140dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/username"
@@ -24,35 +24,11 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="200dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/etZip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="320dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/zip_code"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/etName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/name"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:minHeight="48dp"
         tools:ignore="MissingConstraints" />
 
@@ -60,9 +36,9 @@
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etZip"
+        android:layout_below="@+id/etPassword"
         android:layout_marginStart="135dp"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="43dp"
         android:text="@string/sign_up" />
 
     <TextView
