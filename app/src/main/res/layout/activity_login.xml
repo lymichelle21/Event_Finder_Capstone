@@ -51,9 +51,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnLogin"
-        android:layout_marginStart="120dp"
+        android:layout_marginStart="116dp"
         android:layout_marginTop="61dp"
-        android:text="New to Event Finder?"
+        android:text="@string/new_to_event_finder"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="New to Event Finder?" />
 
@@ -76,7 +76,7 @@
         tools:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivLogo"
