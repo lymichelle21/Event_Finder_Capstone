@@ -53,7 +53,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-        Toast.makeText(LoginActivity.this, "Login Test!", Toast.LENGTH_LONG).show();
-        return;
+        String username = etUsername.getText().toString();
+        String password = etPassword.getText().toString();
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e != null) {
+                    Toast.makeText(LoginActivity.this, "Error: Login failed", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                goMainActivity();
+                Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    private void goMainActivity() {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
     }
 }
