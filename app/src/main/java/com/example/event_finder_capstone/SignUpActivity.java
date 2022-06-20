@@ -43,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
         ParseUser user = new ParseUser();
         user.setUsername(etUsername.getText().toString());
         user.setPassword(etPassword.getText().toString());
+        //TODO: See what info is needed for location in EventBrite API
 
         user.signUpInBackground(new SignUpCallback() {
             @Override
