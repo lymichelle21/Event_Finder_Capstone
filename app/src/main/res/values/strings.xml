@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Event_Finder_Capstone</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="event_finder">Event Finder</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="name">Name</string>
+    <string name="new_to_event_finder">New to Event Finder?</string>
+    <string name="join_a_community_of_event_seekers">Join a community of event seekers!</string>
 </resources>
