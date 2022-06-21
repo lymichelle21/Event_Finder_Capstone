@@ -3,13 +3,6 @@ package com.example.event_finder_capstone;
 import android.content.Context;
 
 import com.codepath.oauth.OAuthBaseClient;
-import android.content.Context;
-
-import androidx.annotation.Nullable;
-
-import com.codepath.asynchttpclient.RequestParams;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.github.scribejava.core.builder.api.BaseApi;
 
 public class EventClient extends OAuthBaseClient {
     //public static final BaseApi REST_API_INSTANCE = EventBriteApi.instance;
@@ -30,5 +23,4 @@ public class EventClient extends OAuthBaseClient {
                 String.format(REST_CALLBACK_URL_TEMPLATE, context.getString(R.string.intent_host),
                         context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
     }
-
 }

@@ -9,4 +9,6 @@
     <string name="name">Name</string>
     <string name="new_to_event_finder">New to Event Finder?</string>
     <string name="join_a_community_of_event_seekers">Join a community of event seekers!</string>
+    <string name="intent_scheme">oauth</string>
+    <string name="intent_host">events</string>
 </resources>
