@@ -15,10 +15,10 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "APP_ID", apikeyProperties['APP_ID'])
-        buildConfigField("String", "CLIENT_KEY", apikeyProperties['CLIENT_KEY'])
-        buildConfigField("String", "CONSUMER_KEY", apikeyProperties['CONSUMER_KEY'])
-        buildConfigField("String", "CONSUMER_SECRET", apikeyProperties['CONSUMER_SECRET'])
+        buildConfigField("String", "PARSE_APP_ID", apikeyProperties['PARSE_APP_ID'])
+        buildConfigField("String", "PARSE_CLIENT_KEY", apikeyProperties['PARSE_CLIENT_KEY'])
+        buildConfigField("String", "YELP_CLIENT_ID", apikeyProperties['YELP_CLIENT_ID'])
+        buildConfigField("String", "YELP_KEY", apikeyProperties['YELP_KEY'])
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -54,4 +54,5 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.codepath.libraries:asynchttpclient:2.2.0'
 }
