@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.event_finder_capstone.models.Event;
 
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,6 +30,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getEvents() {
-        Log.d(TAG, "Hello!");
+        Call<Event> call = RetrofitClient.getInstance().getYelpAPI().getEvents();
+        call.enqueue(new Callback<Event>() {
+            @Override
+            public void onResponse(Call<Event> call, Response<Event> response) {
+                return;
+            }
+            @Override
+            public void onFailure(Call<Event> call,  Throwable e) {
+                Toast.makeText(getApplicationContext(), "An error has happened", Toast.LENGTH_LONG).show();
+            }
+
+        });
     }
 }
