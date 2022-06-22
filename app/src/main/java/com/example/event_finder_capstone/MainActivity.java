@@ -17,6 +17,7 @@ import okhttp3.Headers;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main Activity";
+    public static final String YELP_API_BASE_URL = "https://api.yelp.com/v3/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
