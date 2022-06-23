@@ -12,8 +12,6 @@ import com.example.event_finder_capstone.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -76,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
             Event event = new Event();
             event.setName(temp.get("name").getAsString());
             event.setDescription(temp.get("description").getAsString());
+            event.setImageUrl(temp.get("image_url").getAsString());
+            event.setTimeStart(temp.get("time_start").getAsString());
             res.add(event);
         }
         return res;

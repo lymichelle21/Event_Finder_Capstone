@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.event_finder_capstone.models.Event;
 
 import java.util.List;
@@ -47,17 +48,21 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         ImageView ivEventPhoto;
         TextView tvEventTitle;
         TextView tvEventDescription;
+        TextView tvDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivEventPhoto = itemView.findViewById(R.id.ivEventPhoto);
             tvEventTitle = itemView.findViewById(R.id.tvEventTitle);
             tvEventDescription = itemView.findViewById(R.id.tvEventDescription);
+            tvDate = itemView.findViewById(R.id.tvDate);
         }
 
         public void bind(Event event) {
             tvEventTitle.setText(event.getName());
             tvEventDescription.setText(event.getDescription());
+            tvDate.setText((event.getTimeStart()));
+            Glide.with(context).load(event.getImageUrl()).into(ivEventPhoto);
         }
     }
 }
