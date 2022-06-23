@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAPIEvents() {
-        RetrofitClient.getInstance().getYelpAPI().getEvents("en_US", "10", "94025").enqueue(new Callback<JsonObject>() {
+        RetrofitClient.getInstance().getYelpAPI().getEvents("en_US", "10", "01854").enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {

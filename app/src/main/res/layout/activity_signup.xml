@@ -12,7 +12,8 @@
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
+        android:layout_below="@+id/tvSignUpQuestion"
+        android:layout_marginTop="26dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/username"
@@ -24,7 +25,8 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_below="@+id/etUsername"
+        android:layout_marginTop="12dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
@@ -36,9 +38,9 @@
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword"
+        android:layout_below="@+id/etZip"
         android:layout_marginStart="135dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="44dp"
         android:text="@string/sign_up" />
 
     <TextView
@@ -50,5 +52,17 @@
         android:text="@string/join_a_community_of_event_seekers"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="Join a community of event seekers!" />
+
+    <EditText
+        android:id="@+id/etZip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword"
+        android:layout_marginTop="12dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/zip_code"
+        android:inputType="textPersonName"
+        android:minHeight="48dp" />
 
 </RelativeLayout>

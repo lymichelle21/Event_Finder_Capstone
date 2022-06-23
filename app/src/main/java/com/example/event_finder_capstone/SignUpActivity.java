@@ -20,6 +20,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private Button btnSignUp;
+    private EditText etZip;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
+        etZip = findViewById(R.id.etZip);
         btnSignUp = findViewById(R.id.btnSignUp);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         ParseUser user = new ParseUser();
         user.setUsername(etUsername.getText().toString());
         user.setPassword(etPassword.getText().toString());
-        //TODO: See what info is needed for location in Event API
+        user.put("zip", etZip.getText().toString());
 
         user.signUpInBackground(new SignUpCallback() {
             @Override
