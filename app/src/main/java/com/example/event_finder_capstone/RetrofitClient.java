@@ -1,7 +1,5 @@
 package com.example.event_finder_capstone;
 
-import android.os.Build;
-
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -12,19 +10,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    public static EventEndpointsInterface Yelp_API;
     public static final String TAG = "Main Activity";
     public static final String YELP_API_BASE_URL = "https://api.yelp.com/v3/";
-
-    private final EventEndpointsInterface Yelp_Api;
+    public static final String value = "Bearer " + BuildConfig.YELP_KEY;
+    public static EventEndpointsInterface Yelp_API;
     private static RetrofitClient instance = null;
+    private final EventEndpointsInterface Yelp_Api;
 
     private RetrofitClient() {
 
         Interceptor interceptor = new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request newRequest = chain.request().newBuilder().addHeader("Authorization", "Bearer " + BuildConfig.YELP_KEY).build();
+                Request newRequest = chain.request().newBuilder().addHeader("Authorization", value).build();
                 return chain.proceed(newRequest);
             }
         };
