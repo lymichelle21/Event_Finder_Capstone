@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.event_finder_capstone.models.Event;
 
-import org.w3c.dom.Text;
-
 import java.util.Date;
 import java.util.List;
 
@@ -67,16 +65,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public void bind(Event event) {
             tvEventTitle.setText(event.getName());
             tvEventDescription.setText(event.getDescription());
-            tvStartDate.setText(convertEventDateFormat(event.getTimeStart()));
-            tvEndDate.setText(convertEventDateFormat(event.getTimeEnd()));
+            tvStartDate.setText(convertEventDateFormat());
+            tvEndDate.setText(convertEventDateFormat());
             Glide.with(context).load(event.getImageUrl()).centerCrop().into(ivEventPhoto);
         }
 
-        private String convertEventDateFormat(String timeStart) {
+        private String convertEventDateFormat() {
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
-            String strDate = formatter.format(date);
-            return strDate;
+            return formatter.format(date);
         }
     }
 }

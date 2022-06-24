@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,14 +11,13 @@
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvSignUpQuestion"
+        android:layout_below="@+id/tvWelcomeMessage"
         android:layout_marginTop="26dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="MissingConstraints" />
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -31,8 +29,7 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:minHeight="48dp"
-        tools:ignore="MissingConstraints" />
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/btnSignUp"
@@ -44,7 +41,7 @@
         android:text="@string/sign_up" />
 
     <TextView
-        android:id="@+id/tvSignUpQuestion"
+        android:id="@+id/tvWelcomeMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="65dp"

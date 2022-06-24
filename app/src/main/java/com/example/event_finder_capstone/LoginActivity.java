@@ -2,15 +2,12 @@ package com.example.event_finder_capstone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.parse.LogInCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,19 +27,9 @@ public class LoginActivity extends AppCompatActivity {
 
         checkIfLoggedIn();
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginUser();
-            }
-        });
+        btnLogin.setOnClickListener(v -> loginUser());
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signupUser();
-            }
-        });
+        btnSignUp.setOnClickListener(v -> signupUser());
     }
 
     private void signupUser() {
@@ -53,16 +40,13 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser() {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e != null) {
-                    Toast.makeText(LoginActivity.this, "Error: Login failed", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                goMainActivity();
-                Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_LONG).show();
+        ParseUser.logInInBackground(username, password, (user, e) -> {
+            if (e != null) {
+                Toast.makeText(LoginActivity.this, "Error: Login failed", Toast.LENGTH_LONG).show();
+                return;
             }
+            goMainActivity();
+            Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_LONG).show();
         });
     }
 

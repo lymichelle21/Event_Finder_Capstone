@@ -2,12 +2,11 @@ package com.example.event_finder_capstone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,13 +28,11 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();
     private EventsAdapter eventsAdapter;
-    private Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnLogout = findViewById(R.id.btnLogout);
         rvEvents = findViewById(R.id.rvEvents);
         eventsList = new ArrayList<>();
         eventsAdapter = new EventsAdapter(this, eventsList);
@@ -47,13 +44,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAPIEvents() {
-        RetrofitClient.getInstance().getYelpAPI().getEvents("en_US",
-                "10",
-                (System.currentTimeMillis() / 1000L),
-                40000L,
+        String eventSearchRegion = "en_US";
+        Long eventSearchRadiusFromUser = 40000L;
+        String numberOfEventsToRetrieve = "10";
+        Long upcomingEventsOnly =  (System.currentTimeMillis() / 1000L);
+        RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
+                numberOfEventsToRetrieve,
+                upcomingEventsOnly,
+                eventSearchRadiusFromUser,
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         try {
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                             eventsList.addAll(convertToList(result));
                             eventsAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
-                            Log.e("error", "JSON exception error");
+                            Toast.makeText(MainActivity.this, "JSON exception error", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 Toast.makeText(MainActivity.this, "Failed to call API", Toast.LENGTH_SHORT).show();
             }
         });
@@ -109,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
     void onLogoutButton() {
         Toast.makeText(MainActivity.this, "Logged out!", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser();
         Intent i = new Intent(this, LoginActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

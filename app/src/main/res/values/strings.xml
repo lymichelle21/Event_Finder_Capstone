@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Event_Finder_Capstone</string>
+    <string name="app_name">Event Finder</string>
     <string name="sign_up">Sign Up</string>
     <string name="event_finder">Event Finder</string>
     <string name="login">Login</string>
