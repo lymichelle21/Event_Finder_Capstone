@@ -1,6 +1,7 @@
 package com.example.event_finder_capstone;
 
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +46,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return events.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView ivEventPhoto;
         TextView tvEventTitle;
@@ -60,6 +61,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvEventDescription = itemView.findViewById(R.id.tvEventDescription);
             tvStartDate = itemView.findViewById(R.id.tvStartDate);
             tvEndDate = itemView.findViewById(R.id.tvEndDate);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Event event) {
@@ -75,5 +77,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
             return formatter.format(date);
         }
+
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                context.startActivity(intent);
+            }
+        }
     }
+
 }

@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        android:text="The Great Cookout"
         android:textSize="25sp"
         tools:layout_editor_absoluteX="69dp"
-        tools:layout_editor_absoluteY="36dp" />
+        tools:layout_editor_absoluteY="36dp"
+        tools:text="The Great Cookout" />
 
     <ImageView
         android:id="@+id/ivEventsDetailsImage"
@@ -24,7 +24,8 @@
         android:layout_below="@+id/tvEventDetailsTitle"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/todo" />
 
     <TextView
         android:id="@+id/tvEventDetailsDateHeader"
@@ -32,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivEventsDetailsImage"
         android:layout_marginTop="19dp"
-        android:text="Event Dates: "
+        android:text="@string/event_dates"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Event Dates:" />
@@ -110,7 +111,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="19dp"
         android:layout_toEndOf="@+id/tvEventDetailsEndDate"
-        android:text="Cost:"
+        android:text="@string/cost"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Cost:" />
@@ -132,7 +133,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEventDetailsDescription"
         android:layout_marginTop="11dp"
-        android:text="Location:"
+        android:text="@string/location"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Location:" />
@@ -143,7 +144,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEventDetailsAddressHeader"
         android:layout_marginTop="11dp"
-        android:text="Event Site:"
+        android:text="@string/event_site"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Event Site:" />
