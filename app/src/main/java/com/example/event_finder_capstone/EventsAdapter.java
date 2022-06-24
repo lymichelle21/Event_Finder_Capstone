@@ -1,6 +1,7 @@
 package com.example.event_finder_capstone;
 
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.event_finder_capstone.models.Event;
 
+import org.w3c.dom.Text;
+
+import java.util.Date;
 import java.util.List;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
@@ -48,21 +52,31 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         ImageView ivEventPhoto;
         TextView tvEventTitle;
         TextView tvEventDescription;
-        TextView tvDate;
+        TextView tvStartDate;
+        TextView tvEndDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivEventPhoto = itemView.findViewById(R.id.ivEventPhoto);
             tvEventTitle = itemView.findViewById(R.id.tvEventTitle);
             tvEventDescription = itemView.findViewById(R.id.tvEventDescription);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvStartDate = itemView.findViewById(R.id.tvStartDate);
+            tvEndDate = itemView.findViewById(R.id.tvEndDate);
         }
 
         public void bind(Event event) {
             tvEventTitle.setText(event.getName());
             tvEventDescription.setText(event.getDescription());
-            tvDate.setText((event.getTimeStart()));
+            tvStartDate.setText(convertEventDateFormat(event.getTimeStart()));
+            tvEndDate.setText(convertEventDateFormat(event.getTimeEnd()));
             Glide.with(context).load(event.getImageUrl()).centerCrop().into(ivEventPhoto);
+        }
+
+        private String convertEventDateFormat(String timeStart) {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+            String strDate = formatter.format(date);
+            return strDate;
         }
     }
 }
