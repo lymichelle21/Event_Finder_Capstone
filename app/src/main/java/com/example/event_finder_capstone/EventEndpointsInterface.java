@@ -11,5 +11,6 @@ public interface EventEndpointsInterface {
     Call<JsonObject> getEvents(@Query("locale") String locale,
                                @Query("limit") String limit,
                                @Query("start_date") Long start_date,
+                               @Query("radius") Long radius,
                                @Query("location") String location);
 }

@@ -1,7 +1,11 @@
 package com.example.event_finder_capstone;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();
     private EventsAdapter eventsAdapter;
+    private Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btnLogout = findViewById(R.id.btnLogout);
         rvEvents = findViewById(R.id.rvEvents);
         eventsList = new ArrayList<>();
         eventsAdapter = new EventsAdapter(this, eventsList);
@@ -41,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAPIEvents() {
-        RetrofitClient.getInstance().getYelpAPI().getEvents("en_US", "10", (System.currentTimeMillis() / 1000L), ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
+        RetrofitClient.getInstance().getYelpAPI().getEvents("en_US", "10", (System.currentTimeMillis() / 1000L), 40000L, ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -80,5 +86,29 @@ public class MainActivity extends AppCompatActivity {
             res.add(event);
         }
         return res;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.btnLogout) {
+            onLogoutButton();
+        }
+        return true;
+    }
+
+    void onLogoutButton() {
+        Toast.makeText(MainActivity.this, "Logged out!", Toast.LENGTH_LONG).show();
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        Intent i = new Intent(this, LoginActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 }
