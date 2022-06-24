@@ -62,7 +62,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvEventTitle.setText(event.getName());
             tvEventDescription.setText(event.getDescription());
             tvDate.setText((event.getTimeStart()));
-            Glide.with(context).load(event.getImageUrl()).into(ivEventPhoto);
+            Glide.with(context).load(event.getImageUrl()).centerCrop().into(ivEventPhoto);
         }
     }
 }

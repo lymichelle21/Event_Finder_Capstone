@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.event_finder_capstone.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAPIEvents() {
-        RetrofitClient.getInstance().getYelpAPI().getEvents("en_US", "10", "01854").enqueue(new Callback<JsonObject>() {
+        RetrofitClient.getInstance().getYelpAPI().getEvents("en_US", "10", (System.currentTimeMillis() / 1000L), ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {

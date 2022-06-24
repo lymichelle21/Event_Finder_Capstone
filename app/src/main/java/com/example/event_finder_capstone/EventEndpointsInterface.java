@@ -8,5 +8,8 @@ import retrofit2.http.Query;
 
 public interface EventEndpointsInterface {
     @GET("events")
-    Call<JsonObject> getEvents(@Query("locale") String locale, @Query("limit") String limit, @Query("location") String location);
+    Call<JsonObject> getEvents(@Query("locale") String locale,
+                               @Query("limit") String limit,
+                               @Query("start_date") Long start_date,
+                               @Query("location") String location);
 }
