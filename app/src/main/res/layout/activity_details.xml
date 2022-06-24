@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+
+    <TextView
+        android:id="@+id/tvEventDetailsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:text="The Great Cookout"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="69dp"
+        tools:layout_editor_absoluteY="36dp" />
+
+    <ImageView
+        android:id="@+id/ivEventsDetailsImage"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_below="@+id/tvEventDetailsTitle"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsDateHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEventsDetailsImage"
+        android:layout_marginTop="19dp"
+        android:text="Event Dates: "
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Event Dates:" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEventsDetailsImage"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="19dp"
+        android:layout_toEndOf="@+id/tvEventDetailsDateHeader"
+        android:textSize="16sp"
+        tools:text="09/1/22" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEventsDetailsImage"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="19dp"
+        android:layout_toEndOf="@+id/tvEventDetailsTo"
+        android:textSize="16sp"
+        tools:text="09/02/22" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEventsDetailsImage"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="19dp"
+        android:layout_toEndOf="@+id/tvEventDetailsStartDate"
+        android:text="@string/to"
+        android:textSize="16sp"
+        tools:text="@string/to" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEventDetailsDateHeader"
+        android:layout_marginTop="11dp"
+        tools:text="Insert the awesome event description here. More details and whatnot go here. Inserting more text because descriptions are long." />
+
+    <TextView
+        android:id="@+id/tvEventDetailsAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEventDetailsDescription"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/tvEventDetailsAddressHeader"
+        android:textSize="14sp"
+        tools:text="1 Hacker Way, Menlo Park, CA 94025" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsSite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEventDetailsAddress"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/tvEventDetailsSiteHeader"
+        android:textSize="14sp"
+        android:linksClickable="true"
+        tools:text="www.yelp.com" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsCostHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEventsDetailsImage"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="19dp"
+        android:layout_toEndOf="@+id/tvEventDetailsEndDate"
+        android:text="Cost:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Cost:" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEventsDetailsImage"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="19dp"
+        android:layout_toEndOf="@+id/tvEventDetailsCostHeader"
+        android:textSize="16sp"
+        tools:text="$2" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsAddressHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEventDetailsDescription"
+        android:layout_marginTop="11dp"
+        android:text="Location:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Location:" />
+
+    <TextView
+        android:id="@+id/tvEventDetailsSiteHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEventDetailsAddressHeader"
+        android:layout_marginTop="11dp"
+        android:text="Event Site:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Event Site:" />
+
+</RelativeLayout>
