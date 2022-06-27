@@ -17,4 +17,5 @@
     <string name="location">Location:</string>
     <string name="event_site">Event Site:</string>
     <string name="todo">TODO</string>
+    <string name="photo_album">Photo Album</string>
 </resources>

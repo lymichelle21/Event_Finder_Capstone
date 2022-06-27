@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkAndSetEventCost(Event event, JsonObject temp) {
         if (!String.valueOf(temp.get("cost")).equals("null")) {
-            event.setCost("$" + temp.get("cost").getAsString());
+            event.setCost("$" + temp.get("cost").getAsString() +"0");
         } else {
             event.setCost("N/A");
         }

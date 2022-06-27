@@ -1,11 +1,14 @@
 package com.example.event_finder_capstone;
 
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +36,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     TextView tvEventDetailsSite;
     TextView tvEventDetailsCost;
     ImageView ivEventDetailsImage;
+    Button btnPhotoAlbum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,21 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsSite = findViewById(R.id.tvEventDetailsSite);
         tvEventDetailsCost = findViewById(R.id.tvEventDetailsCost);
         ivEventDetailsImage = findViewById(R.id.ivEventsDetailsImage);
+        btnPhotoAlbum = findViewById(R.id.btnPhotoAlbum);
+
         setDetailsScreenText();
+
+        btnPhotoAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goPhotoAlbum();
+            }
+        });
+    }
+
+    private void goPhotoAlbum() {
+        Intent intent = new Intent(EventDetailsActivity.this, PhotoAlbumActivity.class);
+        startActivity(intent);
     }
 
     private void setDetailsScreenText() {
@@ -89,5 +107,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         Date formattedDate = inputFormat.parse(unformattedDate);
         return outputFormat.format(formattedDate);
     }
+
+
 }
 
