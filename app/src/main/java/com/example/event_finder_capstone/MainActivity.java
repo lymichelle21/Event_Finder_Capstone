@@ -97,18 +97,32 @@ public class MainActivity extends AppCompatActivity {
         event.setDescription(temp.get("description").getAsString());
         event.setImageUrl(temp.get("image_url").getAsString());
         event.setTimeStart(temp.get("time_start").getAsString());
-        if (!String.valueOf(temp.get("time_end")).equals("null")) {
-            event.setTimeEnd(temp.get("time_end").getAsString());
-        } else {
-            event.setTimeEnd(temp.get("time_start").getAsString());
-        }
+        event.setEventSiteUrl(temp.get("event_site_url").getAsString());
+        checkAndSetEventEndTime(event, temp);
+        checkAndSetEventCost(event, temp);
+        formatAndSetEventLocation(temp, event);
+    }
+
+    private void checkAndSetEventCost(Event event, JsonObject temp) {
         if (!String.valueOf(temp.get("cost")).equals("null")) {
             event.setCost("$" + temp.get("cost").getAsString());
         } else {
             event.setCost("N/A");
         }
-        event.setEventSiteUrl(temp.get("event_site_url").getAsString());
-        event.setLocation(temp.get("location").getAsJsonObject().get("display_address").toString());
+    }
+
+    private void checkAndSetEventEndTime(Event event, JsonObject temp) {
+        if (!String.valueOf(temp.get("time_end")).equals("null")) {
+            event.setTimeEnd(temp.get("time_end").getAsString());
+        } else {
+            event.setTimeEnd(temp.get("time_start").getAsString());
+        }
+    }
+
+    private void formatAndSetEventLocation(JsonObject temp, Event event) {
+        String formattedLocation = temp.get("location").getAsJsonObject().get("display_address").toString();
+        formattedLocation = formattedLocation.replaceAll("[\\[\\]\"\"]", " ");
+        event.setLocation(formattedLocation);
     }
 
     @Override

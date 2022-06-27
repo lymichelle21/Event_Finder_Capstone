@@ -96,11 +96,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEventDetailsAddress"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="11dp"
         android:layout_toEndOf="@+id/tvEventDetailsSiteHeader"
         android:autoLink="all"
         android:linksClickable="true"
+        android:minHeight="48dp"
+        android:textColor="#00838F"
         android:textSize="14sp"
+        tools:ignore="TextContrastCheck"
         tools:text="www.yelp.com" />
 
     <TextView

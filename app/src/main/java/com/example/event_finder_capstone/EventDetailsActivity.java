@@ -55,9 +55,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsDescription.setText(event.getDescription());
         tvEventDetailsSite.setText(event.getEventSiteUrl());
         tvEventDetailsAddress.setText(event.getLocation());
-        Log.d(TAG, "site url" + (event.getEventSiteUrl()).toString());
         tvEventDetailsCost.setText(event.getCost().toString());
-
         Glide.with(this).load(event.getImageUrl()).centerCrop().into(ivEventDetailsImage);
         try {
             tvEventDetailsStartDate.setText(convertEventDateFormat(event.getTimeStart()));
