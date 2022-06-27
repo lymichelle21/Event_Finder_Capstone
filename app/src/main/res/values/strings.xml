@@ -19,4 +19,7 @@
     <string name="todo">TODO</string>
     <string name="photo_album">Photo Album</string>
     <string name="add_photo">Add Photo</string>
+    <string name="add_your_caption_here">Add your caption here!</string>
+    <string name="submit">Submit</string>
+    <string name="image">TODO</string>
 </resources>
