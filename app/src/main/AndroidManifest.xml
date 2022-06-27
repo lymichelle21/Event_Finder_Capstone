@@ -28,5 +28,6 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".EventDetailsActivity" />
         <activity android:name=".PhotoAlbumActivity" />
+        <activity android:name=".AddPhotoActivity" />
     </application>
 </manifest>

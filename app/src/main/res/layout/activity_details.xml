@@ -42,10 +42,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivEventsDetailsImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/tvEventDetailsDateHeader"
-        android:textSize="16sp"
+        android:textSize="14sp"
         tools:text="09/1/22" />
 
     <TextView
@@ -54,9 +54,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivEventsDetailsImage"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/tvEventDetailsTo"
-        android:textSize="16sp"
+        android:textSize="14sp"
         tools:text="09/02/22" />
 
     <TextView
@@ -65,10 +65,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivEventsDetailsImage"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/tvEventDetailsStartDate"
         android:text="@string/to"
-        android:textSize="16sp"
+        android:textSize="14sp"
         tools:text="@string/to" />
 
     <TextView
@@ -109,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivEventsDetailsImage"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="19dp"
         android:layout_toEndOf="@+id/tvEventDetailsEndDate"
         android:text="@string/cost"
@@ -123,9 +123,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivEventsDetailsImage"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/tvEventDetailsCostHeader"
-        android:textSize="16sp"
+        android:textSize="14sp"
         tools:text="$2" />
 
     <TextView
