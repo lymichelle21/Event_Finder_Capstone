@@ -2,6 +2,7 @@ package com.example.event_finder_capstone;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();
     private EventsAdapter eventsAdapter;
@@ -84,13 +86,13 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < events.size(); i++) {
             JsonObject temp = (JsonObject) events.get(i);
             Event event = new Event();
-            populateEventInfo(event, temp);
+            populateEventInfo(i, event, temp);
             res.add(event);
         }
         return res;
     }
 
-    private void populateEventInfo(Event event, JsonObject temp) {
+    private void populateEventInfo(int  i, Event event, JsonObject temp) {
         event.setName(temp.get("name").getAsString());
         event.setDescription(temp.get("description").getAsString());
         event.setImageUrl(temp.get("image_url").getAsString());
@@ -100,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             event.setTimeEnd(temp.get("time_start").getAsString());
         }
+        if (!String.valueOf(temp.get("cost")).equals("null")) {
+            event.setCost("$" + temp.get("cost").getAsString());
+        } else {
+            event.setCost("N/A");
+        }
+        event.setEventSiteUrl(temp.get("event_site_url").getAsString());
+        event.setLocation(temp.get("location").getAsJsonObject().get("display_address").toString());
     }
 
     @Override

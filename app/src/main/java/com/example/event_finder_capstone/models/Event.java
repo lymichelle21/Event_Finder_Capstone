@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.text.DecimalFormat;
+
 import javax.annotation.Generated;
 
 @Parcel(analyze = {Event.class})
@@ -19,13 +21,12 @@ public class Event {
     @SerializedName("category")
     @Expose
     private String category;
-    // TODO: Figure out how to have parcels take in objects
-//    @SerializedName("cost")
-//    @Expose
-//    private Object cost;
-//    @SerializedName("cost_max")
-//    @Expose
-//    private Object costMax;
+    @SerializedName("cost")
+    @Expose
+    private String cost;
+    @SerializedName("cost_max")
+    @Expose
+    private String costMax;
     @SerializedName("description")
     @Expose
     private String description;
@@ -70,7 +71,7 @@ public class Event {
     private String timeStart;
     @SerializedName("location")
     @Expose
-    private Location location;
+    private String location;
     @SerializedName("business_id")
     @Expose
     private String businessId;
@@ -92,22 +93,22 @@ public class Event {
     public void setCategory(String category) {
         this.category = category;
     }
-//
-//    public Object getCost() {
-//        return cost;
-//    }
-//
-//    public void setCost(Object cost) {
-//        this.cost = cost;
-//    }
-//
-//    public Object getCostMax() {
-//        return costMax;
-//    }
-//
-//    public void setCostMax(Object costMax) {
-//        this.costMax = costMax;
-//    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = (String) cost;
+    }
+
+    public String getCostMax() {
+        return costMax;
+    }
+
+    public void setCostMax(String costMax) {
+        this.costMax = (String) costMax;
+    }
 
     public String getDescription() {
         return description;
@@ -221,11 +222,11 @@ public class Event {
         this.timeStart = timeStart;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getLocation() {
+        return location.toString();
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 

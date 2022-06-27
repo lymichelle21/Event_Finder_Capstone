@@ -13,7 +13,7 @@
     <string name="intent_host">events</string>
     <string name="to">to</string>
     <string name="event_dates">Event Dates:</string>
-    <string name="cost">Cost:</string>
+    <string name="cost">Cost: </string>
     <string name="location">Location:</string>
     <string name="event_site">Event Site:</string>
     <string name="todo">TODO</string>

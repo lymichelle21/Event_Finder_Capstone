@@ -1,9 +1,12 @@
 package com.example.event_finder_capstone;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,8 +53,11 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         tvEventDetailsTitle.setText(event.getName());
         tvEventDetailsDescription.setText(event.getDescription());
-        //TODO: Figure out why not populating
-        tvEventDetailsSite.setText(event.getCategory());
+        tvEventDetailsSite.setText(event.getEventSiteUrl());
+        tvEventDetailsAddress.setText(event.getLocation());
+        Log.d(TAG, "site url" + (event.getEventSiteUrl()).toString());
+        tvEventDetailsCost.setText(event.getCost().toString());
+
         Glide.with(this).load(event.getImageUrl()).centerCrop().into(ivEventDetailsImage);
         try {
             tvEventDetailsStartDate.setText(convertEventDateFormat(event.getTimeStart()));
