@@ -1,12 +1,11 @@
 package com.example.event_finder_capstone;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,23 +39,30 @@ public class EventDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        tvEventDetailsTitle = (TextView) findViewById(R.id.tvEventDetailsTitle);
-        tvEventDetailsDescription = (TextView) findViewById(R.id.tvEventDetailsDescription);
-        tvEventDetailsStartDate = (TextView) findViewById(R.id.tvEventDetailsStartDate);
-        tvEventDetailsEndDate = (TextView) findViewById(R.id.tvEventDetailsEndDate);
-        tvEventDetailsAddress = (TextView) findViewById(R.id.tvEventDetailsAddress);
-        tvEventDetailsSite = (TextView) findViewById(R.id.tvEventDetailsSite);
-        tvEventDetailsCost = (TextView) findViewById(R.id.tvEventDetailsCost);
-        ivEventDetailsImage = (ImageView) findViewById(R.id.ivEventsDetailsImage);
+        tvEventDetailsTitle = findViewById(R.id.tvEventDetailsTitle);
+        tvEventDetailsDescription = findViewById(R.id.tvEventDetailsDescription);
+        tvEventDetailsStartDate = findViewById(R.id.tvEventDetailsStartDate);
+        tvEventDetailsEndDate = findViewById(R.id.tvEventDetailsEndDate);
+        tvEventDetailsAddress = findViewById(R.id.tvEventDetailsAddress);
+        tvEventDetailsSite = findViewById(R.id.tvEventDetailsSite);
+        tvEventDetailsCost = findViewById(R.id.tvEventDetailsCost);
+        ivEventDetailsImage = findViewById(R.id.ivEventsDetailsImage);
+        setDetailsScreenText();
+    }
 
-        event = (Event) Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
+    private void setDetailsScreenText() {
+        event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
 
         tvEventDetailsTitle.setText(event.getName());
         tvEventDetailsDescription.setText(event.getDescription());
-        tvEventDetailsSite.setText(event.getEventSiteUrl());
+        formatAndSetEventURL();
         tvEventDetailsAddress.setText(event.getLocation());
-        tvEventDetailsCost.setText(event.getCost().toString());
+        tvEventDetailsCost.setText(event.getCost());
         Glide.with(this).load(event.getImageUrl()).centerCrop().into(ivEventDetailsImage);
+        setEventStartAndEndDates();
+    }
+
+    private void setEventStartAndEndDates() {
         try {
             tvEventDetailsStartDate.setText(convertEventDateFormat(event.getTimeStart()));
         } catch (ParseException e) {
@@ -67,6 +73,14 @@ public class EventDetailsActivity extends AppCompatActivity {
         } catch (ParseException e) {
             Toast.makeText(EventDetailsActivity.this, "Failed to retrieve end date", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void formatAndSetEventURL() {
+        String link = event.getEventSiteUrl();
+        tvEventDetailsSite.setMovementMethod(LinkMovementMethod.getInstance());
+        tvEventDetailsSite.setClickable(true);
+        String text = "<a href='" + link + "'> Book Tickets and Learn More </a>";
+        tvEventDetailsSite.setText(Html.fromHtml(text));
     }
 
     private String convertEventDateFormat(String unformattedDate) throws ParseException {
