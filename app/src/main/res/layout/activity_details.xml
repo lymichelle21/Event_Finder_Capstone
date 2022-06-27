@@ -99,8 +99,8 @@
         android:layout_marginStart="7dp"
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/tvEventDetailsSiteHeader"
-        android:textSize="14sp"
         android:linksClickable="true"
+        android:textSize="14sp"
         tools:text="www.yelp.com" />
 
     <TextView
@@ -108,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivEventsDetailsImage"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="11dp"
         android:layout_marginTop="19dp"
         android:layout_toEndOf="@+id/tvEventDetailsEndDate"
         android:text="@string/cost"

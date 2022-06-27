@@ -5,22 +5,27 @@ import android.location.Location;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import javax.annotation.Generated;
 
+@Parcel(analyze = {Event.class})
 @Generated("jsonschema2pojo")
 public class Event {
+
     @SerializedName("attending_count")
     @Expose
     private int attendingCount;
     @SerializedName("category")
     @Expose
     private String category;
-    @SerializedName("cost")
-    @Expose
-    private Object cost;
-    @SerializedName("cost_max")
-    @Expose
-    private Object costMax;
+    // TODO: Figure out how to have parcels take in objects
+//    @SerializedName("cost")
+//    @Expose
+//    private Object cost;
+//    @SerializedName("cost_max")
+//    @Expose
+//    private Object costMax;
     @SerializedName("description")
     @Expose
     private String description;
@@ -69,6 +74,8 @@ public class Event {
     @SerializedName("business_id")
     @Expose
     private String businessId;
+    public Event() {
+    }
 
     public int getAttendingCount() {
         return attendingCount;
@@ -85,22 +92,22 @@ public class Event {
     public void setCategory(String category) {
         this.category = category;
     }
-
-    public Object getCost() {
-        return cost;
-    }
-
-    public void setCost(Object cost) {
-        this.cost = cost;
-    }
-
-    public Object getCostMax() {
-        return costMax;
-    }
-
-    public void setCostMax(Object costMax) {
-        this.costMax = costMax;
-    }
+//
+//    public Object getCost() {
+//        return cost;
+//    }
+//
+//    public void setCost(Object cost) {
+//        this.cost = cost;
+//    }
+//
+//    public Object getCostMax() {
+//        return costMax;
+//    }
+//
+//    public void setCostMax(Object costMax) {
+//        this.costMax = costMax;
+//    }
 
     public String getDescription() {
         return description;

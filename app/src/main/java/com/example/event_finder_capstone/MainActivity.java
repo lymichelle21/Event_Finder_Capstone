@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUser = 40000L;
         String numberOfEventsToRetrieve = "10";
-        Long upcomingEventsOnly =  (System.currentTimeMillis() / 1000L);
+        Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
         RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
                 numberOfEventsToRetrieve,
                 upcomingEventsOnly,
@@ -84,13 +84,22 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < events.size(); i++) {
             JsonObject temp = (JsonObject) events.get(i);
             Event event = new Event();
-            event.setName(temp.get("name").getAsString());
-            event.setDescription(temp.get("description").getAsString());
-            event.setImageUrl(temp.get("image_url").getAsString());
-            event.setTimeStart(temp.get("time_start").getAsString());
+            populateEventInfo(event, temp);
             res.add(event);
         }
         return res;
+    }
+
+    private void populateEventInfo(Event event, JsonObject temp) {
+        event.setName(temp.get("name").getAsString());
+        event.setDescription(temp.get("description").getAsString());
+        event.setImageUrl(temp.get("image_url").getAsString());
+        event.setTimeStart(temp.get("time_start").getAsString());
+        if (!String.valueOf(temp.get("time_end")).equals("null")) {
+            event.setTimeEnd(temp.get("time_end").getAsString());
+        } else {
+            event.setTimeEnd(temp.get("time_start").getAsString());
+        }
     }
 
     @Override
