@@ -47,7 +47,7 @@
         tools:layout_editor_absoluteX="145dp" />
 
     <TextView
-        android:id="@+id/tvSignUpQuestion"
+        android:id="@+id/tvWelcomeMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnLogin"
@@ -61,7 +61,7 @@
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvSignUpQuestion"
+        android:layout_below="@+id/tvWelcomeMessage"
         android:layout_marginStart="135dp"
         android:layout_marginTop="12dp"
         android:text="@string/sign_up" />
