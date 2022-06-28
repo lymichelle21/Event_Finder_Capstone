@@ -49,6 +49,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_photo);
 
         event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
+        getSupportActionBar().setTitle("Add Photos from " + event.getName());
 
         etDescription = findViewById(R.id.etDescription);
         Button btnCaptureImage = findViewById(R.id.btnCaptureImage);

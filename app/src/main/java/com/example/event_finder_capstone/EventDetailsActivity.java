@@ -24,7 +24,6 @@ import java.util.Locale;
 
 public class EventDetailsActivity extends AppCompatActivity {
     Event event;
-
     TextView tvEventDetailsTitle;
     TextView tvEventDetailsDescription;
     TextView tvEventDetailsStartDate;
@@ -39,6 +38,8 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        getSupportActionBar().setTitle("Event Details");
 
         tvEventDetailsTitle = findViewById(R.id.tvEventDetailsTitle);
         tvEventDetailsDescription = findViewById(R.id.tvEventDetailsDescription);

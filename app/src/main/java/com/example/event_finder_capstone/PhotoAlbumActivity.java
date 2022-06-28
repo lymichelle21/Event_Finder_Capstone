@@ -1,18 +1,14 @@
 package com.example.event_finder_capstone;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.event_finder_capstone.models.Event;
@@ -30,15 +26,18 @@ public class PhotoAlbumActivity extends AppCompatActivity {
 
     private static final String TAG = "PhotoAlbumActivity";
     private static final int POST_LIMIT = 20;
-    Event event;
-    RecyclerView rvPhotos;
     protected PhotoAdapter photo_adapter;
     protected List<Photo> allPhotos;
+    Event event;
+    RecyclerView rvPhotos;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_album);
+
+        event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
+        getSupportActionBar().setTitle("Photos from " + event.getName());
 
         rvPhotos = findViewById(R.id.rvPhotos);
         allPhotos = new ArrayList<>();
