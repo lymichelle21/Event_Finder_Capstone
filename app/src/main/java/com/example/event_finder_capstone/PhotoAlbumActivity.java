@@ -1,21 +1,28 @@
 package com.example.event_finder_capstone;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.event_finder_capstone.models.Event;
+
+import org.parceler.Parcels;
+
 public class PhotoAlbumActivity extends AppCompatActivity {
+
+    private static final String TAG = "PhotoAlbumActivity";
+    Context context;
+    Event event;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_album);
-
     }
 
     @Override
@@ -33,10 +40,11 @@ public class PhotoAlbumActivity extends AppCompatActivity {
     }
 
     void onAddImageButton() {
-        Toast.makeText(PhotoAlbumActivity.this, "Making new post!", Toast.LENGTH_LONG).show();
-        Intent i = new Intent(this, AddPhotoActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
+        Intent intent = new Intent(PhotoAlbumActivity.this, AddPhotoActivity.class);
+        event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
+        intent.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

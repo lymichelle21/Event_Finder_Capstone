@@ -20,8 +20,8 @@
         android:layout_height="354dp"
         android:layout_marginTop="16dp"
         android:background="@color/black"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/image" />
+        android:contentDescription="@string/image"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
         android:id="@+id/etDescription"

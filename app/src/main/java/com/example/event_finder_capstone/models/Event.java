@@ -1,13 +1,9 @@
 package com.example.event_finder_capstone.models;
 
-import android.location.Location;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
-
-import java.text.DecimalFormat;
 
 import javax.annotation.Generated;
 
@@ -75,6 +71,7 @@ public class Event {
     @SerializedName("business_id")
     @Expose
     private String businessId;
+
     public Event() {
     }
 
@@ -127,11 +124,11 @@ public class Event {
     }
 
     public String getId() {
-        return id;
+        return (String) id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = (String) id;
     }
 
     public String getImageUrl() {

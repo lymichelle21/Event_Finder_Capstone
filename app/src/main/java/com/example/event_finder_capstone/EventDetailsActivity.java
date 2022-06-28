@@ -1,13 +1,11 @@
 package com.example.event_finder_capstone;
 
-import android.content.Context;
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,7 +23,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class EventDetailsActivity extends AppCompatActivity {
-    Context context;
     Event event;
 
     TextView tvEventDetailsTitle;
@@ -55,16 +52,12 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         setDetailsScreenText();
 
-        btnPhotoAlbum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goPhotoAlbum();
-            }
-        });
+        btnPhotoAlbum.setOnClickListener(v -> goPhotoAlbum());
     }
 
     private void goPhotoAlbum() {
         Intent intent = new Intent(EventDetailsActivity.this, PhotoAlbumActivity.class);
+        intent.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
         startActivity(intent);
     }
 

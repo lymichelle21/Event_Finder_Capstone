@@ -2,7 +2,6 @@ package com.example.event_finder_capstone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -92,11 +91,12 @@ public class MainActivity extends AppCompatActivity {
         return res;
     }
 
-    private void populateEventInfo(int  i, Event event, JsonObject temp) {
+    private void populateEventInfo(int i, Event event, JsonObject temp) {
         event.setName(temp.get("name").getAsString());
         event.setDescription(temp.get("description").getAsString());
         event.setImageUrl(temp.get("image_url").getAsString());
         event.setTimeStart(temp.get("time_start").getAsString());
+        event.setId(temp.get("id").getAsString());
         event.setEventSiteUrl(temp.get("event_site_url").getAsString());
         checkAndSetEventEndTime(event, temp);
         checkAndSetEventCost(event, temp);
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkAndSetEventCost(Event event, JsonObject temp) {
         if (!String.valueOf(temp.get("cost")).equals("null")) {
-            event.setCost("$" + temp.get("cost").getAsString() +"0");
+            event.setCost("$" + temp.get("cost").getAsString() + "0");
         } else {
             event.setCost("N/A");
         }

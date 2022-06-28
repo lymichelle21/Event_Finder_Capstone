@@ -2,7 +2,9 @@ package com.example.event_finder_capstone;
 
 import android.app.Application;
 
+import com.example.event_finder_capstone.models.Photo;
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 public class ParseApplication extends Application {
 
@@ -12,6 +14,8 @@ public class ParseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ParseObject.registerSubclass(Photo.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(parse_app_id)
