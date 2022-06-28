@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,7 +91,6 @@ public class AddPhotoActivity extends AppCompatActivity {
         photo.saveInBackground(e -> {
             if (e != null) {
                 Toast.makeText(AddPhotoActivity.this, "Error saving post!", Toast.LENGTH_LONG).show();
-                Log.e(TAG, e.toString());
             }
             Toast.makeText(AddPhotoActivity.this, "Posted!", Toast.LENGTH_LONG).show();
             etDescription.setText("");

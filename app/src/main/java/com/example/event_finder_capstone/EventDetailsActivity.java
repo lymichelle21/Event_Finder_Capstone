@@ -63,7 +63,6 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void setDetailsScreenText() {
         event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
-
         tvEventDetailsTitle.setText(event.getName());
         tvEventDetailsDescription.setText(event.getDescription());
         formatAndSetEventURL();
