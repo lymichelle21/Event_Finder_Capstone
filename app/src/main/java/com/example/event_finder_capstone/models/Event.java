@@ -5,10 +5,16 @@ import android.location.Location;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
+import java.text.DecimalFormat;
+
 import javax.annotation.Generated;
 
+@Parcel(analyze = {Event.class})
 @Generated("jsonschema2pojo")
 public class Event {
+
     @SerializedName("attending_count")
     @Expose
     private int attendingCount;
@@ -17,10 +23,10 @@ public class Event {
     private String category;
     @SerializedName("cost")
     @Expose
-    private Object cost;
+    private String cost;
     @SerializedName("cost_max")
     @Expose
-    private Object costMax;
+    private String costMax;
     @SerializedName("description")
     @Expose
     private String description;
@@ -65,10 +71,12 @@ public class Event {
     private String timeStart;
     @SerializedName("location")
     @Expose
-    private Location location;
+    private String location;
     @SerializedName("business_id")
     @Expose
     private String businessId;
+    public Event() {
+    }
 
     public int getAttendingCount() {
         return attendingCount;
@@ -86,20 +94,20 @@ public class Event {
         this.category = category;
     }
 
-    public Object getCost() {
+    public String getCost() {
         return cost;
     }
 
-    public void setCost(Object cost) {
-        this.cost = cost;
+    public void setCost(String cost) {
+        this.cost = (String) cost;
     }
 
-    public Object getCostMax() {
+    public String getCostMax() {
         return costMax;
     }
 
-    public void setCostMax(Object costMax) {
-        this.costMax = costMax;
+    public void setCostMax(String costMax) {
+        this.costMax = (String) costMax;
     }
 
     public String getDescription() {
@@ -214,11 +222,11 @@ public class Event {
         this.timeStart = timeStart;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getLocation() {
+        return location.toString();
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 

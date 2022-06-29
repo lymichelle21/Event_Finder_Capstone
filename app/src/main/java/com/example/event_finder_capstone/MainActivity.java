@@ -2,6 +2,7 @@ package com.example.event_finder_capstone;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();
     private EventsAdapter eventsAdapter;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUser = 40000L;
         String numberOfEventsToRetrieve = "10";
-        Long upcomingEventsOnly =  (System.currentTimeMillis() / 1000L);
+        Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
         RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
                 numberOfEventsToRetrieve,
                 upcomingEventsOnly,
@@ -84,13 +86,43 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < events.size(); i++) {
             JsonObject temp = (JsonObject) events.get(i);
             Event event = new Event();
-            event.setName(temp.get("name").getAsString());
-            event.setDescription(temp.get("description").getAsString());
-            event.setImageUrl(temp.get("image_url").getAsString());
-            event.setTimeStart(temp.get("time_start").getAsString());
+            populateEventInfo(i, event, temp);
             res.add(event);
         }
         return res;
+    }
+
+    private void populateEventInfo(int  i, Event event, JsonObject temp) {
+        event.setName(temp.get("name").getAsString());
+        event.setDescription(temp.get("description").getAsString());
+        event.setImageUrl(temp.get("image_url").getAsString());
+        event.setTimeStart(temp.get("time_start").getAsString());
+        event.setEventSiteUrl(temp.get("event_site_url").getAsString());
+        checkAndSetEventEndTime(event, temp);
+        checkAndSetEventCost(event, temp);
+        formatAndSetEventLocation(temp, event);
+    }
+
+    private void checkAndSetEventCost(Event event, JsonObject temp) {
+        if (!String.valueOf(temp.get("cost")).equals("null")) {
+            event.setCost("$" + temp.get("cost").getAsString() +"0");
+        } else {
+            event.setCost("N/A");
+        }
+    }
+
+    private void checkAndSetEventEndTime(Event event, JsonObject temp) {
+        if (!String.valueOf(temp.get("time_end")).equals("null")) {
+            event.setTimeEnd(temp.get("time_end").getAsString());
+        } else {
+            event.setTimeEnd(temp.get("time_start").getAsString());
+        }
+    }
+
+    private void formatAndSetEventLocation(JsonObject temp, Event event) {
+        String formattedLocation = temp.get("location").getAsJsonObject().get("display_address").toString();
+        formattedLocation = formattedLocation.replaceAll("[\\[\\]\"\"]", " ");
+        event.setLocation(formattedLocation);
     }
 
     @Override

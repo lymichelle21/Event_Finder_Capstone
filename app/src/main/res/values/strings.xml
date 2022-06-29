@@ -12,4 +12,11 @@
     <string name="intent_scheme">oauth</string>
     <string name="intent_host">events</string>
     <string name="to">to</string>
+    <string name="event_dates">Event Dates:</string>
+    <string name="cost">Cost: </string>
+    <string name="location">Location:</string>
+    <string name="event_site">Event Site:</string>
+    <string name="todo">TODO</string>
+    <string name="photo_album">Photo Album</string>
+    <string name="add_photo">Add Photo</string>
 </resources>
