@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,8 +19,6 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigationView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,27 +28,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBottomNavigation(FragmentManager fragmentManager) {
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment;
-                switch (menuItem.getItemId()) {
-                    case R.id.action_feed:
-                        fragment = new FeedFragment();
-                        break;
-                    case R.id.action_explore:
-                        fragment = new ExploreFragment();
-                        break;
-                    case R.id.action_profile:
-                        fragment = new ProfileFragment();
-                        break;
-                    default:
-                        return true;
-                }
-                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
-                return true;
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(menuItem -> {
+            Fragment fragment;
+            switch (menuItem.getItemId()) {
+                case R.id.action_feed:
+                    fragment = new FeedFragment();
+                    break;
+                case R.id.action_explore:
+                    fragment = new ExploreFragment();
+                    break;
+                case R.id.action_profile:
+                    fragment = new ProfileFragment();
+                    break;
+                default:
+                    return true;
             }
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+            return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
     }

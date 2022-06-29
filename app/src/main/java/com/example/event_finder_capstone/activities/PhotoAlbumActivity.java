@@ -11,22 +11,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.event_finder_capstone.adapters.PhotoAdapter;
 import com.example.event_finder_capstone.R;
+import com.example.event_finder_capstone.adapters.PhotoAdapter;
 import com.example.event_finder_capstone.models.Event;
 import com.example.event_finder_capstone.models.Photo;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PhotoAlbumActivity extends AppCompatActivity {
 
-    private static final String TAG = "PhotoAlbumActivity";
     private static final int POST_LIMIT = 20;
     protected PhotoAdapter photo_adapter;
     protected List<Photo> allPhotos;
@@ -39,7 +37,7 @@ public class PhotoAlbumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo_album);
 
         event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
-        getSupportActionBar().setTitle("Photos from " + event.getName());
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Photos from " + event.getName());
 
         rvPhotos = findViewById(R.id.rvPhotos);
         allPhotos = new ArrayList<>();
@@ -58,16 +56,13 @@ public class PhotoAlbumActivity extends AppCompatActivity {
         query.include(Photo.KEY_EVENT_ID);
         query.setLimit(POST_LIMIT);
         query.addDescendingOrder("createdAt");
-        query.findInBackground(new FindCallback<Photo>() {
-            @Override
-            public void done(List<Photo> photos, ParseException e) {
-                if (e != null) {
-                    Toast.makeText(PhotoAlbumActivity.this, "Failed to query posts", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                allPhotos.addAll(photos);
-                photo_adapter.notifyDataSetChanged();
+        query.findInBackground((photos, e) -> {
+            if (e != null) {
+                Toast.makeText(PhotoAlbumActivity.this, "Failed to query posts", Toast.LENGTH_LONG).show();
+                return;
             }
+            allPhotos.addAll(photos);
+            photo_adapter.notifyDataSetChanged();
         });
     }
 
