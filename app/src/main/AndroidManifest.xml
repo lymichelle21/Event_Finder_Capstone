@@ -12,7 +12,7 @@
     </queries>
 
     <application
-        android:name=".ParseApplication"
+        android:name=".network.ParseApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -34,17 +34,17 @@
         </provider>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".EventDetailsActivity" />
-        <activity android:name=".PhotoAlbumActivity" />
-        <activity android:name=".AddPhotoActivity" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.EventDetailsActivity" />
+        <activity android:name=".activities.PhotoAlbumActivity" />
+        <activity android:name=".activities.AddPhotoActivity" />
     </application>
 </manifest>

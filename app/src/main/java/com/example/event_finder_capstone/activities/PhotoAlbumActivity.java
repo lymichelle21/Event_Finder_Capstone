@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.event_finder_capstone.adapters.PhotoAdapter;
+import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Event;
 import com.example.event_finder_capstone.models.Photo;
 import com.parse.FindCallback;

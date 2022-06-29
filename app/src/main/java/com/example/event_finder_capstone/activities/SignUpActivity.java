@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.event_finder_capstone.R;
 import com.parse.ParseUser;
 
 public class SignUpActivity extends AppCompatActivity {

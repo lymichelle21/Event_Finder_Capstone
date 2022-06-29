@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.interfaces;
 
 import com.google.gson.JsonObject;
 

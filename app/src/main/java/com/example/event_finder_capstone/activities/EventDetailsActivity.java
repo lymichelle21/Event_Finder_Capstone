@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.activities;
 
 import android.content.Intent;
 import android.icu.text.DateFormat;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Event;
 
 import org.parceler.Parcels;

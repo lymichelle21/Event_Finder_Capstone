@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.event_finder_capstone.adapters.EventsAdapter;
+import com.example.event_finder_capstone.R;
+import com.example.event_finder_capstone.network.RetrofitClient;
 import com.example.event_finder_capstone.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -34,25 +37,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setUpRecyclerView();
+        getAPIEvents();
+    }
+
+    private void setUpRecyclerView() {
         rvEvents = findViewById(R.id.rvEvents);
         eventsList = new ArrayList<>();
         eventsAdapter = new EventsAdapter(this, eventsList);
         rvEvents.setAdapter(eventsAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvEvents.setLayoutManager(linearLayoutManager);
-
-        getAPIEvents();
     }
 
     private void getAPIEvents() {
         String eventSearchRegion = "en_US";
-        Long eventSearchRadiusFromUser = 40000L;
+        Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
         Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
         RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
                 numberOfEventsToRetrieve,
                 upcomingEventsOnly,
-                eventSearchRadiusFromUser,
+                eventSearchRadiusFromUserInMeters,
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
