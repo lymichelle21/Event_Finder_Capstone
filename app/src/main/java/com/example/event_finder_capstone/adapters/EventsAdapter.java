@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.activities.EventDetailsActivity;
 import com.example.event_finder_capstone.models.Event;
@@ -80,7 +82,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvEventDescription.setText(event.getDescription());
             tvStartDate.setText(convertEventDateFormat(event.getTimeStart()));
             tvEndDate.setText(convertEventDateFormat(event.getTimeEnd()));
-            Glide.with(context).load(event.getImageUrl()).centerCrop().into(ivEventPhoto);
+            Glide.with(context).load(event.getImageUrl()).centerCrop().transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventPhoto);
         }
 
         private String convertEventDateFormat(String unformattedDate) throws ParseException {

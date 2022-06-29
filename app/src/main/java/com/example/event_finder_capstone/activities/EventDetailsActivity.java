@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Event;
 
@@ -70,7 +72,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         formatAndSetEventURL();
         tvEventDetailsAddress.setText(event.getLocation());
         tvEventDetailsCost.setText(event.getCost());
-        Glide.with(this).load(event.getImageUrl()).centerCrop().into(ivEventDetailsImage);
+        Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
         setEventStartAndEndDates();
     }
 
