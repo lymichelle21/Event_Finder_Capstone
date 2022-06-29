@@ -4,6 +4,12 @@ plugins {
     id 'com.android.library' version '7.2.1' apply false
 }
 
+ext {
+    appCompatVersion= '1.0.0'
+    designSupportVersion= '1.0.0'
+
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
