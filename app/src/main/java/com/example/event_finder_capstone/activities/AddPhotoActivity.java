@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.example.event_finder_capstone.utils.BitmapScaler;
+import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Event;
 import com.example.event_finder_capstone.models.Photo;
 import com.parse.ParseFile;

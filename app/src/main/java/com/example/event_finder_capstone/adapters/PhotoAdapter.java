@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Photo;
 import com.parse.ParseFile;
 

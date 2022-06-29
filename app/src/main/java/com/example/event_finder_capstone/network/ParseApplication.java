@@ -1,7 +1,8 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.network;
 
 import android.app.Application;
 
+import com.example.event_finder_capstone.BuildConfig;
 import com.example.event_finder_capstone.models.Photo;
 import com.parse.Parse;
 import com.parse.ParseObject;

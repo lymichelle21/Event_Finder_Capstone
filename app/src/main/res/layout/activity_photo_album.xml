@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".PhotoAlbumActivity">
+    tools:context=".activities.PhotoAlbumActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPhotos"

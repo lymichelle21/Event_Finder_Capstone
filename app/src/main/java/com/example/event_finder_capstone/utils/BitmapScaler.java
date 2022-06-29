@@ -1,4 +1,4 @@
-package com.example.event_finder_capstone;
+package com.example.event_finder_capstone.utils;
 
 import android.graphics.Bitmap;
 
