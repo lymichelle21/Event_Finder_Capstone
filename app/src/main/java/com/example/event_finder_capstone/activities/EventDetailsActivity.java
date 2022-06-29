@@ -5,6 +5,8 @@ import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,8 +58,23 @@ public class EventDetailsActivity extends AppCompatActivity {
         btnPhotoAlbum = findViewById(R.id.btnPhotoAlbum);
 
         setDetailsScreenText();
+        setUpDoubleTap();
 
         btnPhotoAlbum.setOnClickListener(v -> goPhotoAlbum());
+    }
+
+    private void setUpDoubleTap() {
+        final GestureDetector.SimpleOnGestureListener listener = new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                Toast.makeText(getApplicationContext(), "Bookmarked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        };
+
+        final GestureDetector detector = new GestureDetector(listener);
+        detector.setOnDoubleTapListener(listener);
+        getWindow().getDecorView().setOnTouchListener((view, event) -> detector.onTouchEvent(event));
     }
 
     private void goPhotoAlbum() {
