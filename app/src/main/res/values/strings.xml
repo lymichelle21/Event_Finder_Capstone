@@ -25,4 +25,6 @@
     <string name="feed">Feed</string>
     <string name="profile">Profile</string>
     <string name="explore">Explore</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
