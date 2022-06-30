@@ -1,13 +1,10 @@
 package com.example.event_finder_capstone.activities;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Button;
@@ -24,6 +21,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Bookmark;
 import com.example.event_finder_capstone.models.Event;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -73,7 +71,16 @@ public class EventDetailsActivity extends AppCompatActivity {
         final GestureDetector.SimpleOnGestureListener listener = new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                addEventToBookmarked();
+                try {
+                    if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
+                        Toast.makeText(EventDetailsActivity.this, "Already bookmarked!", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        addEventToBookmarked();
+                    }
+                } catch (com.parse.ParseException ex) {
+                    ex.printStackTrace();
+                }
                 return true;
             }
         };
@@ -81,6 +88,19 @@ public class EventDetailsActivity extends AppCompatActivity {
         final GestureDetector detector = new GestureDetector(listener);
         detector.setOnDoubleTapListener(listener);
         getWindow().getDecorView().setOnTouchListener((view, event) -> detector.onTouchEvent(event));
+    }
+
+    private int checkIfEventAlreadyBookmarked(String eventId) throws com.parse.ParseException {
+        ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
+        query.whereEqualTo(Bookmark.KEY_BOOKMARKED_EVENT_ID, eventId);
+        query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
+        query.findInBackground((bookmarks, e) -> {
+            if (e != null) {
+                Toast.makeText(EventDetailsActivity.this, "Failed to check if already bookmarked", Toast.LENGTH_LONG).show();
+                return;
+            }
+        });
+        return query.count();
     }
 
     private void addEventToBookmarked() {
