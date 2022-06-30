@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     TextView tvEventDetailsCost;
     ImageView ivEventDetailsImage;
     Button btnPhotoAlbum;
+    ImageView ivBookmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +62,13 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsCost = findViewById(R.id.tvEventDetailsCost);
         ivEventDetailsImage = findViewById(R.id.ivEventsDetailsImage);
         btnPhotoAlbum = findViewById(R.id.btnPhotoAlbum);
+        ivBookmark = findViewById(R.id.ivBookmark);
 
-        setDetailsScreenText();
+        try {
+            setDetailsScreenText();
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
         setUpDoubleTap();
 
         btnPhotoAlbum.setOnClickListener(v -> goPhotoAlbum());
@@ -74,8 +81,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 try {
                     if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
                         Toast.makeText(EventDetailsActivity.this, "Already bookmarked!", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         addEventToBookmarked();
                     }
                 } catch (com.parse.ParseException ex) {
@@ -121,6 +127,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 return;
             }
             Toast.makeText(EventDetailsActivity.this, "Bookmarked!", Toast.LENGTH_LONG).show();
+            ivBookmark.setVisibility(View.VISIBLE);
         });
     }
 
@@ -130,7 +137,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setDetailsScreenText() {
+    private void setDetailsScreenText() throws com.parse.ParseException {
         tvEventDetailsTitle.setText(event.getName());
         tvEventDetailsDescription.setText(event.getDescription());
         formatAndSetEventURL();
@@ -138,6 +145,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsCost.setText(event.getCost());
         Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
         setEventStartAndEndDates();
+        if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
+            ivBookmark.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setEventStartAndEndDates() {
