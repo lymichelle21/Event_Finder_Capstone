@@ -3,6 +3,7 @@ package com.example.event_finder_capstone.network;
 import android.app.Application;
 
 import com.example.event_finder_capstone.BuildConfig;
+import com.example.event_finder_capstone.models.Bookmark;
 import com.example.event_finder_capstone.models.Photo;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -17,6 +18,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Photo.class);
+        ParseObject.registerSubclass(Bookmark.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(parse_app_id)

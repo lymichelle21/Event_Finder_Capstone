@@ -1,10 +1,13 @@
 package com.example.event_finder_capstone.activities;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Button;
@@ -19,7 +22,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.event_finder_capstone.R;
+import com.example.event_finder_capstone.models.Bookmark;
 import com.example.event_finder_capstone.models.Event;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -46,6 +51,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("Event Details");
+        event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
 
         tvEventDetailsTitle = findViewById(R.id.tvEventDetailsTitle);
         tvEventDetailsDescription = findViewById(R.id.tvEventDetailsDescription);
@@ -67,7 +73,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         final GestureDetector.SimpleOnGestureListener listener = new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                Toast.makeText(getApplicationContext(), "Bookmarked", Toast.LENGTH_SHORT).show();
+                addEventToBookmarked();
                 return true;
             }
         };
@@ -77,6 +83,27 @@ public class EventDetailsActivity extends AppCompatActivity {
         getWindow().getDecorView().setOnTouchListener((view, event) -> detector.onTouchEvent(event));
     }
 
+    private void addEventToBookmarked() {
+        String eventId = event.getId();
+        String eventCategory = event.getCategory();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        saveBookmark(eventId, eventCategory, currentUser);
+    }
+
+    private void saveBookmark(String eventId, String eventCategory, ParseUser currentUser) {
+        Bookmark bookmark = new Bookmark();
+        bookmark.setEventId(eventId);
+        bookmark.setEventCategory(eventCategory);
+        bookmark.setUser(currentUser);
+        bookmark.saveInBackground(e -> {
+            if (e != null) {
+                Toast.makeText(EventDetailsActivity.this, "Error saving bookmark!", Toast.LENGTH_LONG).show();
+                return;
+            }
+            Toast.makeText(EventDetailsActivity.this, "Bookmarked!", Toast.LENGTH_LONG).show();
+        });
+    }
+
     private void goPhotoAlbum() {
         Intent intent = new Intent(EventDetailsActivity.this, PhotoAlbumActivity.class);
         intent.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
@@ -84,7 +111,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void setDetailsScreenText() {
-        event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
         tvEventDetailsTitle.setText(event.getName());
         tvEventDetailsDescription.setText(event.getDescription());
         formatAndSetEventURL();

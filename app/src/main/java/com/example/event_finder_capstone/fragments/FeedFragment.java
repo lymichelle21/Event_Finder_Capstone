@@ -112,6 +112,7 @@ public class FeedFragment extends Fragment {
         event.setTimeStart(temp.get("time_start").getAsString());
         event.setId(temp.get("id").getAsString());
         event.setEventSiteUrl(temp.get("event_site_url").getAsString());
+        event.setCategory(temp.get("category").getAsString());
         checkAndSetEventEndTime(event, temp);
         checkAndSetEventCost(event, temp);
         formatAndSetEventLocation(temp, event);

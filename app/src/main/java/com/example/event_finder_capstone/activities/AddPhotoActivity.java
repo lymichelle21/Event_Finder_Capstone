@@ -88,7 +88,7 @@ public class AddPhotoActivity extends AppCompatActivity {
 
     private void savePhoto(String description, ParseUser currentUser, File photoFile, String eventId) {
         Photo photo = new Photo();
-        photo.setEventId(event.getId());
+        photo.setEventId(eventId);
         photo.setDescription(description);
         photo.setImage(new ParseFile(photoFile));
         photo.setUser(currentUser);
