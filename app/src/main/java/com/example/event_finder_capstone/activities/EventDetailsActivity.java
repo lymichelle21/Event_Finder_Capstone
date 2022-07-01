@@ -80,7 +80,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             public boolean onDoubleTap(MotionEvent e) {
                 try {
                     if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
-                        Toast.makeText(EventDetailsActivity.this, "Already bookmarked!", Toast.LENGTH_SHORT).show();
+                        removeBookmark(event.getId());
                     } else {
                         addEventToBookmarked();
                     }
@@ -94,6 +94,25 @@ public class EventDetailsActivity extends AppCompatActivity {
         final GestureDetector detector = new GestureDetector(listener);
         detector.setOnDoubleTapListener(listener);
         getWindow().getDecorView().setOnTouchListener((view, event) -> detector.onTouchEvent(event));
+    }
+
+    private void removeBookmark(String eventId) {
+        ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
+        query.whereEqualTo(Bookmark.KEY_BOOKMARKED_EVENT_ID, eventId);
+        query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
+        query.getFirstInBackground((bookmarks, e) -> {
+            if (e != null) {
+                Toast.makeText(EventDetailsActivity.this, "Failed to remove bookmark", Toast.LENGTH_LONG).show();
+            }
+            try {
+                bookmarks.delete();
+            } catch (com.parse.ParseException ex) {
+                ex.printStackTrace();
+            }
+            bookmarks.saveInBackground();
+            Toast.makeText(EventDetailsActivity.this, "Removed bookmark!", Toast.LENGTH_SHORT).show();
+            ivBookmark.setVisibility(View.INVISIBLE);
+        });
     }
 
     private int checkIfEventAlreadyBookmarked(String eventId) throws com.parse.ParseException {
