@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,8 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Event;
 
@@ -22,6 +24,7 @@ import org.parceler.Parcels;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class EventDetailsActivity extends AppCompatActivity {
     Event event;
@@ -40,7 +43,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        getSupportActionBar().setTitle("Event Details");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Event Details");
 
         tvEventDetailsTitle = findViewById(R.id.tvEventDetailsTitle);
         tvEventDetailsDescription = findViewById(R.id.tvEventDetailsDescription);
@@ -70,7 +73,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         formatAndSetEventURL();
         tvEventDetailsAddress.setText(event.getLocation());
         tvEventDetailsCost.setText(event.getCost());
-        Glide.with(this).load(event.getImageUrl()).centerCrop().into(ivEventDetailsImage);
+        Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
         setEventStartAndEndDates();
     }
 
@@ -92,7 +95,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsSite.setMovementMethod(LinkMovementMethod.getInstance());
         tvEventDetailsSite.setClickable(true);
         String text = "<a href='" + link + "'> Book Tickets and Learn More </a>";
-        tvEventDetailsSite.setText(Html.fromHtml(text));
+        tvEventDetailsSite.setText(HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
 
     private String convertEventDateFormat(String unformattedDate) throws ParseException {

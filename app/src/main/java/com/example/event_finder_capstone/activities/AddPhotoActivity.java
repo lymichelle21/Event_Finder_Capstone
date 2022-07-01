@@ -17,10 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.example.event_finder_capstone.utils.BitmapScaler;
 import com.example.event_finder_capstone.R;
 import com.example.event_finder_capstone.models.Event;
 import com.example.event_finder_capstone.models.Photo;
+import com.example.event_finder_capstone.utils.BitmapScaler;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class AddPhotoActivity extends AppCompatActivity {
 
@@ -51,7 +52,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_photo);
 
         event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
-        getSupportActionBar().setTitle("Add Photos from " + event.getName());
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Add Photos from " + event.getName());
 
         etDescription = findViewById(R.id.etDescription);
         Button btnCaptureImage = findViewById(R.id.btnCaptureImage);

@@ -22,4 +22,9 @@
     <string name="add_your_caption_here">Add your caption here!</string>
     <string name="submit">Submit</string>
     <string name="image">TODO</string>
+    <string name="feed">Feed</string>
+    <string name="profile">Profile</string>
+    <string name="explore">Explore</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
