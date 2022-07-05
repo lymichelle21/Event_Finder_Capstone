@@ -2,8 +2,6 @@ package com.capstone.event_finder.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +21,7 @@ import com.capstone.event_finder.models.Event;
 import org.parceler.Parcels;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
@@ -80,16 +76,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public void bind(Event event) throws ParseException {
             tvEventTitle.setText(event.getName());
             tvEventDescription.setText(event.getDescription());
-            tvStartDate.setText(convertEventDateFormat(event.getTimeStart()));
-            tvEndDate.setText(convertEventDateFormat(event.getTimeEnd()));
+            tvStartDate.setText(event.getTimeStart());
+            tvEndDate.setText(event.getTimeEnd());
             Glide.with(context).load(event.getImageUrl()).centerCrop().transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventPhoto);
-        }
-
-        private String convertEventDateFormat(String unformattedDate) throws ParseException {
-            DateFormat outputFormat = new SimpleDateFormat("MM/dd/yy", Locale.US);
-            DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-            Date formattedDate = inputFormat.parse(unformattedDate);
-            return outputFormat.format(formattedDate);
         }
 
         public void onClick(View v) {

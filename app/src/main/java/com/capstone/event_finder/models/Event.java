@@ -1,9 +1,16 @@
 package com.capstone.event_finder.models;
 
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -203,16 +210,16 @@ public class Event {
         this.ticketsUrl = ticketsUrl;
     }
 
-    public String getTimeEnd() {
-        return timeEnd;
+    public String getTimeEnd() throws ParseException {
+        return convertEventDateFormat(timeEnd);
     }
 
     public void setTimeEnd(String timeEnd) {
         this.timeEnd = timeEnd;
     }
 
-    public String getTimeStart() {
-        return timeStart;
+    public String getTimeStart() throws ParseException {
+        return convertEventDateFormat(timeStart);
     }
 
     public void setTimeStart(String timeStart) {
@@ -235,4 +242,10 @@ public class Event {
         this.businessId = businessId;
     }
 
+    private String convertEventDateFormat(String unformattedDate) throws ParseException {
+        DateFormat outputFormat = new SimpleDateFormat("MM/dd/yy", Locale.US);
+        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        Date formattedDate = inputFormat.parse(unformattedDate);
+        return outputFormat.format(formattedDate);
+    }
 }

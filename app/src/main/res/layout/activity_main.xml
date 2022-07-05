@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.capstone.event_finder.activities.MainActivity">
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/rvEvents"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginStart="0dp"-->
-<!--        android:layout_marginTop="0dp" />-->
-
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="match_parent"

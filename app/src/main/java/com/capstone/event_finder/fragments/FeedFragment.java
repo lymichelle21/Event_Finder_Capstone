@@ -19,6 +19,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.parse.ParseUser;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -99,13 +101,13 @@ public class FeedFragment extends Fragment {
         for (int i = 0; i < events.size(); i++) {
             JsonObject temp = (JsonObject) events.get(i);
             Event event = new Event();
-            populateEventInfo(i, event, temp);
+            populateEventInfo(event, temp);
             res.add(event);
         }
         return res;
     }
 
-    private void populateEventInfo(int i, Event event, JsonObject temp) {
+    private void populateEventInfo(Event event, JsonObject temp) {
         event.setName(temp.get("name").getAsString());
         event.setDescription(temp.get("description").getAsString());
         event.setImageUrl(temp.get("image_url").getAsString());
@@ -119,7 +121,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void checkAndSetEventCost(Event event, JsonObject temp) {
-        if (!String.valueOf(temp.get("cost")).equals("null")) {
+        if (String.valueOf(temp.get("cost")) == "null") {
             event.setCost("$" + temp.get("cost").getAsString() + "0");
         } else {
             event.setCost("N/A");
@@ -127,7 +129,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void checkAndSetEventEndTime(Event event, JsonObject temp) {
-        if (!String.valueOf(temp.get("time_end")).equals("null")) {
+        if (String.valueOf(temp.get("time_end")) == "null") {
             event.setTimeEnd(temp.get("time_end").getAsString());
         } else {
             event.setTimeEnd(temp.get("time_start").getAsString());
@@ -139,5 +141,4 @@ public class FeedFragment extends Fragment {
         formattedLocation = formattedLocation.replaceAll("[\\[\\]\"\"]", " ");
         event.setLocation(formattedLocation);
     }
-
 }

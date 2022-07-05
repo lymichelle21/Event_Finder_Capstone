@@ -66,7 +66,6 @@ public class AddPhotoActivity extends AppCompatActivity {
             pb.setVisibility(ProgressBar.VISIBLE);
             submitPhotoToServer();
         });
-
     }
 
     private void submitPhotoToServer() {
@@ -105,7 +104,7 @@ public class AddPhotoActivity extends AppCompatActivity {
 
     private void launchCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        photoFile = getPhotoFileUri(photoFileName);
+        photoFile = getPhotoFilePath(photoFileName);
         Uri fileProvider = FileProvider.getUriForFile(AddPhotoActivity.this, "com.codepath.event_photo_provider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -117,7 +116,7 @@ public class AddPhotoActivity extends AppCompatActivity {
     private void resizePhoto(Bitmap resizedBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, PHOTO_QUALITY, bytes);
-        File resizedFile = getPhotoFileUri(photoFileName + "_resized");
+        File resizedFile = getPhotoFilePath(photoFileName + "_resized");
         try {
             resizedFile.createNewFile();
         } catch (IOException e) {
@@ -142,7 +141,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         }
     }
 
-    private File getPhotoFileUri(String photoFileName) {
+    private File getPhotoFilePath(String photoFileName) {
         File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Toast.makeText(AddPhotoActivity.this, "Failed to create photo directory", Toast.LENGTH_LONG).show();
@@ -155,7 +154,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Uri takenPhotoUri = Uri.fromFile(getPhotoFileUri(photoFileName));
+                Uri takenPhotoUri = Uri.fromFile(getPhotoFilePath(photoFileName));
                 Bitmap rawTakenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
                 Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, PHOTO_WIDTH);
                 resizePhoto(resizedBitmap);

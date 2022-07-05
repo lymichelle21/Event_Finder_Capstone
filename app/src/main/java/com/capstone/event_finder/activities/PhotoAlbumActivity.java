@@ -26,7 +26,7 @@ import java.util.Objects;
 public class PhotoAlbumActivity extends AppCompatActivity {
 
     private static final int POST_LIMIT = 20;
-    protected PhotoAdapter photo_adapter;
+    protected PhotoAdapter photoAdapter;
     protected List<Photo> allPhotos;
     Event event;
     RecyclerView rvPhotos;
@@ -39,14 +39,17 @@ public class PhotoAlbumActivity extends AppCompatActivity {
         event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
         Objects.requireNonNull(getSupportActionBar()).setTitle("Photos from " + event.getName());
 
+        setUpPhotoGridRecyclerView();
+        queryPhotos(event.getId());
+    }
+
+    private void setUpPhotoGridRecyclerView() {
         rvPhotos = findViewById(R.id.rvPhotos);
         allPhotos = new ArrayList<>();
-        photo_adapter = new PhotoAdapter(this, allPhotos);
-        rvPhotos.setAdapter(photo_adapter);
+        photoAdapter = new PhotoAdapter(this, allPhotos);
+        rvPhotos.setAdapter(photoAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rvPhotos.setLayoutManager(gridLayoutManager);
-        event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
-        queryPhotos(event.getId());
     }
 
     private void queryPhotos(String eventId) {
@@ -62,7 +65,7 @@ public class PhotoAlbumActivity extends AppCompatActivity {
                 return;
             }
             allPhotos.addAll(photos);
-            photo_adapter.notifyDataSetChanged();
+            photoAdapter.notifyDataSetChanged();
         });
     }
 

@@ -1,8 +1,6 @@
 package com.capstone.event_finder.activities;
 
 import android.content.Intent;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.GestureDetector;
@@ -28,8 +26,6 @@ import com.parse.ParseUser;
 import org.parceler.Parcels;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 public class EventDetailsActivity extends AppCompatActivity {
@@ -122,7 +118,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         query.findInBackground((bookmarks, e) -> {
             if (e != null) {
                 Toast.makeText(EventDetailsActivity.this, "Failed to check if already bookmarked", Toast.LENGTH_LONG).show();
-                return;
             }
         });
         return query.count();
@@ -159,11 +154,11 @@ public class EventDetailsActivity extends AppCompatActivity {
     private void setDetailsScreenText() throws com.parse.ParseException {
         tvEventDetailsTitle.setText(event.getName());
         tvEventDetailsDescription.setText(event.getDescription());
-        formatAndSetEventURL();
         tvEventDetailsAddress.setText(event.getLocation());
         tvEventDetailsCost.setText(event.getCost());
         Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
         setEventStartAndEndDates();
+        formatAndSetEventURL();
         if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
             ivBookmark.setVisibility(View.VISIBLE);
         }
@@ -171,12 +166,12 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void setEventStartAndEndDates() {
         try {
-            tvEventDetailsStartDate.setText(convertEventDateFormat(event.getTimeStart()));
+            tvEventDetailsStartDate.setText(event.getTimeStart());
         } catch (ParseException e) {
             Toast.makeText(EventDetailsActivity.this, "Failed to retrieve start date", Toast.LENGTH_SHORT).show();
         }
         try {
-            tvEventDetailsEndDate.setText(convertEventDateFormat(event.getTimeEnd()));
+            tvEventDetailsEndDate.setText(event.getTimeEnd());
         } catch (ParseException e) {
             Toast.makeText(EventDetailsActivity.this, "Failed to retrieve end date", Toast.LENGTH_SHORT).show();
         }
@@ -189,14 +184,5 @@ public class EventDetailsActivity extends AppCompatActivity {
         String text = "<a href='" + link + "'> Book Tickets and Learn More </a>";
         tvEventDetailsSite.setText(HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
-
-    private String convertEventDateFormat(String unformattedDate) throws ParseException {
-        DateFormat outputFormat = new SimpleDateFormat("MM/dd/yy", Locale.US);
-        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-        Date formattedDate = inputFormat.parse(unformattedDate);
-        return outputFormat.format(formattedDate);
-    }
-
-
 }
 
