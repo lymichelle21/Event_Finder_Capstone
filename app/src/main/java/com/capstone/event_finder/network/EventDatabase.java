@@ -1,0 +1,49 @@
+package com.capstone.event_finder.network;
+
+import android.content.Context;
+import android.os.AsyncTask;
+
+import androidx.annotation.NonNull;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.capstone.event_finder.interfaces.EventDao;
+import com.capstone.event_finder.models.EventEntity;
+
+@Database(entities = {EventEntity.class}, version = 1)
+public abstract class EventDatabase extends RoomDatabase {
+    private static EventDatabase instance;
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateDbAsyncTask(instance).execute();
+        }
+    };
+
+    public static synchronized EventDatabase getInstance(Context context) {
+        if (instance == null) {
+            instance = Room.databaseBuilder(context.getApplicationContext(),
+                            EventDatabase.class, "event_database")
+                    .fallbackToDestructiveMigration()
+                    .addCallback(roomCallback)
+                    .build();
+        }
+        return instance;
+    }
+
+    public abstract EventDao eventDao();
+
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+        PopulateDbAsyncTask(EventDatabase instance) {
+            EventDao dao = instance.eventDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+    }
+}
