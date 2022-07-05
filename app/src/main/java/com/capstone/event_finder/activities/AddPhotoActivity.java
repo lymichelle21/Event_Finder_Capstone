@@ -112,7 +112,6 @@ public class AddPhotoActivity extends AppCompatActivity {
         }
     }
 
-
     private void resizePhoto(Bitmap resizedBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, PHOTO_QUALITY, bytes);
