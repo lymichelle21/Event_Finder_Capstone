@@ -3,6 +3,7 @@ package com.capstone.event_finder.models;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

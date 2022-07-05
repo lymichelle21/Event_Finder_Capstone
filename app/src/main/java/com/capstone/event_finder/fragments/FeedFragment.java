@@ -11,15 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.capstone.event_finder.R;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.RetrofitClient;
-import com.capstone.event_finder.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.parse.ParseUser;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -137,8 +135,11 @@ public class FeedFragment extends Fragment {
     }
 
     private void formatAndSetEventLocation(JsonObject temp, Event event) {
-        String formattedLocation = temp.get("location").getAsJsonObject().get("display_address").toString();
-        formattedLocation = formattedLocation.replaceAll("[\\[\\]\"\"]", " ");
-        event.setLocation(formattedLocation);
+        JsonArray formattedLocation = temp.getAsJsonObject("location").getAsJsonArray("display_address");
+        String formattedLocationString = "";
+        for (int i = 0; i < formattedLocation.size(); i++) {
+            formattedLocationString = formattedLocationString + (formattedLocation.get(i).getAsString()) + " ";
+        }
+        event.setLocation(formattedLocationString);
     }
 }
