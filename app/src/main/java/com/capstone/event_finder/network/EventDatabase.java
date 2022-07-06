@@ -10,39 +10,46 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.capstone.event_finder.interfaces.EventDao;
-import com.capstone.event_finder.models.EventEntity;
+import com.capstone.event_finder.models.Event;
 
-@Database(entities = {EventEntity.class}, version = 1)
+@Database(entities = {Event.class}, version = 5)
 public abstract class EventDatabase extends RoomDatabase {
-    private static EventDatabase instance;
+    private static volatile EventDatabase instance;
+    public abstract EventDao eventDao();
+
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDbAsyncTask(instance).execute();
+            new PopulateDbAsyncTask(instance);
         }
     };
 
     public static synchronized EventDatabase getInstance(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(),
-                            EventDatabase.class, "event_database")
-                    .fallbackToDestructiveMigration()
-                    .addCallback(roomCallback)
-                    .build();
+            synchronized (EventDatabase.class) {
+                if (instance == null) {
+                    instance = Room.databaseBuilder(context.getApplicationContext(),
+                                    EventDatabase.class, "event_database")
+                            .fallbackToDestructiveMigration()
+                            .addCallback(roomCallback)
+                            .build();
+                }
+            }
         }
         return instance;
     }
 
-    public abstract EventDao eventDao();
-
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        PopulateDbAsyncTask(EventDatabase instance) {
-            EventDao dao = instance.eventDao();
-        }
 
+        private EventDao eventDao;
+        public PopulateDbAsyncTask(EventDatabase eventDatabase)
+        {
+            eventDao = eventDatabase.eventDao();
+        }
         @Override
         protected Void doInBackground(Void... voids) {
+            eventDao.deleteAllEvents();
             return null;
         }
     }
