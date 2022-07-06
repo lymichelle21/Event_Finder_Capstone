@@ -1,15 +1,18 @@
 package com.capstone.event_finder.models;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.content.Context;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
 
-import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -17,7 +20,6 @@ import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Generated;
@@ -259,16 +261,26 @@ public class Event {
         this.ticketsUrl = ticketsUrl;
     }
 
-    public String getTimeEnd() throws ParseException {
-        return convertEventDateFormat(timeEnd);
+    public String getTimeEnd(){
+        try{
+            return convertEventDateFormat(timeEnd);
+        }
+        catch (ParseException e) {
+        }
+        return "";
     }
 
     public void setTimeEnd(String timeEnd) {
         this.timeEnd = timeEnd;
     }
 
-    public String getTimeStart() throws ParseException {
-        return convertEventDateFormat(timeStart);
+    public String getTimeStart() {
+        try{
+            return convertEventDateFormat(timeStart);
+        }
+        catch (ParseException e) {
+        }
+        return "";
     }
 
     public void setTimeStart(String timeStart) {

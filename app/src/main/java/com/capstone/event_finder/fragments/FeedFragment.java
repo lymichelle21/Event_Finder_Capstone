@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.models.Event;
+import com.capstone.event_finder.network.EventRepository;
+import com.capstone.event_finder.network.EventViewModel;
 import com.capstone.event_finder.network.RetrofitClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -32,6 +34,8 @@ public class FeedFragment extends Fragment {
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();
     private EventsAdapter eventsAdapter;
+    private EventRepository eventRepository;
+    private EventViewModel eventViewModel;
 
     public FeedFragment() {
     }
@@ -45,6 +49,7 @@ public class FeedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        eventRepository = new EventRepository(getActivity().getApplication());
         setUpRecyclerView(view);
         getAPIEvents();
     }
@@ -77,6 +82,7 @@ public class FeedFragment extends Fragment {
                             eventsList.clear();
                             eventsList.addAll(convertToList(result));
                             eventsAdapter.notifyDataSetChanged();
+                            eventRepository.insert((List<Event>) convertToList(result));
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
                         }

@@ -165,16 +165,8 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void setEventStartAndEndDates() {
-        try {
-            tvEventDetailsStartDate.setText(event.getTimeStart());
-        } catch (ParseException e) {
-            Toast.makeText(EventDetailsActivity.this, "Failed to retrieve start date", Toast.LENGTH_SHORT).show();
-        }
-        try {
-            tvEventDetailsEndDate.setText(event.getTimeEnd());
-        } catch (ParseException e) {
-            Toast.makeText(EventDetailsActivity.this, "Failed to retrieve end date", Toast.LENGTH_SHORT).show();
-        }
+        tvEventDetailsStartDate.setText(event.getTimeStart());
+        tvEventDetailsEndDate.setText(event.getTimeEnd());
     }
 
     private void formatAndSetEventURL() {

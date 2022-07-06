@@ -25,7 +25,7 @@ public class EventViewModel extends AndroidViewModel {
         eventRepository.insert(events);
     }
 
-    public LiveData<List<Event>> getAllCats() {
+    public LiveData<List<Event>> getEvents() {
         return getEvents;
     }
 }
