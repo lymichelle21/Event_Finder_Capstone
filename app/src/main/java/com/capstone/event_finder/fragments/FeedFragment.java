@@ -1,6 +1,10 @@
 package com.capstone.event_finder.fragments;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,8 +56,20 @@ public class FeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eventRepository = new EventRepository(getActivity().getApplication());
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+
         setUpRecyclerView(view);
-        getAPIEvents();
+
+        eventViewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
+                @Override
+                public void onChanged(List<Event> events) {
+                    Log.d(TAG, "hey hey!");
+                    eventsList.addAll(events);
+                    eventsAdapter.notifyDataSetChanged();
+                }
+            });
+
+        //getAPIEvents();
     }
 
     private void setUpRecyclerView(@NonNull View view) {
@@ -81,8 +99,8 @@ public class FeedFragment extends Fragment {
                             JsonObject result = response.body();
                             eventsList.clear();
                             eventsList.addAll(convertToList(result));
+                            eventViewModel.insert((List<Event>) convertToList(result));
                             eventsAdapter.notifyDataSetChanged();
-                            eventRepository.insert((List<Event>) convertToList(result));
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
                         }
@@ -97,6 +115,7 @@ public class FeedFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed to call API", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private Collection<? extends Event> convertToList(JsonObject result) {

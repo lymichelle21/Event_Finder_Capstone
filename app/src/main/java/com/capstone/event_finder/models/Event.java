@@ -262,10 +262,14 @@ public class Event {
     }
 
     public String getTimeEnd(){
+        if (timeEnd.matches("\\d{2}/\\d{2}/\\d{2}")) {
+            return timeEnd;
+        }
         try{
             return convertEventDateFormat(timeEnd);
         }
         catch (ParseException e) {
+            e.printStackTrace();
         }
         return "";
     }
@@ -275,10 +279,14 @@ public class Event {
     }
 
     public String getTimeStart() {
+        if (timeStart.matches("\\d{2}/\\d{2}/\\d{2}")) {
+            return timeStart;
+        }
         try{
             return convertEventDateFormat(timeStart);
         }
         catch (ParseException e) {
+            e.printStackTrace();
         }
         return "";
     }
