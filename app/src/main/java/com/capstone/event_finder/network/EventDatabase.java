@@ -1,7 +1,10 @@
 package com.capstone.event_finder.network;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -17,8 +20,8 @@ public abstract class EventDatabase extends RoomDatabase {
     private static volatile EventDatabase instance;
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
             new PopulateDbAsyncTask(instance);
         }
     };

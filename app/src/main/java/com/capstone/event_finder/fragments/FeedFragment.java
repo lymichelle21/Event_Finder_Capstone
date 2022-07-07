@@ -59,14 +59,6 @@ public class FeedFragment extends Fragment {
 
         setUpRecyclerView(view);
 
-//        eventViewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
-//            @Override
-//            public void onChanged(List<Event> events) {
-//                Log.d(TAG, "Caching locally now!");
-//                eventsList.addAll(events);
-//                eventsAdapter.notifyDataSetChanged();
-//            }
-//        });
 
         getAPIEvents();
     }
@@ -98,8 +90,8 @@ public class FeedFragment extends Fragment {
                             JsonObject result = response.body();
                             eventsList.clear();
                             eventsList.addAll(convertToList(result));
+                            eventViewModel.delete((List<Event>) convertToList(result));
                             eventViewModel.insert((List<Event>) convertToList(result));
-                            //eventViewModel.delete((List<Event>) convertToList(result));
                             eventsAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
@@ -112,7 +104,15 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), "Failed to call API", Toast.LENGTH_SHORT).show();
+                eventViewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
+                    @Override
+                    public void onChanged(List<Event> events) {
+                        Log.d(TAG, "Caching locally now!");
+                        eventsList.addAll(events);
+                        eventsAdapter.notifyDataSetChanged();
+                    }
+                });
+                Toast.makeText(getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
             }
         });
 
