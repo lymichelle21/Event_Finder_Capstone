@@ -1,10 +1,7 @@
 package com.capstone.event_finder.network;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -15,14 +12,14 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.capstone.event_finder.interfaces.EventDao;
 import com.capstone.event_finder.models.Event;
 
-@Database(entities = {Event.class}, version = 5)
+@Database(entities = {Event.class}, version = 1)
 public abstract class EventDatabase extends RoomDatabase {
     private static volatile EventDatabase instance;
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            new PopulateDbAsyncTask(instance);
+            new populateDbAsyncTask(instance);
         }
     };
 
@@ -43,10 +40,10 @@ public abstract class EventDatabase extends RoomDatabase {
 
     public abstract EventDao eventDao();
 
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private EventDao eventDao;
+    private static class populateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final EventDao eventDao;
 
-        public PopulateDbAsyncTask(EventDatabase eventDatabase) {
+        public populateDbAsyncTask(EventDatabase eventDatabase) {
             eventDao = eventDatabase.eventDao();
         }
 

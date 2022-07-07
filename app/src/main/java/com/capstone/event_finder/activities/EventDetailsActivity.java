@@ -74,7 +74,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
                 try {
-                    if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
+                    if (isEventAlreadyBookmarked(event.getId())) {
                         removeBookmark(event.getId());
                     } else {
                         addEventToBookmarked();
@@ -86,7 +86,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         };
 
-        final GestureDetector detector = new GestureDetector(listener);
+        final GestureDetector detector = new GestureDetector(getApplicationContext(), listener);
         detector.setOnDoubleTapListener(listener);
         getWindow().getDecorView().setOnTouchListener((view, event) -> detector.onTouchEvent(event));
     }
@@ -102,6 +102,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             try {
                 bookmarks.delete();
             } catch (com.parse.ParseException ex) {
+                Toast.makeText(EventDetailsActivity.this, "Failed to delete bookmark", Toast.LENGTH_LONG).show();
                 ex.printStackTrace();
             }
             bookmarks.saveInBackground();
@@ -110,7 +111,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private int checkIfEventAlreadyBookmarked(String eventId) throws com.parse.ParseException {
+    private boolean isEventAlreadyBookmarked(String eventId) throws com.parse.ParseException {
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
         query.whereEqualTo(Bookmark.KEY_BOOKMARKED_EVENT_ID, eventId);
         query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
@@ -119,7 +120,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 Toast.makeText(EventDetailsActivity.this, "Failed to check if already bookmarked", Toast.LENGTH_LONG).show();
             }
         });
-        return query.count();
+        return query.count() >= 1;
     }
 
     private void addEventToBookmarked() {
@@ -159,7 +160,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsEndDate.setText(event.getTimeEnd());
         Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
         formatAndSetEventURL();
-        if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
+        if (isEventAlreadyBookmarked(event.getId())) {
             ivBookmark.setVisibility(View.VISIBLE);
         }
     }

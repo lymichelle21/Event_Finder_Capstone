@@ -14,10 +14,9 @@ public class EventRepository {
 
     public EventDao eventDao;
     public LiveData<List<Event>> getEvents;
-    private EventDatabase eventDatabase;
 
     public EventRepository(Application application) {
-        eventDatabase = EventDatabase.getInstance(application);
+        EventDatabase eventDatabase = EventDatabase.getInstance(application);
         eventDao = eventDatabase.eventDao();
         getEvents = eventDao.getEvents();
     }
@@ -35,28 +34,30 @@ public class EventRepository {
     }
 
     private static class InsertAsyncTask extends AsyncTask<List<Event>,Void,Void> {
-        private EventDao eventDao;
+        private final EventDao eventDao;
 
         public InsertAsyncTask(EventDao eventDao) {
             this.eventDao = eventDao;
         }
 
+        @SafeVarargs
         @Override
-        protected Void doInBackground(List<Event>... lists) {
+        protected final Void doInBackground(List<Event>... lists) {
             eventDao.insert(lists[0]);
             return null;
         }
     }
 
     private static class DeleteAsyncTask extends AsyncTask<List<Event>,Void,Void> {
-        private EventDao eventDao;
+        private final EventDao eventDao;
 
         public DeleteAsyncTask(EventDao eventDao) {
             this.eventDao = eventDao;
         }
 
+        @SafeVarargs
         @Override
-        protected Void doInBackground(List<Event>... lists) {
+        protected final Void doInBackground(List<Event>... lists) {
             eventDao.deleteAllEvents();
             return null;
         }
