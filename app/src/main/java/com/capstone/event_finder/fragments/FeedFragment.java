@@ -149,18 +149,19 @@ public class FeedFragment extends Fragment {
     }
 
     private void checkAndSetEventCost(Event event, JsonObject temp) {
-        if (String.valueOf(temp.get("cost")).equals("null")) {
-            event.setCost("$" + temp.get("cost").getAsString() + "0");
-        } else {
+        Log.d(TAG, (temp.get("cost").toString()));
+        if (temp.get("cost").toString().matches("null")) {
             event.setCost("N/A");
+        } else {
+            event.setCost("$" + temp.get("cost").getAsString() + "0");
         }
     }
 
     private void checkAndSetEventEndTime(Event event, JsonObject temp) {
-        if (String.valueOf(temp.get("time_end")).equals("null")) {
-            event.setTimeEnd(temp.get("time_end").getAsString());
-        } else {
+        if (temp.get("time_end").toString().matches("null")) {
             event.setTimeEnd(temp.get("time_start").getAsString());
+        } else {
+            event.setTimeEnd(temp.get("time_end").getAsString());
         }
     }
 
