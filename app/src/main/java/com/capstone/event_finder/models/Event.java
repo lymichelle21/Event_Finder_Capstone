@@ -1,12 +1,7 @@
 package com.capstone.event_finder.models;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.content.Context;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -261,14 +256,13 @@ public class Event {
         this.ticketsUrl = ticketsUrl;
     }
 
-    public String getTimeEnd(){
+    public String getTimeEnd() {
         if (timeEnd.matches("\\d{2}/\\d{2}/\\d{2}")) {
             return timeEnd;
         }
-        try{
+        try {
             return convertEventDateFormat(timeEnd);
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return "";
@@ -282,10 +276,9 @@ public class Event {
         if (timeStart.matches("\\d{2}/\\d{2}/\\d{2}")) {
             return timeStart;
         }
-        try{
+        try {
             return convertEventDateFormat(timeStart);
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return "";

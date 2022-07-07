@@ -25,7 +25,6 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
-import java.text.ParseException;
 import java.util.Objects;
 
 public class EventDetailsActivity extends AppCompatActivity {
@@ -156,17 +155,13 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsDescription.setText(event.getDescription());
         tvEventDetailsAddress.setText(event.getLocation());
         tvEventDetailsCost.setText(event.getCost());
+        tvEventDetailsStartDate.setText(event.getTimeStart());
+        tvEventDetailsEndDate.setText(event.getTimeEnd());
         Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
-        setEventStartAndEndDates();
         formatAndSetEventURL();
         if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
             ivBookmark.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void setEventStartAndEndDates() {
-        tvEventDetailsStartDate.setText(event.getTimeStart());
-        tvEventDetailsEndDate.setText(event.getTimeEnd());
     }
 
     private void formatAndSetEventURL() {

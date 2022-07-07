@@ -15,8 +15,6 @@ import com.capstone.event_finder.models.Event;
 @Database(entities = {Event.class}, version = 5)
 public abstract class EventDatabase extends RoomDatabase {
     private static volatile EventDatabase instance;
-    public abstract EventDao eventDao();
-
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -40,13 +38,15 @@ public abstract class EventDatabase extends RoomDatabase {
         return instance;
     }
 
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+    public abstract EventDao eventDao();
 
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private EventDao eventDao;
-        public PopulateDbAsyncTask(EventDatabase eventDatabase)
-        {
+
+        public PopulateDbAsyncTask(EventDatabase eventDatabase) {
             eventDao = eventDatabase.eventDao();
         }
+
         @Override
         protected Void doInBackground(Void... voids) {
             eventDao.deleteAllEvents();

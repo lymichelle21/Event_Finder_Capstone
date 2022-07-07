@@ -2,7 +2,6 @@ package com.capstone.event_finder.fragments;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,16 +59,16 @@ public class FeedFragment extends Fragment {
 
         setUpRecyclerView(view);
 
-        eventViewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
-                @Override
-                public void onChanged(List<Event> events) {
-                    Log.d(TAG, "hey hey!");
-                    eventsList.addAll(events);
-                    eventsAdapter.notifyDataSetChanged();
-                }
-            });
+//        eventViewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
+//            @Override
+//            public void onChanged(List<Event> events) {
+//                Log.d(TAG, "Caching locally now!");
+//                eventsList.addAll(events);
+//                eventsAdapter.notifyDataSetChanged();
+//            }
+//        });
 
-        //getAPIEvents();
+        getAPIEvents();
     }
 
     private void setUpRecyclerView(@NonNull View view) {
@@ -100,6 +99,7 @@ public class FeedFragment extends Fragment {
                             eventsList.clear();
                             eventsList.addAll(convertToList(result));
                             eventViewModel.insert((List<Event>) convertToList(result));
+                            //eventViewModel.delete((List<Event>) convertToList(result));
                             eventsAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
