@@ -1,9 +1,6 @@
 package com.capstone.event_finder.fragments;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,15 +57,12 @@ public class FeedFragment extends Fragment implements FeedFragmentInterface {
     }
 
     private void setUpSwipeRefresh(@NonNull View view) {
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer = view.findViewById(R.id.swipeContainer);
         setUpRecyclerView(view);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getContext(), "Finding new events!", Toast.LENGTH_SHORT).show();
-                getAPIEvents();
-                swipeContainer.setRefreshing(false);
-            }
+        swipeContainer.setOnRefreshListener(() -> {
+            Toast.makeText(getContext(), "Finding new events!", Toast.LENGTH_SHORT).show();
+            getAPIEvents();
+            swipeContainer.setRefreshing(false);
         });
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -128,7 +122,6 @@ public class FeedFragment extends Fragment implements FeedFragmentInterface {
     private void tryLocallyCaching() {
         eventViewModel.getEvents().observe(getViewLifecycleOwner(), events -> {
             eventsList.addAll(events);
-            Log.d(TAG, String.valueOf(eventsList.size()));
             eventsAdapter.notifyDataSetChanged();
         });
     }

@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBottomNavigation(FragmentManager fragmentManager) {
-        final Fragment feedFragment = new FeedFragment();
-        final Fragment exploreFragment = new ExploreFragment();
-        final Fragment profileFragment = new ProfileFragment();
+        Fragment feedFragment = new FeedFragment();
+        Fragment exploreFragment = new ExploreFragment();
+        Fragment profileFragment = new ProfileFragment();
         initialCallToEventApi((FeedFragmentInterface) feedFragment);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {

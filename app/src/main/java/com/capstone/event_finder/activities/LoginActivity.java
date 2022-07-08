@@ -7,10 +7,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.capstone.event_finder.R;
-import com.capstone.event_finder.network.EventViewModel;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
