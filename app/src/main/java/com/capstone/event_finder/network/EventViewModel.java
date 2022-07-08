@@ -13,6 +13,7 @@ import java.util.List;
 public class EventViewModel extends AndroidViewModel {
 
     public LiveData<List<Event>> getEvents;
+
     private final EventRepository eventRepository;
 
     public EventViewModel(@NonNull Application application) {
@@ -25,8 +26,8 @@ public class EventViewModel extends AndroidViewModel {
         eventRepository.insert(events);
     }
 
-    public void delete(List<Event> events) {
-        eventRepository.deleteAllEvents(events);
+    public void delete() {
+        eventRepository.deleteAllEvents();
     }
 
     public LiveData<List<Event>> getEvents() {

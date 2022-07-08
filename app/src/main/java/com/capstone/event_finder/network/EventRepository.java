@@ -29,8 +29,8 @@ public class EventRepository {
         return getEvents;
     }
 
-    public void deleteAllEvents(List<Event> events) {
-        new DeleteAsyncTask(eventDao).execute(events);
+    public void deleteAllEvents() {
+        new DeleteAsyncTask(eventDao).execute();
     }
 
     private static class InsertAsyncTask extends AsyncTask<List<Event>,Void,Void> {

@@ -14,9 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.adapters.EventsAdapter;
+import com.capstone.event_finder.interfaces.FeedFragmentInterface;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.EventViewModel;
 import com.capstone.event_finder.network.RetrofitClient;
@@ -32,12 +34,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements FeedFragmentInterface {
 
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();
     private EventsAdapter eventsAdapter;
     private EventViewModel eventViewModel;
+    private SwipeRefreshLayout swipeContainer;
 
     public FeedFragment() {
     }
@@ -52,10 +55,25 @@ public class FeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+        setUpSwipeRefresh(view);
+        tryLocallyCaching();
+    }
 
+    private void setUpSwipeRefresh(@NonNull View view) {
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         setUpRecyclerView(view);
-
-        getAPIEvents();
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getContext(), "Finding new events!", Toast.LENGTH_SHORT).show();
+                getAPIEvents();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private void setUpRecyclerView(@NonNull View view) {
@@ -67,7 +85,7 @@ public class FeedFragment extends Fragment {
         rvEvents.setLayoutManager(linearLayoutManager);
     }
 
-    private void getAPIEvents() {
+    public void getAPIEvents() {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
@@ -80,7 +98,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    addEventsToFeed(response);
+                    addEventsToDatabase(response);
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
@@ -88,20 +106,17 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                tryLocallyCaching();
                 Toast.makeText(getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
-    private void addEventsToFeed(@NonNull Response<JsonObject> response) {
+    private void addEventsToDatabase(@NonNull Response<JsonObject> response) {
         requireActivity().runOnUiThread(() -> {
             try {
                 JsonObject result = response.body();
                 eventsList.clear();
                 assert result != null;
-                eventsList.addAll(convertToList(result));
                 clearAndAddEventsToDatabase(result);
                 eventsAdapter.notifyDataSetChanged();
             } catch (Exception e) {
@@ -112,14 +127,14 @@ public class FeedFragment extends Fragment {
 
     private void tryLocallyCaching() {
         eventViewModel.getEvents().observe(getViewLifecycleOwner(), events -> {
-            Log.d(TAG, "Caching locally now!");
             eventsList.addAll(events);
+            Log.d(TAG, String.valueOf(eventsList.size()));
             eventsAdapter.notifyDataSetChanged();
         });
     }
 
     private void clearAndAddEventsToDatabase(JsonObject result) {
-        eventViewModel.delete((List<Event>) convertToList(result));
+        eventViewModel.delete();
         eventViewModel.insert((List<Event>) convertToList(result));
     }
 
@@ -149,7 +164,6 @@ public class FeedFragment extends Fragment {
     }
 
     private void checkAndSetEventCost(Event event, JsonObject temp) {
-        Log.d(TAG, (temp.get("cost").toString()));
         if (temp.get("cost").toString().matches("null")) {
             event.setCost("N/A");
         } else {

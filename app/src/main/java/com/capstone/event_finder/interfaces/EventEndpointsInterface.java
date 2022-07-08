@@ -13,6 +13,4 @@ public interface EventEndpointsInterface {
                                @Query("start_date") Long start_date,
                                @Query("radius") Long radius,
                                @Query("location") String location);
-
-    //     Call<List<Model>>
 }

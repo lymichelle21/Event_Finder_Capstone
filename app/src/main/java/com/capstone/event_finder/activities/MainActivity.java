@@ -9,37 +9,51 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.fragments.ProfileFragment;
+import com.capstone.event_finder.interfaces.FeedFragmentInterface;
+import com.capstone.event_finder.network.EventViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
+    private EventViewModel eventViewModel;
+    private FeedFragmentInterface listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final FragmentManager fragmentManager = getSupportFragmentManager();
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         setUpBottomNavigation(fragmentManager);
     }
 
+    public void setListener(FeedFragmentInterface listener) {
+        this.listener = listener;
+    }
+
     private void setUpBottomNavigation(FragmentManager fragmentManager) {
+        final Fragment feedFragment = new FeedFragment();
+        final Fragment exploreFragment = new ExploreFragment();
+        final Fragment profileFragment = new ProfileFragment();
+        initialCallToEventApi((FeedFragmentInterface) feedFragment);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
             switch (menuItem.getItemId()) {
                 case R.id.action_feed:
-                    fragment = new FeedFragment();
+                    fragment = feedFragment;
                     break;
                 case R.id.action_explore:
-                    fragment = new ExploreFragment();
+                    fragment = exploreFragment;
                     break;
                 case R.id.action_profile:
-                    fragment = new ProfileFragment();
+                    fragment = profileFragment;
                     break;
                 default:
                     return true;
@@ -48,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
+    }
+
+    private void initialCallToEventApi(FeedFragmentInterface feedFragment) {
+        setListener(feedFragment);
+        listener.getAPIEvents();
     }
 
     @Override
@@ -65,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void onLogoutButton() {
+        eventViewModel.delete();
         Toast.makeText(MainActivity.this, "Logged out!", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
         Intent i = new Intent(this, LoginActivity.class);
