@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvProfileUsername"
         android:layout_marginTop="136dp"
+        android:text="@string/bookmarks"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Bookmarks" />
 

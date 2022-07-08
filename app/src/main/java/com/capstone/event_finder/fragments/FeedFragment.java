@@ -52,13 +52,13 @@ public class FeedFragment extends Fragment implements FeedFragmentInterface {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+        setUpRecyclerView(view);
         setUpSwipeRefresh(view);
         tryLocallyCaching();
     }
 
     private void setUpSwipeRefresh(@NonNull View view) {
         swipeContainer = view.findViewById(R.id.swipeContainer);
-        setUpRecyclerView(view);
         swipeContainer.setOnRefreshListener(() -> {
             Toast.makeText(getContext(), "Finding new events!", Toast.LENGTH_SHORT).show();
             getAPIEvents();
