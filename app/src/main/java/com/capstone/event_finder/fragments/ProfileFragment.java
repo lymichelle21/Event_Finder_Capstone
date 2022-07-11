@@ -1,9 +1,6 @@
 package com.capstone.event_finder.fragments;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.adapters.EventsAdapter;
+import com.capstone.event_finder.interfaces.ProfileFragmentInterface;
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.RetrofitClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,15 +31,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements ProfileFragmentInterface {
 
+    private final List<Bookmark> userBookmarks = new ArrayList<>();
+    private final List<Event> bookmarkList = new ArrayList<>();
+    private final ArrayList<String> bookmarkIds = new ArrayList<>();
     RecyclerView rvBookmarks;
     TextView tvProfileUsername;
     EventsAdapter bookmarkAdapter;
-    JSONArray allBookmarks;
-    private List<Bookmark> userBookmarks = new ArrayList<Bookmark>();
-    private List<Event> bookmarkList = new ArrayList<>();
-    private ArrayList bookmarkIds = new ArrayList();
 
     public ProfileFragment() {
     }
@@ -59,49 +52,66 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //setUpRecyclerView(view);
+
         tvProfileUsername = view.findViewById(R.id.tvProfileUsername);
         rvBookmarks = view.findViewById(R.id.rvBookmarks);
         tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
-        queryUserBookmarksFromParse();
-        //lookupEvent();
+
+        JsonArray allBookmarks = new JsonArray();
+        setUpRecyclerView(view);
+        getAndSetUserBookmarks(allBookmarks);
+
     }
 
-    public void queryUserBookmarksFromParse(){
+    public void getAndSetUserBookmarks(JsonArray allBookmarks) {
+        bookmarkList.clear();
+        userBookmarks.clear();
+        bookmarkIds.clear();
+        queryUserBookmarksFromParse(allBookmarks);
+    }
+
+    public void queryUserBookmarksFromParse(JsonArray allBookmarks) {
         final int POST_LIMIT = 10;
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
         query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
         query.setLimit(POST_LIMIT);
         query.addDescendingOrder("createdAt");
-        query.findInBackground(new FindCallback<Bookmark>() {
-            @Override
-            public void done(List<Bookmark> bookmarks, ParseException e) {
-                if (e != null) {
-                    Toast.makeText(getContext(), "Failed to find bookmarks", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                userBookmarks.addAll(bookmarks);
-                for (int i = 0; i < userBookmarks.size(); i++) {
-                    Bookmark bookmark = bookmarks.get(i);
-                    String bookmarkId = bookmark.getEventId();
-                    bookmarkIds.add(bookmarkId);
-                    Log.d(TAG, bookmarkIds.toString());
-                }
+        query.findInBackground((bookmarks, e) -> {
+            if (e != null) {
+                Toast.makeText(getContext(), "Failed to find bookmarks", Toast.LENGTH_LONG).show();
+                return;
             }
+            userBookmarks.clear();
+            userBookmarks.addAll(bookmarks);
+            queryUserBookmarksFromApi(allBookmarks);
         });
     }
 
-    public void lookupEvent() {
-        RetrofitClient.getInstance().getYelpAPI().lookupEvent("oakland-saucy-oakland-restaurant-pop-up").enqueue(new Callback<JsonObject>() {
+    private void queryUserBookmarksFromApi(JsonArray allBookmarks) {
+        for (int i = 0; i < userBookmarks.size(); i++) {
+            Bookmark bookmark = userBookmarks.get(i);
+            String bookmarkId = bookmark.getEventId();
+            bookmarkIds.add(bookmarkId);
+        }
+
+        for (int i = 0; i < bookmarkIds.size(); i++) {
+            lookupEventsAndSetEvents(bookmarkIds.get(i), i, allBookmarks);
+        }
+    }
+
+    public void lookupEventsAndSetEvents(String bookmarkId, Integer currentBookmark, JsonArray allBookmarks) {
+        RetrofitClient.getInstance().getYelpAPI().lookupEvent(bookmarkId).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject result = response.body();
-                    //Log.d(TAG, "This is the query: " + result.toString());
-                    Log.d(TAG, allBookmarks.toString());
-                    Toast.makeText(getContext(), "Query Success!", Toast.LENGTH_SHORT).show();
+                    allBookmarks.add(result);
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+                }
+                if (currentBookmark == userBookmarks.size() - 1) {
+                    bookmarkList.addAll(convertToList(allBookmarks));
+                    bookmarkAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -114,18 +124,16 @@ public class ProfileFragment extends Fragment {
 
     private void setUpRecyclerView(@NonNull View view) {
         rvBookmarks = view.findViewById(R.id.rvBookmarks);
-        bookmarkList = new ArrayList<>();
         bookmarkAdapter = new EventsAdapter(getContext(), bookmarkList);
         rvBookmarks.setAdapter(bookmarkAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvBookmarks.setLayoutManager(linearLayoutManager);
     }
 
-    private Collection<? extends Event> convertToList(JsonObject result) {
+    private Collection<? extends Event> convertToList(JsonArray result) {
         List<Event> res = new ArrayList<>();
-        JsonArray bookmarks = result.getAsJsonArray();
-        for (int i = 0; i < bookmarks.size(); i++) {
-            JsonObject temp = (JsonObject) bookmarks.get(i);
+        for (int i = 0; i < result.size(); i++) {
+            JsonObject temp = (JsonObject) result.get(i);
             Event event = new Event();
             populateEventInfo(event, temp);
             res.add(event);
