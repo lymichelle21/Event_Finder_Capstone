@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2002716064453125" />
         <entry key="app/src/main/res/layout/fragment_explore.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/fragment_feed.xml" value="0.29846014492753625" />
+        <entry key="app/src/main/res/layout/fragment_photo_details.xml" value="0.16312056737588654" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/item_event.xml" value="0.2668330307547928" />
         <entry key="app/src/main/res/layout/item_photo.xml" value="0.2703804347826087" />
