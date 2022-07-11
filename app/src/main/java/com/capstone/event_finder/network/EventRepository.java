@@ -14,11 +14,14 @@ public class EventRepository {
 
     public EventDao eventDao;
     public LiveData<List<Event>> getEvents;
+    public LiveData<List<Event>> eventInCache;
+
 
     public EventRepository(Application application) {
         EventDatabase eventDatabase = EventDatabase.getInstance(application);
         eventDao = eventDatabase.eventDao();
         getEvents = eventDao.getEvents();
+        eventInCache = eventDao.eventInCache("boston-sincere-engineer-and-covey");
     }
 
     public void insert(List<Event> events){
@@ -28,6 +31,8 @@ public class EventRepository {
     public LiveData<List<Event>> getEvents(){
         return getEvents;
     }
+
+    public LiveData<List<Event>> eventInCache(String eventId) {return eventInCache;}
 
     public void deleteAllEvents() {
         new DeleteAsyncTask(eventDao).execute();
@@ -62,4 +67,20 @@ public class EventRepository {
             return null;
         }
     }
+
+//    private static class EventAsyncTask extends AsyncTask<List<Event>,Void,Void> {
+//        private final EventDao eventDao;
+//        String eventId = "";
+//
+//        public EventAsyncTask(EventDao eventDao) {
+//            this.eventDao = eventDao;
+//        }
+//
+//        @SafeVarargs
+//        @Override
+//        protected final Void doInBackground(List<Event>... lists) {
+//            eventDao.eventInCache(eventId);
+//            return null;
+//        }
+//    }
 }

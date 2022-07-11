@@ -1,6 +1,9 @@
 package com.capstone.event_finder.fragments;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +21,7 @@ import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.interfaces.ProfileFragmentInterface;
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
+import com.capstone.event_finder.network.EventViewModel;
 import com.capstone.event_finder.network.RetrofitClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -33,6 +38,7 @@ import retrofit2.Response;
 
 public class ProfileFragment extends Fragment implements ProfileFragmentInterface {
 
+    private EventViewModel eventViewModel;
     private final List<Bookmark> userBookmarks = new ArrayList<>();
     private final List<Event> bookmarkList = new ArrayList<>();
     private final ArrayList<String> bookmarkIds = new ArrayList<>();
@@ -52,7 +58,7 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         tvProfileUsername = view.findViewById(R.id.tvProfileUsername);
         rvBookmarks = view.findViewById(R.id.rvBookmarks);
         tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
@@ -61,13 +67,24 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
         setUpRecyclerView(view);
         getAndSetUserBookmarks(allBookmarks);
 
+        // TODO: Check database if event available - if not, then query
+
     }
 
     public void getAndSetUserBookmarks(JsonArray allBookmarks) {
         bookmarkList.clear();
         userBookmarks.clear();
         bookmarkIds.clear();
-        queryUserBookmarksFromParse(allBookmarks);
+        //queryUserBookmarksFromParse(allBookmarks);
+        retrieveEventInCache();
+    }
+
+    private void retrieveEventInCache() {
+        eventViewModel.eventInCache.observe(getViewLifecycleOwner(), events -> {
+            Log.d(TAG, "test to get Sincere Engineer " + events.toString());
+            bookmarkList.addAll(events);
+            bookmarkAdapter.notifyDataSetChanged();
+        });
     }
 
     public void queryUserBookmarksFromParse(JsonArray allBookmarks) {
@@ -109,6 +126,7 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
+
                 if (currentBookmark == userBookmarks.size() - 1) {
                     bookmarkList.addAll(convertToList(allBookmarks));
                     bookmarkAdapter.notifyDataSetChanged();
