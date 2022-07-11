@@ -21,7 +21,7 @@ public class EventViewModel extends AndroidViewModel {
         super(application);
         eventRepository = new EventRepository(application);
         getEvents = eventRepository.getEvents();
-        eventInCache = eventRepository.eventInCache("boston-sincere-engineer-and-covey");
+        eventInCache = eventInCache("");
     }
 
     public void insert(List<Event> events) {
@@ -36,7 +36,7 @@ public class EventViewModel extends AndroidViewModel {
         return getEvents;
     }
 
-    public LiveData<List<Event>> eventInCache() {
-        return eventInCache;
+    public LiveData<List<Event>> eventInCache(String eventId) {
+        return eventRepository.eventInCache(eventId);
     }
 }

@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.adapters.EventsAdapter;
-import com.capstone.event_finder.interfaces.ProfileFragmentInterface;
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.EventViewModel;
@@ -36,15 +35,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileFragment extends Fragment implements ProfileFragmentInterface {
+public class ProfileFragment extends Fragment {
 
-    private EventViewModel eventViewModel;
     private final List<Bookmark> userBookmarks = new ArrayList<>();
     private final List<Event> bookmarkList = new ArrayList<>();
     private final ArrayList<String> bookmarkIds = new ArrayList<>();
     RecyclerView rvBookmarks;
     TextView tvProfileUsername;
     EventsAdapter bookmarkAdapter;
+    private EventViewModel eventViewModel;
 
     public ProfileFragment() {
     }
@@ -66,22 +65,22 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);
         getAndSetUserBookmarks(allBookmarks);
-
-        // TODO: Check database if event available - if not, then query
-
     }
 
     public void getAndSetUserBookmarks(JsonArray allBookmarks) {
         bookmarkList.clear();
         userBookmarks.clear();
         bookmarkIds.clear();
-        //queryUserBookmarksFromParse(allBookmarks);
-        retrieveEventInCache();
+        queryUserBookmarksFromParse(allBookmarks);
     }
 
-    private void retrieveEventInCache() {
-        eventViewModel.eventInCache.observe(getViewLifecycleOwner(), events -> {
-            Log.d(TAG, "test to get Sincere Engineer " + events.toString());
+    private void tryRetrieveEventInCache(String eventId, JsonArray allBookmarks) {
+        eventViewModel.eventInCache(eventId).observe(getViewLifecycleOwner(), events -> {
+            Log.d(TAG, "checking if in cache " + events.toString());
+            if (events.isEmpty()) {
+                Log.d(TAG, "calling api!");
+                lookupEventsAndSetEvents(eventId, allBookmarks);
+            }
             bookmarkList.addAll(events);
             bookmarkAdapter.notifyDataSetChanged();
         });
@@ -100,23 +99,26 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
             }
             userBookmarks.clear();
             userBookmarks.addAll(bookmarks);
-            queryUserBookmarksFromApi(allBookmarks);
+            queryUserBookmarkIds(allBookmarks);
         });
     }
 
-    private void queryUserBookmarksFromApi(JsonArray allBookmarks) {
+    private void queryUserBookmarkIds(JsonArray allBookmarks) {
         for (int i = 0; i < userBookmarks.size(); i++) {
             Bookmark bookmark = userBookmarks.get(i);
             String bookmarkId = bookmark.getEventId();
             bookmarkIds.add(bookmarkId);
         }
+        queryAndSetUserBookmarksToFeed(allBookmarks);
+    }
 
+    private void queryAndSetUserBookmarksToFeed(JsonArray allBookmarks) {
         for (int i = 0; i < bookmarkIds.size(); i++) {
-            lookupEventsAndSetEvents(bookmarkIds.get(i), i, allBookmarks);
+            tryRetrieveEventInCache(bookmarkIds.get(i), allBookmarks);
         }
     }
 
-    public void lookupEventsAndSetEvents(String bookmarkId, Integer currentBookmark, JsonArray allBookmarks) {
+    public void lookupEventsAndSetEvents(String bookmarkId, JsonArray allBookmarks) {
         RetrofitClient.getInstance().getYelpAPI().lookupEvent(bookmarkId).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -126,11 +128,8 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
-
-                if (currentBookmark == userBookmarks.size() - 1) {
-                    bookmarkList.addAll(convertToList(allBookmarks));
-                    bookmarkAdapter.notifyDataSetChanged();
-                }
+                bookmarkList.addAll(convertToList(allBookmarks));
+                bookmarkAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -196,5 +195,4 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
         }
         event.setLocation(formattedLocationString.toString());
     }
-
 }

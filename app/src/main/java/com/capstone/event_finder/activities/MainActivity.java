@@ -16,7 +16,6 @@ import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.fragments.ProfileFragment;
 import com.capstone.event_finder.interfaces.FeedFragmentInterface;
-import com.capstone.event_finder.interfaces.ProfileFragmentInterface;
 import com.capstone.event_finder.network.EventViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
@@ -24,7 +23,6 @@ import com.parse.ParseUser;
 public class MainActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
     private FeedFragmentInterface listener;
-    private ProfileFragmentInterface profileListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +36,12 @@ public class MainActivity extends AppCompatActivity {
     public void setListener(FeedFragmentInterface listener) {
         this.listener = listener;
     }
-    public void setProfileListener(ProfileFragmentInterface profileListener) {
-        this.profileListener = profileListener;
-    }
-
 
     private void setUpBottomNavigation(FragmentManager fragmentManager) {
         Fragment feedFragment = new FeedFragment();
         Fragment exploreFragment = new ExploreFragment();
         Fragment profileFragment = new ProfileFragment();
         initialCallToEventApi((FeedFragmentInterface) feedFragment);
-        initialCallForBookmarks((ProfileFragmentInterface) profileFragment);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
@@ -74,11 +67,6 @@ public class MainActivity extends AppCompatActivity {
     private void initialCallToEventApi(FeedFragmentInterface feedFragment) {
         setListener(feedFragment);
         listener.getAPIEvents();
-    }
-
-    private void initialCallForBookmarks (ProfileFragmentInterface profileFragment) {
-        setProfileListener(profileFragment);
-        //profileListener.getAndSetUserBookmarks();
     }
 
     @Override
