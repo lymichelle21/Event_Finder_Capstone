@@ -77,9 +77,7 @@ public class ProfileFragment extends Fragment {
 
     private void tryRetrieveEventInCache(String eventId, JsonArray allBookmarks) {
         eventViewModel.eventInCache(eventId).observe(getViewLifecycleOwner(), events -> {
-            Log.d(TAG, "checking if in cache " + events.toString());
             if (events.isEmpty()) {
-                Log.d(TAG, "calling api!");
                 lookupEventsAndSetEvents(eventId, allBookmarks);
             }
             bookmarkList.addAll(events);
