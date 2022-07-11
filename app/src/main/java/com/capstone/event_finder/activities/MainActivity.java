@@ -105,12 +105,6 @@ public class MainActivity extends AppCompatActivity {
         event.setLocation(formattedLocationString.toString());
     }
 
-
-
-
-
-
-
     private void initialCallToEventApi(FeedFragmentInterface feedFragment) {
         setListener(feedFragment);
         listener.getAPIEvents();
