@@ -1,7 +1,6 @@
 package com.capstone.event_finder.network;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -14,14 +13,13 @@ import com.capstone.event_finder.models.Event;
 
 @Database(entities = {Event.class}, version = 1)
 public abstract class EventDatabase extends RoomDatabase {
-    private static volatile EventDatabase instance;
     private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            new populateDbAsyncTask(instance);
         }
     };
+    private static EventDatabase instance;
 
     public static synchronized EventDatabase getInstance(Context context) {
         if (instance == null) {
@@ -39,18 +37,4 @@ public abstract class EventDatabase extends RoomDatabase {
     }
 
     public abstract EventDao eventDao();
-
-    private static class populateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final EventDao eventDao;
-
-        public populateDbAsyncTask(EventDatabase eventDatabase) {
-            eventDao = eventDatabase.eventDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            eventDao.deleteAllEvents();
-            return null;
-        }
-    }
 }
