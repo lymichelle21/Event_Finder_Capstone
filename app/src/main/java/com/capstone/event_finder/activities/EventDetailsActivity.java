@@ -25,7 +25,6 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
-import java.text.ParseException;
 import java.util.Objects;
 
 public class EventDetailsActivity extends AppCompatActivity {
@@ -75,7 +74,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
                 try {
-                    if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
+                    if (isEventAlreadyBookmarked(event.getId())) {
                         removeBookmark(event.getId());
                     } else {
                         addEventToBookmarked();
@@ -87,7 +86,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         };
 
-        final GestureDetector detector = new GestureDetector(listener);
+        final GestureDetector detector = new GestureDetector(getApplicationContext(), listener);
         detector.setOnDoubleTapListener(listener);
         getWindow().getDecorView().setOnTouchListener((view, event) -> detector.onTouchEvent(event));
     }
@@ -103,6 +102,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             try {
                 bookmarks.delete();
             } catch (com.parse.ParseException ex) {
+                Toast.makeText(EventDetailsActivity.this, "Failed to delete bookmark", Toast.LENGTH_LONG).show();
                 ex.printStackTrace();
             }
             bookmarks.saveInBackground();
@@ -111,7 +111,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private int checkIfEventAlreadyBookmarked(String eventId) throws com.parse.ParseException {
+    private boolean isEventAlreadyBookmarked(String eventId) throws com.parse.ParseException {
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
         query.whereEqualTo(Bookmark.KEY_BOOKMARKED_EVENT_ID, eventId);
         query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
@@ -120,7 +120,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 Toast.makeText(EventDetailsActivity.this, "Failed to check if already bookmarked", Toast.LENGTH_LONG).show();
             }
         });
-        return query.count();
+        return query.count() >= 1;
     }
 
     private void addEventToBookmarked() {
@@ -156,24 +156,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsDescription.setText(event.getDescription());
         tvEventDetailsAddress.setText(event.getLocation());
         tvEventDetailsCost.setText(event.getCost());
+        tvEventDetailsStartDate.setText(event.getTimeStart());
+        tvEventDetailsEndDate.setText(event.getTimeEnd());
         Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
-        setEventStartAndEndDates();
         formatAndSetEventURL();
-        if (checkIfEventAlreadyBookmarked(event.getId()) == 1) {
+        if (isEventAlreadyBookmarked(event.getId())) {
             ivBookmark.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setEventStartAndEndDates() {
-        try {
-            tvEventDetailsStartDate.setText(event.getTimeStart());
-        } catch (ParseException e) {
-            Toast.makeText(EventDetailsActivity.this, "Failed to retrieve start date", Toast.LENGTH_SHORT).show();
-        }
-        try {
-            tvEventDetailsEndDate.setText(event.getTimeEnd());
-        } catch (ParseException e) {
-            Toast.makeText(EventDetailsActivity.this, "Failed to retrieve end date", Toast.LENGTH_SHORT).show();
         }
     }
 

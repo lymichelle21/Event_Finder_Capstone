@@ -3,6 +3,11 @@ package com.capstone.event_finder.models;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -14,67 +19,108 @@ import java.util.Locale;
 
 import javax.annotation.Generated;
 
+@Entity(tableName = "event_table")
 @Parcel(analyze = {Event.class})
 @Generated("jsonschema2pojo")
 public class Event {
-
-    @SerializedName("attending_count")
-    @Expose
-    private int attendingCount;
-    @SerializedName("category")
-    @Expose
-    private String category;
-    @SerializedName("cost")
-    @Expose
-    private String cost;
-    @SerializedName("cost_max")
-    @Expose
-    private String costMax;
-    @SerializedName("description")
-    @Expose
-    private String description;
-    @SerializedName("event_site_url")
-    @Expose
-    private String eventSiteUrl;
+    @ColumnInfo
+    @PrimaryKey
+    @NonNull
     @SerializedName("id")
     @Expose
     private String id;
+
+    @ColumnInfo
+    @SerializedName("attending_count")
+    @Expose
+    private int attendingCount;
+
+    @ColumnInfo
+    @SerializedName("category")
+    @Expose
+    private String category;
+
+    @ColumnInfo
+    @SerializedName("cost")
+    @Expose
+    private String cost;
+
+    @ColumnInfo
+    @SerializedName("cost_max")
+    @Expose
+    private String costMax;
+
+    @ColumnInfo
+    @SerializedName("description")
+    @Expose
+    private String description;
+
+    @ColumnInfo
+    @SerializedName("event_site_url")
+    @Expose
+    private String eventSiteUrl;
+
+    @ColumnInfo
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
+
+    @ColumnInfo
     @SerializedName("interested_count")
     @Expose
     private int interestedCount;
+
+    @ColumnInfo
     @SerializedName("is_canceled")
     @Expose
     private boolean isCanceled;
+
+    @ColumnInfo
     @SerializedName("is_free")
     @Expose
     private boolean isFree;
+
+    @ColumnInfo
     @SerializedName("is_official")
     @Expose
     private boolean isOfficial;
+
+    @ColumnInfo
     @SerializedName("latitude")
     @Expose
     private float latitude;
+
+    @ColumnInfo
     @SerializedName("longitude")
     @Expose
     private float longitude;
+
+    @ColumnInfo
     @SerializedName("name")
     @Expose
     private String name;
+
+    @ColumnInfo
     @SerializedName("tickets_url")
     @Expose
     private String ticketsUrl;
+
+    @ColumnInfo
     @SerializedName("time_end")
     @Expose
     private String timeEnd;
+
+    @ColumnInfo
     @SerializedName("time_start")
     @Expose
     private String timeStart;
+
+    @ColumnInfo
     @SerializedName("location")
     @Expose
     private String location;
+
+    @ColumnInfo
     @SerializedName("business_id")
     @Expose
     private String businessId;
@@ -210,16 +256,32 @@ public class Event {
         this.ticketsUrl = ticketsUrl;
     }
 
-    public String getTimeEnd() throws ParseException {
-        return convertEventDateFormat(timeEnd);
+    public String getTimeEnd() {
+        if (timeEnd.matches("\\d{2}/\\d{2}/\\d{2}")) {
+            return timeEnd;
+        }
+        try {
+            return convertEventDateFormat(timeEnd);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void setTimeEnd(String timeEnd) {
         this.timeEnd = timeEnd;
     }
 
-    public String getTimeStart() throws ParseException {
-        return convertEventDateFormat(timeStart);
+    public String getTimeStart() {
+        if (timeStart.matches("\\d{2}/\\d{2}/\\d{2}")) {
+            return timeStart;
+        }
+        try {
+            return convertEventDateFormat(timeStart);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void setTimeStart(String timeStart) {
@@ -249,3 +311,5 @@ public class Event {
         return outputFormat.format(formattedDate);
     }
 }
+
+

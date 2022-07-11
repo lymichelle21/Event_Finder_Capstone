@@ -8,18 +8,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.capstone.event_finder.adapters.EventsAdapter;
-import com.capstone.event_finder.models.Event;
-import com.capstone.event_finder.network.RetrofitClient;
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.adapters.EventsAdapter;
+import com.capstone.event_finder.interfaces.FeedFragmentInterface;
+import com.capstone.event_finder.models.Event;
+import com.capstone.event_finder.network.EventViewModel;
+import com.capstone.event_finder.network.RetrofitClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.parse.ParseUser;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,11 +31,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements FeedFragmentInterface {
 
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();
     private EventsAdapter eventsAdapter;
+    private EventViewModel eventViewModel;
+    private SwipeRefreshLayout swipeContainer;
 
     public FeedFragment() {
     }
@@ -47,8 +51,23 @@ public class FeedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+        setUpSwipeRefresh(view);
+        tryLocallyCaching();
+    }
+
+    private void setUpSwipeRefresh(@NonNull View view) {
+        swipeContainer = view.findViewById(R.id.swipeContainer);
         setUpRecyclerView(view);
-        getAPIEvents();
+        swipeContainer.setOnRefreshListener(() -> {
+            Toast.makeText(getContext(), "Finding new events!", Toast.LENGTH_SHORT).show();
+            getAPIEvents();
+            swipeContainer.setRefreshing(false);
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private void setUpRecyclerView(@NonNull View view) {
@@ -60,7 +79,7 @@ public class FeedFragment extends Fragment {
         rvEvents.setLayoutManager(linearLayoutManager);
     }
 
-    private void getAPIEvents() {
+    public void getAPIEvents() {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
@@ -73,16 +92,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        try {
-                            JsonObject result = response.body();
-                            eventsList.clear();
-                            eventsList.addAll(convertToList(result));
-                            eventsAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    addEventsToDatabase(response);
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
@@ -90,9 +100,35 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), "Failed to call API", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void addEventsToDatabase(@NonNull Response<JsonObject> response) {
+        requireActivity().runOnUiThread(() -> {
+            try {
+                JsonObject result = response.body();
+                eventsList.clear();
+                assert result != null;
+                clearAndAddEventsToDatabase(result);
+                eventsAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void tryLocallyCaching() {
+        eventViewModel.getEvents().observe(getViewLifecycleOwner(), events -> {
+            eventsList.addAll(events);
+            eventsAdapter.notifyDataSetChanged();
+        });
+    }
+
+    private void clearAndAddEventsToDatabase(JsonObject result) {
+        eventViewModel.delete();
+        eventViewModel.insert((List<Event>) convertToList(result));
     }
 
     private Collection<? extends Event> convertToList(JsonObject result) {
@@ -121,24 +157,27 @@ public class FeedFragment extends Fragment {
     }
 
     private void checkAndSetEventCost(Event event, JsonObject temp) {
-        if (String.valueOf(temp.get("cost")) == "null") {
-            event.setCost("$" + temp.get("cost").getAsString() + "0");
-        } else {
+        if (temp.get("cost").toString().matches("null")) {
             event.setCost("N/A");
+        } else {
+            event.setCost("$" + temp.get("cost").getAsString() + "0");
         }
     }
 
     private void checkAndSetEventEndTime(Event event, JsonObject temp) {
-        if (String.valueOf(temp.get("time_end")) == "null") {
-            event.setTimeEnd(temp.get("time_end").getAsString());
-        } else {
+        if (temp.get("time_end").toString().matches("null")) {
             event.setTimeEnd(temp.get("time_start").getAsString());
+        } else {
+            event.setTimeEnd(temp.get("time_end").getAsString());
         }
     }
 
     private void formatAndSetEventLocation(JsonObject temp, Event event) {
-        String formattedLocation = temp.get("location").getAsJsonObject().get("display_address").toString();
-        formattedLocation = formattedLocation.replaceAll("[\\[\\]\"\"]", " ");
-        event.setLocation(formattedLocation);
+        JsonArray formattedLocation = temp.getAsJsonObject("location").getAsJsonArray("display_address");
+        StringBuilder formattedLocationString = new StringBuilder();
+        for (int i = 0; i < formattedLocation.size(); i++) {
+            formattedLocationString.append(formattedLocation.get(i).getAsString()).append(" ");
+        }
+        event.setLocation(formattedLocationString.toString());
     }
 }
