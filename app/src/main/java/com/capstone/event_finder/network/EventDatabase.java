@@ -19,7 +19,7 @@ public abstract class EventDatabase extends RoomDatabase {
             super.onOpen(db);
         }
     };
-    private static EventDatabase instance;
+    private static volatile EventDatabase instance;
 
     public static synchronized EventDatabase getInstance(Context context) {
         if (instance == null) {

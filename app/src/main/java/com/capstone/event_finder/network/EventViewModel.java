@@ -12,10 +12,9 @@ import java.util.List;
 
 public class EventViewModel extends AndroidViewModel {
 
+    private final EventRepository eventRepository;
     public LiveData<List<Event>> getEvents;
     public LiveData<List<Event>> eventInCache;
-
-    private final EventRepository eventRepository;
 
     public EventViewModel(@NonNull Application application) {
         super(application);

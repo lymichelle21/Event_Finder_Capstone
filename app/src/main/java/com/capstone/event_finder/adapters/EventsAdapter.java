@@ -1,6 +1,5 @@
 package com.capstone.event_finder.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.EventDetailsActivity;
-import com.capstone.event_finder.activities.PhotoDetailsActivity;
 import com.capstone.event_finder.models.Event;
 
 import org.parceler.Parcels;

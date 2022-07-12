@@ -57,14 +57,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivAlbumPhotoItem = itemView.findViewById(R.id.ivAlbumPhotoItem);
-            ivAlbumPhotoItem.setOnClickListener(v -> {
-                Photo photo = photos.get(getLayoutPosition());
-                Intent intent = new Intent(context, PhotoDetailsActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation((Activity) context, ivAlbumPhotoItem, "photo");
-                intent.putExtra(Photo.class.getSimpleName(), Parcels.wrap(photo));
-                context.startActivity(intent, options.toBundle());
-            });
+            ivAlbumPhotoItem.setOnClickListener(this::goToPhotoDetailsActivity);
         }
 
         public void bind(Photo post) {
@@ -72,6 +65,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivAlbumPhotoItem);
             }
+        }
+
+        private void goToPhotoDetailsActivity(View v) {
+            Photo photo = photos.get(getLayoutPosition());
+            Intent intent = new Intent(context, PhotoDetailsActivity.class);
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation((Activity) context, ivAlbumPhotoItem, "photo");
+            intent.putExtra(Photo.class.getSimpleName(), Parcels.wrap(photo));
+            context.startActivity(intent, options.toBundle());
         }
     }
 }

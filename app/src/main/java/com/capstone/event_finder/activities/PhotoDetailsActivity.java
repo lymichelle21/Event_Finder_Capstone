@@ -24,11 +24,15 @@ public class PhotoDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_details);
-        tvPhotoDetailsUsername = (TextView) findViewById(R.id.tvPhotoDetailsUsername);
-        tvPhotoDetailsDescription = (TextView) findViewById(R.id.tvPhotoDetailsDescription);
-        ivPhotoDetailsImage = (ImageView) findViewById(R.id.ivPhotoDetailsImage);
+        tvPhotoDetailsUsername = findViewById(R.id.tvPhotoDetailsUsername);
+        tvPhotoDetailsDescription = findViewById(R.id.tvPhotoDetailsDescription);
+        ivPhotoDetailsImage = findViewById(R.id.ivPhotoDetailsImage);
 
-        photo = (Photo) Parcels.unwrap(getIntent().getParcelableExtra(Photo.class.getSimpleName()));
+        getAndSetPhotoContent();
+    }
+
+    private void getAndSetPhotoContent() {
+        photo = Parcels.unwrap(getIntent().getParcelableExtra(Photo.class.getSimpleName()));
         tvPhotoDetailsUsername.setText(photo.getUser().getUsername());
         tvPhotoDetailsDescription.setText(photo.getDescription());
         ParseFile image = photo.getImage();
