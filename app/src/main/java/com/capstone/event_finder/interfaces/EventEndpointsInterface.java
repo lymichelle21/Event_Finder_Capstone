@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface EventEndpointsInterface {
@@ -13,4 +14,7 @@ public interface EventEndpointsInterface {
                                @Query("start_date") Long start_date,
                                @Query("radius") Long radius,
                                @Query("location") String location);
+
+    @GET("events/{id}")
+    Call<JsonObject> lookupEvent(@Path("id") String id);
 }

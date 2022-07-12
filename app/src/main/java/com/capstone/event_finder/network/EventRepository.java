@@ -14,6 +14,8 @@ public class EventRepository {
 
     public EventDao eventDao;
     public LiveData<List<Event>> getEvents;
+    public LiveData<List<Event>> eventInCache;
+
 
     public EventRepository(Application application) {
         EventDatabase eventDatabase = EventDatabase.getInstance(application);
@@ -28,6 +30,9 @@ public class EventRepository {
     public LiveData<List<Event>> getEvents(){
         return getEvents;
     }
+
+    public LiveData<List<Event>> eventInCache(String eventId) {return eventDao.eventInCache(eventId);
+        }
 
     public void deleteAllEvents() {
         new DeleteAsyncTask(eventDao).execute();

@@ -1,6 +1,9 @@
 package com.capstone.event_finder.fragments;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.interfaces.FeedFragmentInterface;
 import com.capstone.event_finder.models.Event;
@@ -52,13 +56,13 @@ public class FeedFragment extends Fragment implements FeedFragmentInterface {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+        setUpRecyclerView(view);
         setUpSwipeRefresh(view);
         tryLocallyCaching();
     }
 
     private void setUpSwipeRefresh(@NonNull View view) {
         swipeContainer = view.findViewById(R.id.swipeContainer);
-        setUpRecyclerView(view);
         swipeContainer.setOnRefreshListener(() -> {
             Toast.makeText(getContext(), "Finding new events!", Toast.LENGTH_SHORT).show();
             getAPIEvents();
@@ -137,47 +141,9 @@ public class FeedFragment extends Fragment implements FeedFragmentInterface {
         for (int i = 0; i < events.size(); i++) {
             JsonObject temp = (JsonObject) events.get(i);
             Event event = new Event();
-            populateEventInfo(event, temp);
+            ((MainActivity) getActivity()).populateEventInfo(event, temp);
             res.add(event);
         }
         return res;
-    }
-
-    private void populateEventInfo(Event event, JsonObject temp) {
-        event.setName(temp.get("name").getAsString());
-        event.setDescription(temp.get("description").getAsString());
-        event.setImageUrl(temp.get("image_url").getAsString());
-        event.setTimeStart(temp.get("time_start").getAsString());
-        event.setId(temp.get("id").getAsString());
-        event.setEventSiteUrl(temp.get("event_site_url").getAsString());
-        event.setCategory(temp.get("category").getAsString());
-        checkAndSetEventEndTime(event, temp);
-        checkAndSetEventCost(event, temp);
-        formatAndSetEventLocation(temp, event);
-    }
-
-    private void checkAndSetEventCost(Event event, JsonObject temp) {
-        if (temp.get("cost").toString().matches("null")) {
-            event.setCost("N/A");
-        } else {
-            event.setCost("$" + temp.get("cost").getAsString() + "0");
-        }
-    }
-
-    private void checkAndSetEventEndTime(Event event, JsonObject temp) {
-        if (temp.get("time_end").toString().matches("null")) {
-            event.setTimeEnd(temp.get("time_start").getAsString());
-        } else {
-            event.setTimeEnd(temp.get("time_end").getAsString());
-        }
-    }
-
-    private void formatAndSetEventLocation(JsonObject temp, Event event) {
-        JsonArray formattedLocation = temp.getAsJsonObject("location").getAsJsonArray("display_address");
-        StringBuilder formattedLocationString = new StringBuilder();
-        for (int i = 0; i < formattedLocation.size(); i++) {
-            formattedLocationString.append(formattedLocation.get(i).getAsString()).append(" ");
-        }
-        event.setLocation(formattedLocationString.toString());
     }
 }
