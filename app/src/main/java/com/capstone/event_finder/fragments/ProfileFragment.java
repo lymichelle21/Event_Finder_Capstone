@@ -25,6 +25,9 @@ import com.google.gson.JsonObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +43,8 @@ public class ProfileFragment extends Fragment {
     private final ArrayList<String> bookmarkIds = new ArrayList<>();
     RecyclerView rvBookmarks;
     TextView tvProfileUsername;
+    TextView tvProfileBio;
+    TextView tvInterestCategories;
     EventsAdapter bookmarkAdapter;
     private EventViewModel eventViewModel;
 
@@ -57,8 +62,12 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         tvProfileUsername = view.findViewById(R.id.tvProfileUsername);
+        tvProfileBio = view.findViewById(R.id.tvProfileBio);
+        tvInterestCategories = view.findViewById(R.id.tvInterestCategories);
         rvBookmarks = view.findViewById(R.id.rvBookmarks);
         tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
+        tvProfileBio.setText(ParseUser.getCurrentUser().getString("bio"));
+        tvInterestCategories.setText(ParseUser.getCurrentUser().getString("event_categories_string"));
 
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);

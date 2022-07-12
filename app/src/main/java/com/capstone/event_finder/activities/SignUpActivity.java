@@ -27,6 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText etZip;
     private EditText etBio;
     private TextView tvEventCategoryDropdown;
+    private String allInterestCategories;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +81,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 stringBuilder.append(", ");
                             }
                         }
-                        tvEventCategoryDropdown.setText(stringBuilder.toString());
+                        allInterestCategories = stringBuilder.toString();
+                        tvEventCategoryDropdown.setText(allInterestCategories);
                     }
                 });
 
@@ -116,6 +118,8 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
         user.put("event_categories", categoryListOfStrings);
+        user.put("event_categories_string", allInterestCategories);
+
 
         user.signUpInBackground(e -> {
             if (e != null) {
