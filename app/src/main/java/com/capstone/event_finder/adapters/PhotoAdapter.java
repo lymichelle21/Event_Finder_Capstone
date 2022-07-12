@@ -1,35 +1,20 @@
 package com.capstone.event_finder.adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.capstone.event_finder.activities.EventDetailsActivity;
 import com.capstone.event_finder.activities.MainActivity;
-import com.capstone.event_finder.activities.PhotoAlbumActivity;
-import com.capstone.event_finder.fragments.FeedFragment;
-import com.capstone.event_finder.fragments.PhotoDetailsFragment;
+import com.capstone.event_finder.activities.PhotoDetailsActivity;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.models.Photo;
 import com.capstone.event_finder.R;
@@ -43,6 +28,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
     private final Context context;
     private final List<Photo> photos;
+    Photo photo;
 
     public PhotoAdapter(Context context, List<Photo> photos) {
         this.context = context;
@@ -79,7 +65,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context.getApplicationContext(), "here", Toast.LENGTH_LONG).show();
-                    // TODO: Use interface to call fragment when photo clicked
+                    Photo photo = photos.get(getLayoutPosition());
+                    Intent intent = new Intent(context, PhotoDetailsActivity.class);
+                    intent.putExtra(Photo.class.getSimpleName(), Parcels.wrap(photo));
+                    context.startActivity(intent);
                 }
             });
         }
