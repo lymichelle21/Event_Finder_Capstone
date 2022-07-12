@@ -28,4 +28,5 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="event_photo">event photo</string>
     <string name="short_bio">Short Bio</string>
+    <string name="select_favorite_event_categories">Select favorite event categories</string>
 </resources>
