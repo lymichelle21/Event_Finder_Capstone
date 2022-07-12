@@ -5,8 +5,6 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import org.parceler.Parcel;
-
 @ParseClassName("Photo")
 public class Photo extends ParseObject {
     public static final String KEY_DESCRIPTION = "description";

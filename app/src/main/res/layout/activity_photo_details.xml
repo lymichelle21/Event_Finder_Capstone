@@ -22,6 +22,7 @@
         android:layout_below="@+id/tvPhotoDetailsUsername"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
+        android:transitionName="photo"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -29,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPhotoDetailsImage"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="11dp"
         android:textSize="18sp"
         tools:text="Don't mind me - just coding and vibing to lo-fi" />
 
