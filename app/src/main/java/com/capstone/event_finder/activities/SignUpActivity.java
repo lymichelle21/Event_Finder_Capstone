@@ -1,6 +1,5 @@
 package com.capstone.event_finder.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import java.util.Collections;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    ArrayList<String> categoryListOfStrings = new ArrayList<>();
     private EditText etUsername;
     private EditText etPassword;
     private EditText etZip;
@@ -40,6 +40,11 @@ public class SignUpActivity extends AppCompatActivity {
         tvEventCategoryDropdown = findViewById(R.id.tvEventCategoryDropdown);
         Button btnSignUp = findViewById(R.id.btnSignUp);
 
+        setUpEventCategoryDropdown();
+        btnSignUp.setOnClickListener(v -> signUpUser());
+    }
+
+    private void setUpEventCategoryDropdown() {
         boolean[] selectedCategories;
         ArrayList<Integer> categoryList = new ArrayList<>();
         String[] categoryArray = {"music", "visual-arts", "performing-arts", "film",
@@ -59,12 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int i, boolean isCategoryChecked) {
-                        if (isCategoryChecked) {
-                            categoryList.add(i);
-                            Collections.sort(categoryList);
-                        } else {
-                            categoryList.remove(Integer.valueOf(i));
-                        }
+                        getCategoryListBasedOnSelection(i, isCategoryChecked, categoryList);
                     }
                 });
 
@@ -72,9 +72,11 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         StringBuilder stringBuilder = new StringBuilder();
-                        for (int j = 0; j < categoryList.size(); j++) {
-                            stringBuilder.append(categoryArray[categoryList.get(j)]);
-                            if (j != categoryList.size() - 1) {
+                        for (i = 0; i < categoryList.size(); i++) {
+                            String category = categoryArray[categoryList.get(i)];
+                            stringBuilder.append(category);
+                            categoryListOfStrings.add(category);
+                            if (i != categoryList.size() - 1) {
                                 stringBuilder.append(", ");
                             }
                         }
@@ -96,8 +98,15 @@ public class SignUpActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+    }
 
-        btnSignUp.setOnClickListener(v -> signUpUser());
+    private void getCategoryListBasedOnSelection(int i, boolean isCategoryChecked, ArrayList<Integer> categoryList) {
+        if (isCategoryChecked) {
+            categoryList.add(i);
+            Collections.sort(categoryList);
+        } else {
+            categoryList.remove(Integer.valueOf(i));
+        }
     }
 
     private void signUpUser() {
@@ -106,6 +115,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.setPassword(etPassword.getText().toString());
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
+        user.put("event_categories", categoryListOfStrings);
 
         user.signUpInBackground(e -> {
             if (e != null) {
