@@ -15,7 +15,7 @@ import com.capstone.event_finder.R;
 import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.fragments.ProfileFragment;
-import com.capstone.event_finder.interfaces.FeedFragmentInterface;
+import com.capstone.event_finder.interfaces.EventFetcherInterface;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.EventViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,7 +25,7 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
-    private FeedFragmentInterface feedFragmentListener;
+    private EventFetcherInterface feedFragmentListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setUpBottomNavigation(fragmentManager);
     }
 
-    public void setFeedFragmentListener(FeedFragmentInterface feedFragmentListener) {
+    public void setFeedFragmentListener(EventFetcherInterface feedFragmentListener) {
         this.feedFragmentListener = feedFragmentListener;
     }
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment feedFragment = new FeedFragment();
         Fragment exploreFragment = new ExploreFragment();
         Fragment profileFragment = new ProfileFragment();
-        initialCallToEventApi((FeedFragmentInterface) feedFragment);
+        initialCallToEventApi((EventFetcherInterface) feedFragment);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         event.setLocation(formattedLocationString.toString());
     }
 
-    private void initialCallToEventApi(FeedFragmentInterface feedFragment) {
+    private void initialCallToEventApi(EventFetcherInterface feedFragment) {
         setFeedFragmentListener(feedFragment);
         feedFragmentListener.getAPIEvents();
     }
