@@ -1,6 +1,5 @@
 package com.capstone.event_finder.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -61,35 +60,26 @@ public class SignUpActivity extends AppCompatActivity {
                 builder.setTitle("Select favorite event categories :");
                 builder.setCancelable(false);
 
-                builder.setMultiChoiceItems(categoryArray, selectedCategories, new DialogInterface.OnMultiChoiceClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int i, boolean isCategoryChecked) {
-                        getCategoryListBasedOnSelection(i, isCategoryChecked, categoryList);
-                    }
-                });
+                builder.setMultiChoiceItems(categoryArray, selectedCategories, (dialog, i, isCategoryChecked) -> getCategoryListBasedOnSelection(i, isCategoryChecked, categoryList));
 
                 setUpSaveButton(builder);
                 builder.show();
             }
 
             private void setUpSaveButton(AlertDialog.Builder builder) {
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        categoryListOfStrings = new ArrayList<>();
-                        for (i = 0; i < categoryList.size(); i++) {
-                            String category = categoryArray[categoryList.get(i)];
-                            stringBuilder.append(category);
-                            categoryListOfStrings.add(category);
-                            if (i != categoryList.size() - 1) {
-                                stringBuilder.append(", ");
-                            }
+                builder.setPositiveButton("Save", (dialogInterface, i) -> {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    categoryListOfStrings = new ArrayList<>();
+                    for (i = 0; i < categoryList.size(); i++) {
+                        String category = categoryArray[categoryList.get(i)];
+                        stringBuilder.append(category);
+                        categoryListOfStrings.add(category);
+                        if (i != categoryList.size() - 1) {
+                            stringBuilder.append(", ");
                         }
-                        allInterestCategories = stringBuilder.toString();
-                        tvEventCategoryDropdown.setText(allInterestCategories);
                     }
+                    allInterestCategories = stringBuilder.toString();
+                    tvEventCategoryDropdown.setText(allInterestCategories);
                 });
             }
         });
@@ -111,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
         if (categoryListOfStrings == null) {
-            Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
+            Toast.makeText(SignUpActivity.this, "Error: Sign up failed", Toast.LENGTH_LONG).show();
             return;
         }
         user.put("event_categories", categoryListOfStrings);
