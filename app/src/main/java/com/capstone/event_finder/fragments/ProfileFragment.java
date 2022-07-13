@@ -154,7 +154,7 @@ public class ProfileFragment extends Fragment {
         for (int i = 0; i < result.size(); i++) {
             JsonObject temp = (JsonObject) result.get(i);
             Event event = new Event();
-            ((MainActivity) getActivity()).populateEventInfo(event, temp);
+            ((MainActivity) requireActivity()).populateEventInfo(event, temp);
             res.add(event);
         }
         return res;
