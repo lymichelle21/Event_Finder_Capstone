@@ -29,15 +29,20 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ExploreFragment extends Fragment {
 
     private List<Event> recommendationList = new ArrayList<>();
     private JSONArray interestedCategories = new JSONArray();
-    private final List<Bookmark> bookmarksList = new ArrayList<>();
+    private List<Bookmark> bookmarksList = new ArrayList<>();
+    private Set<String> bookmarkCategories = new HashSet<String>();
 
     RecyclerView rvRecommendations;
     EventsAdapter recommendationAdapter;
@@ -55,8 +60,8 @@ public class ExploreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUpRecyclerView(view);
-        JsonArray allBookmarks = new JsonArray();
-        queryUserBookmarksFromParse(allBookmarks);
+        ArrayList allBookmarkCategories = new ArrayList();
+        queryUserBookmarksFromParse(allBookmarkCategories);
 
         interestedCategories = ParseUser.getCurrentUser().getJSONArray("event_categories");
         for (int i =0; i < interestedCategories.length(); i++) {
@@ -76,7 +81,7 @@ public class ExploreFragment extends Fragment {
         rvRecommendations.setLayoutManager(linearLayoutManager);
     }
 
-    public void queryUserBookmarksFromParse(JsonArray allBookmarks) {
+    public void queryUserBookmarksFromParse(ArrayList allBookmarkCategories) {
         final int POST_LIMIT = 10;
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
         query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
@@ -89,17 +94,28 @@ public class ExploreFragment extends Fragment {
             }
             bookmarksList.clear();
             bookmarksList.addAll(bookmarks);
-            queryUserBookmarkCategories(allBookmarks);
+            queryUserBookmarkCategories(allBookmarkCategories);
         });
     }
 
-    private void queryUserBookmarkCategories(JsonArray allBookmarks) {
+    private void queryUserBookmarkCategories(ArrayList allBookmarkCategories) {
         for (int i = 0; i < bookmarksList.size(); i++) {
             Bookmark bookmark = bookmarksList.get(i);
             String bookmarkedEventCategory = bookmark.getEventCategory();
-            allBookmarks.add(bookmarkedEventCategory);
+            allBookmarkCategories.add(bookmarkedEventCategory);
+            bookmarkCategories.add(bookmarkedEventCategory);
         }
-        Log.d(TAG, allBookmarks.toString());
+        getCategoryOccurrence(allBookmarkCategories);
     }
+
+    private void getCategoryOccurrence(ArrayList allBookmarkCategories) {
+        Log.d(TAG, bookmarkCategories.toString());
+        Log.d(TAG, allBookmarkCategories.toString());
+        for (String category : bookmarkCategories) {
+            int occurrences = Collections.frequency(allBookmarkCategories, category);
+            Log.d(TAG, category + " : " + String.valueOf(occurrences));
+        }
+    }
+
 
 }
