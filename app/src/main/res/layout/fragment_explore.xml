@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="16dp"
     tools:context="com.capstone.event_finder.fragments.ExploreFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Explore events (recommendations) fragment" />
+        android:id="@+id/tvExplore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/events_for_you"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        tools:text="Events for you" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecommendations"
+        android:layout_width="match_parent"
+        android:layout_height="631dp"
+        android:layout_below="@+id/tvExploreDescription"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvExploreDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExplore"
+        android:layout_marginTop="6dp"
+        android:text="@string/recommendations_curated_just_for_you"
+        android:textStyle="italic"
+        tools:text="Recommendations curated just for you!" />
+</RelativeLayout>
