@@ -1,9 +1,6 @@
 package com.capstone.event_finder.fragments;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,7 +138,7 @@ public class FeedFragment extends Fragment implements FeedFragmentInterface {
         for (int i = 0; i < events.size(); i++) {
             JsonObject temp = (JsonObject) events.get(i);
             Event event = new Event();
-            ((MainActivity) getActivity()).populateEventInfo(event, temp);
+            ((MainActivity) requireActivity()).populateEventInfo(event, temp);
             res.add(event);
         }
         return res;

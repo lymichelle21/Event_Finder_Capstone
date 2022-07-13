@@ -8,9 +8,11 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24230072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2107762654622396" />
         <entry key="app/src/main/res/layout/activity_photo_album.xml" value="0.33541666666666664" />
+        <entry key="app/src/main/res/layout/activity_photo_details.xml" value="0.26132246376811596" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2002716064453125" />
         <entry key="app/src/main/res/layout/fragment_explore.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/fragment_feed.xml" value="0.29846014492753625" />
+        <entry key="app/src/main/res/layout/fragment_photo_details.xml" value="0.32997695165323027" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/item_event.xml" value="0.2668330307547928" />
         <entry key="app/src/main/res/layout/item_photo.xml" value="0.2703804347826087" />

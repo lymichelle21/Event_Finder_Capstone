@@ -25,7 +25,7 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
-    private FeedFragmentInterface listener;
+    private FeedFragmentInterface feedFragmentListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setUpBottomNavigation(fragmentManager);
     }
 
-    public void setListener(FeedFragmentInterface listener) {
-        this.listener = listener;
+    public void setFeedFragmentListener(FeedFragmentInterface feedFragmentListener) {
+        this.feedFragmentListener = feedFragmentListener;
     }
 
     private void setUpBottomNavigation(FragmentManager fragmentManager) {
@@ -105,15 +105,9 @@ public class MainActivity extends AppCompatActivity {
         event.setLocation(formattedLocationString.toString());
     }
 
-
-
-
-
-
-
     private void initialCallToEventApi(FeedFragmentInterface feedFragment) {
-        setListener(feedFragment);
-        listener.getAPIEvents();
+        setFeedFragmentListener(feedFragment);
+        feedFragmentListener.getAPIEvents();
     }
 
     @Override

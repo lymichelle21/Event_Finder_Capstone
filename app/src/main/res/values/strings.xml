@@ -26,4 +26,5 @@
     <string name="profile">Profile</string>
     <string name="explore">Explore</string>
     <string name="bookmarks">Bookmarks</string>
+    <string name="event_photo">event photo</string>
 </resources>

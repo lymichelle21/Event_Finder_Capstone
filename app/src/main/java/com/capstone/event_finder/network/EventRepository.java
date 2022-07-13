@@ -13,32 +13,29 @@ import java.util.List;
 public class EventRepository {
 
     public EventDao eventDao;
-    public LiveData<List<Event>> getEvents;
-    public LiveData<List<Event>> eventInCache;
-
 
     public EventRepository(Application application) {
         EventDatabase eventDatabase = EventDatabase.getInstance(application);
         eventDao = eventDatabase.eventDao();
-        getEvents = eventDao.getEvents();
     }
 
-    public void insert(List<Event> events){
+    public void insert(List<Event> events) {
         new InsertAsyncTask(eventDao).execute(events);
     }
 
-    public LiveData<List<Event>> getEvents(){
-        return getEvents;
+    public LiveData<List<Event>> getEvents() {
+        return eventDao.getEvents();
     }
 
-    public LiveData<List<Event>> eventInCache(String eventId) {return eventDao.eventInCache(eventId);
-        }
+    public LiveData<List<Event>> eventInCache(String eventId) {
+        return eventDao.eventInCache(eventId);
+    }
 
     public void deleteAllEvents() {
         new DeleteAsyncTask(eventDao).execute();
     }
 
-    private static class InsertAsyncTask extends AsyncTask<List<Event>,Void,Void> {
+    private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {
         private final EventDao eventDao;
 
         public InsertAsyncTask(EventDao eventDao) {
@@ -53,7 +50,7 @@ public class EventRepository {
         }
     }
 
-    private static class DeleteAsyncTask extends AsyncTask<List<Event>,Void,Void> {
+    private static class DeleteAsyncTask extends AsyncTask<List<Event>, Void, Void> {
         private final EventDao eventDao;
 
         public DeleteAsyncTask(EventDao eventDao) {
