@@ -21,13 +21,13 @@ import java.util.Collections;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    ArrayList<String> categoryListOfStrings = new ArrayList<>();
     private EditText etUsername;
     private EditText etPassword;
     private EditText etZip;
     private EditText etBio;
     private TextView tvEventCategoryDropdown;
     private String allInterestCategories;
+    private ArrayList<String> categoryListOfStrings;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,10 +69,16 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 });
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                setUpSaveButton(builder);
+                builder.show();
+            }
+
+            private void setUpSaveButton(AlertDialog.Builder builder) {
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         StringBuilder stringBuilder = new StringBuilder();
+                        categoryListOfStrings = new ArrayList<>();
                         for (i = 0; i < categoryList.size(); i++) {
                             String category = categoryArray[categoryList.get(i)];
                             stringBuilder.append(category);
@@ -85,19 +91,6 @@ public class SignUpActivity extends AppCompatActivity {
                         tvEventCategoryDropdown.setText(allInterestCategories);
                     }
                 });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        for (int j = 0; j < selectedCategories.length; j++) {
-                            selectedCategories[j] = false;
-                            categoryList.clear();
-                            tvEventCategoryDropdown.setText("");
-                        }
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.show();
             }
         });
     }
@@ -117,9 +110,12 @@ public class SignUpActivity extends AppCompatActivity {
         user.setPassword(etPassword.getText().toString());
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
+        if (categoryListOfStrings == null) {
+            Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
+            return;
+        }
         user.put("event_categories", categoryListOfStrings);
         user.put("event_categories_string", allInterestCategories);
-
 
         user.signUpInBackground(e -> {
             if (e != null) {

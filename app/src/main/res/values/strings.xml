@@ -30,6 +30,6 @@
     <string name="short_bio">Short Bio</string>
     <string name="select_favorite_event_categories">Select favorite event categories</string>
     <string name="bio_here">Bio here</string>
-    <string name="interest_categories">Interest Categories:</string>
+    <string name="interest_categories">Interests:</string>
     <string name="example_categories">lectures-books, fashion</string>
 </resources>
