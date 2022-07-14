@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.models.Photo;
@@ -45,6 +46,7 @@ public class AddPhotoActivity extends AppCompatActivity {
     private ImageView ivPostImage;
     private File photoFile;
     private ProgressBar pb;
+    LottieAnimationView animatedPortal;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         ivPostImage = findViewById(R.id.ivPostImage);
         Button btnSubmit = findViewById(R.id.btnSubmit);
         pb = findViewById(R.id.pbLoading);
+        animatedPortal = findViewById(R.id.animatedPortal);
 
         btnCaptureImage.setOnClickListener(v -> launchCamera());
 
@@ -98,6 +101,7 @@ public class AddPhotoActivity extends AppCompatActivity {
             Toast.makeText(AddPhotoActivity.this, "Posted!", Toast.LENGTH_LONG).show();
             etDescription.setText("");
             ivPostImage.setImageResource(0);
+            animatedPortal.playAnimation();
             pb.setVisibility(ProgressBar.INVISIBLE);
         });
     }
