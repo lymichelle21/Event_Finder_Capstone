@@ -16,7 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
-import com.capstone.event_finder.interfaces.FeedFragmentInterface;
+import com.capstone.event_finder.interfaces.EventFetcherInterface;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.EventViewModel;
 import com.capstone.event_finder.network.RetrofitClient;
@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FeedFragment extends Fragment implements FeedFragmentInterface {
+public class FeedFragment extends Fragment implements EventFetcherInterface {
 
     RecyclerView rvEvents;
     private List<Event> eventsList = new ArrayList<>();

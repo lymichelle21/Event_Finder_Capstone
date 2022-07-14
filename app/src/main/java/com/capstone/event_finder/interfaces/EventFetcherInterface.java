@@ -1,5 +1,5 @@
 package com.capstone.event_finder.interfaces;
 
-public interface FeedFragmentInterface {
+public interface EventFetcherInterface {
     void getAPIEvents();
 }
