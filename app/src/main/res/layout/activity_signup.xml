@@ -88,4 +88,12 @@
         android:textColorHint="#757575"
         app:drawableRightCompat="@android:drawable/arrow_down_float" />
 
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animatedConfetti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:lottie_rawRes="@raw/confetti_animation" />
+
 </RelativeLayout>

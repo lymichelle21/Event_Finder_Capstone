@@ -1,5 +1,8 @@
 package com.capstone.event_finder.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.capstone.event_finder.R;
 import com.parse.ParseUser;
 
@@ -20,6 +24,8 @@ import java.util.Collections;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    LottieAnimationView animatedConfetti;
+    ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
     private EditText etUsername;
     private EditText etPassword;
     private EditText etZip;
@@ -39,9 +45,32 @@ public class SignUpActivity extends AppCompatActivity {
         etBio = findViewById(R.id.etBio);
         tvEventCategoryDropdown = findViewById(R.id.tvEventCategoryDropdown);
         Button btnSignUp = findViewById(R.id.btnSignUp);
+        animatedConfetti = findViewById(R.id.animatedConfetti);
 
         setUpEventCategoryDropdown();
         btnSignUp.setOnClickListener(v -> signUpUser());
+    }
+
+    private void startCheckAnimationLogo() {
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(3000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                animatedConfetti.setProgress((Float) animation.getAnimatedValue());
+            }
+        });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                goMainActivity();
+            }
+        });
+        if (animatedConfetti.getProgress() == 0f) {
+            animator.start();
+        } else {
+            animatedConfetti.setProgress(0f);
+        }
     }
 
     private void setUpEventCategoryDropdown() {
@@ -113,7 +142,8 @@ public class SignUpActivity extends AppCompatActivity {
                 return;
             }
             Toast.makeText(SignUpActivity.this, "Sign up success!", Toast.LENGTH_LONG).show();
-            goMainActivity();
+            animatedConfetti.playAnimation();
+            startCheckAnimationLogo();
         });
     }
 
