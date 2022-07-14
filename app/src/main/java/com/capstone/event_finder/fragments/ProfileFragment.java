@@ -40,6 +40,8 @@ public class ProfileFragment extends Fragment {
     private final ArrayList<String> bookmarkIds = new ArrayList<>();
     RecyclerView rvBookmarks;
     TextView tvProfileUsername;
+    TextView tvProfileBio;
+    TextView tvInterestCategories;
     EventsAdapter bookmarkAdapter;
     private EventViewModel eventViewModel;
 
@@ -57,8 +59,12 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         tvProfileUsername = view.findViewById(R.id.tvProfileUsername);
+        tvProfileBio = view.findViewById(R.id.tvProfileBio);
+        tvInterestCategories = view.findViewById(R.id.tvInterestCategories);
         rvBookmarks = view.findViewById(R.id.rvBookmarks);
         tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
+        tvProfileBio.setText(ParseUser.getCurrentUser().getString("bio"));
+        tvInterestCategories.setText(ParseUser.getCurrentUser().getString("event_categories_string"));
 
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);
@@ -148,7 +154,7 @@ public class ProfileFragment extends Fragment {
         for (int i = 0; i < result.size(); i++) {
             JsonObject temp = (JsonObject) result.get(i);
             Event event = new Event();
-            ((MainActivity) getActivity()).populateEventInfo(event, temp);
+            ((MainActivity) requireActivity()).populateEventInfo(event, temp);
             res.add(event);
         }
         return res;

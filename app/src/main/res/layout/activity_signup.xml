@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,9 +36,9 @@
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etZip"
+        android:layout_below="@+id/tvEventCategoryDropdown"
         android:layout_marginStart="135dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="31dp"
         android:text="@string/sign_up" />
 
     <TextView
@@ -54,12 +55,37 @@
         android:id="@+id/etZip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword"
+        android:layout_below="@+id/etBio"
         android:layout_marginTop="12dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/zip_code"
         android:inputType="textPersonName"
         android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/etBio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword"
+        android:layout_marginTop="12dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/short_bio"
+        android:inputType="textPersonName"
+        android:minHeight="48dp" />
+
+    <TextView
+        android:id="@+id/tvEventCategoryDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etZip"
+        android:layout_marginTop="12dp"
+        android:background="@android:drawable/editbox_background"
+        android:drawablePadding="16dp"
+        android:hint="@string/select_favorite_event_categories"
+        android:padding="12dp"
+        android:textColorHint="#757575"
+        app:drawableRightCompat="@android:drawable/arrow_down_float" />
 
 </RelativeLayout>
