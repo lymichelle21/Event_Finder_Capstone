@@ -1,7 +1,5 @@
 package com.capstone.event_finder.fragments;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -45,12 +44,11 @@ public class ExploreFragment extends Fragment {
     private static final int POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST = 3;
     private static final int POINTS_FOR_CATEGORY_OF_INTEREST = 1;
     private static final int POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST = 2;
+    private final List<Event> recommendationList = new ArrayList<>();
+    private final List<Bookmark> bookmarksList = new ArrayList<>();
+    private final Set<String> bookmarkCategories = new HashSet<>();
     RecyclerView rvRecommendations;
     EventsAdapter recommendationAdapter;
-    private List<Event> recommendationList = new ArrayList<>();
-    private JSONArray interestedCategories = new JSONArray();
-    private List<Bookmark> bookmarksList = new ArrayList<>();
-    private Set<String> bookmarkCategories = new HashSet<String>();
 
     public ExploreFragment() {
     }
@@ -67,11 +65,15 @@ public class ExploreFragment extends Fragment {
         setUpRecyclerView(view);
         bookmarksList.clear();
         bookmarkCategories.clear();
-        ArrayList allBookmarkCategories = new ArrayList();
-        ArrayList userInterestedCategories = new ArrayList();
+        getUserInterestedCategories();
+    }
+
+    private void getUserInterestedCategories() {
+        ArrayList<String> allBookmarkCategories = new ArrayList<>();
+        ArrayList<String> userInterestedCategories = new ArrayList<>();
         queryUserBookmarksFromParse(allBookmarkCategories, userInterestedCategories);
-        interestedCategories = ParseUser.getCurrentUser().getJSONArray("event_categories");
-        for (int i = 0; i < interestedCategories.length(); i++) {
+        JSONArray interestedCategories = ParseUser.getCurrentUser().getJSONArray("event_categories");
+        for (int i = 0; i < Objects.requireNonNull(interestedCategories).length(); i++) {
             try {
                 bookmarkCategories.add(interestedCategories.get(i).toString());
                 userInterestedCategories.add(interestedCategories.get(i).toString());
@@ -89,7 +91,7 @@ public class ExploreFragment extends Fragment {
         rvRecommendations.setLayoutManager(linearLayoutManager);
     }
 
-    public void queryUserBookmarksFromParse(ArrayList allBookmarkCategories, ArrayList userInterestedCategories) {
+    public void queryUserBookmarksFromParse(ArrayList<String> allBookmarkCategories, ArrayList<String> userInterestedCategories) {
         final int POST_LIMIT = 10;
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
         query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
@@ -106,7 +108,7 @@ public class ExploreFragment extends Fragment {
         });
     }
 
-    private void queryUserBookmarkCategories(ArrayList allBookmarkCategories, ArrayList userInterestedCategories) {
+    private void queryUserBookmarkCategories(ArrayList<String> allBookmarkCategories, ArrayList<String> userInterestedCategories) {
         for (int i = 0; i < bookmarksList.size(); i++) {
             Bookmark bookmark = bookmarksList.get(i);
             String bookmarkedEventCategory = bookmark.getEventCategory();
@@ -116,35 +118,31 @@ public class ExploreFragment extends Fragment {
         calculatePoints(allBookmarkCategories, userInterestedCategories);
     }
 
-    private void calculatePoints(ArrayList allBookmarkCategories, ArrayList userInterestedCategories) {
-        Double totalBookmarks = 0.0 + allBookmarkCategories.size();
-        HashMap<String, Double> categoryCount = new HashMap<String, Double>();
-        Double totalPoints = 0.0;
+    private void calculatePoints(ArrayList<String> allBookmarkCategories, ArrayList<String> userInterestedCategories) {
+        HashMap<String, Double> categoryCount = new HashMap<>();
+        double totalPoints = 0.0;
         for (String category : bookmarkCategories) {
             int occurrences = Collections.frequency(allBookmarkCategories, category);
             boolean isUserInterestedCategory = userInterestedCategories.contains(category);
-            Double points = 0.0;
+            double points = 0.0;
             if (isUserInterestedCategory) {
                 points += occurrences * POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST;
                 points += POINTS_FOR_CATEGORY_OF_INTEREST;
-            }
-            else {
+            } else {
                 points += occurrences * POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST;
             }
             totalPoints += points;
             categoryCount.put(category, points);
         }
-
         calculateEventsOfEachCategoryToQuery(categoryCount, totalPoints);
     }
 
     private void calculateEventsOfEachCategoryToQuery(HashMap<String, Double> categoryCount, Double totalPoints) {
+        recommendationList.clear();
         for (String category : bookmarkCategories) {
-            Integer count = (int) (Math.floor(10 * (categoryCount.get(category) / totalPoints)));
-            categoryCount.put(category, Math.floor(10 * (categoryCount.get(category) / totalPoints)));
+            int count = (int) (Math.ceil(10 * (categoryCount.get(category) / totalPoints)));
             getAPIEvents(category, Integer.toString(count));
         }
-        Log.d(TAG, "Category count : " + categoryCount.toString());
     }
 
     public void getAPIEvents(String category, String numberOfEventsToRetrieve) {
@@ -160,12 +158,20 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, response.toString());
+                    requireActivity().runOnUiThread(() -> {
+                        try {
+                            JsonObject result = response.body();
+                            recommendationList.addAll(convertToList(result));
+                            recommendationAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                            Log.e("error", "JSON exception error");
+                        }
+                    });
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
@@ -173,14 +179,15 @@ public class ExploreFragment extends Fragment {
         });
     }
 
-//    private Collection<? extends Event> convertToList(JsonArray result) {
-//        List<Event> res = new ArrayList<>();
-//        for (int i = 0; i < result.size(); i++) {
-//            JsonObject temp = (JsonObject) result.get(i);
-//            Event event = new Event();
-//            ((MainActivity) requireActivity()).populateEventInfo(event, temp);
-//            res.add(event);
-//        }
-//        return res;
-//    }
+    private Collection<? extends Event> convertToList(JsonObject result) {
+        List<Event> res = new ArrayList<>();
+        JsonArray events = result.getAsJsonArray("events");
+        for (int i = 0; i < events.size(); i++) {
+            JsonObject temp = (JsonObject) events.get(i);
+            Event event = new Event();
+            ((MainActivity) requireActivity()).populateEventInfo(event, temp);
+            res.add(event);
+        }
+        return res;
+    }
 }
