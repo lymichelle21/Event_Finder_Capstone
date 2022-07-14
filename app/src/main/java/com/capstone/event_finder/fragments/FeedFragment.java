@@ -1,5 +1,6 @@
 package com.capstone.event_finder.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,11 +85,13 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
+        String categories = "music, visual-arts, performing-arts, film, lectures-books, fashion, food-and-drink, festivals-fairs, charities, sports-active-life, nightlife, kids-family, other";
         Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
         RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
                 numberOfEventsToRetrieve,
                 upcomingEventsOnly,
                 eventSearchRadiusFromUserInMeters,
+                categories,
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -107,17 +110,20 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
     }
 
     private void addEventsToDatabase(@NonNull Response<JsonObject> response) {
-        requireActivity().runOnUiThread(() -> {
-            try {
-                JsonObject result = response.body();
-                eventsList.clear();
-                assert result != null;
-                clearAndAddEventsToDatabase(result);
-                eventsAdapter.notifyDataSetChanged();
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
-            }
-        });
+        Activity activity = getActivity();
+        if (activity != null) {
+            requireActivity().runOnUiThread(() -> {
+                try {
+                    JsonObject result = response.body();
+                    eventsList.clear();
+                    assert result != null;
+                    clearAndAddEventsToDatabase(result);
+                    eventsAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void tryLocallyCaching() {

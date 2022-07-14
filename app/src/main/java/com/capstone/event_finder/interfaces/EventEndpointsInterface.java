@@ -13,6 +13,7 @@ public interface EventEndpointsInterface {
                                @Query("limit") String limit,
                                @Query("start_date") Long start_date,
                                @Query("radius") Long radius,
+                               @Query("categories") String category,
                                @Query("location") String location);
 
     @GET("events/{id}")

@@ -19,6 +19,7 @@ import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
+import com.capstone.event_finder.network.RetrofitClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.parse.ParseQuery;
@@ -33,19 +34,23 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ExploreFragment extends Fragment {
 
+    private static final int POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST = 3;
+    private static final int POINTS_FOR_CATEGORY_OF_INTEREST = 1;
+    private static final int POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST = 2;
+    RecyclerView rvRecommendations;
+    EventsAdapter recommendationAdapter;
     private List<Event> recommendationList = new ArrayList<>();
     private JSONArray interestedCategories = new JSONArray();
     private List<Bookmark> bookmarksList = new ArrayList<>();
     private Set<String> bookmarkCategories = new HashSet<String>();
-
-    RecyclerView rvRecommendations;
-    EventsAdapter recommendationAdapter;
 
     public ExploreFragment() {
     }
@@ -60,13 +65,16 @@ public class ExploreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUpRecyclerView(view);
+        bookmarksList.clear();
+        bookmarkCategories.clear();
         ArrayList allBookmarkCategories = new ArrayList();
-        queryUserBookmarksFromParse(allBookmarkCategories);
-
+        ArrayList userInterestedCategories = new ArrayList();
+        queryUserBookmarksFromParse(allBookmarkCategories, userInterestedCategories);
         interestedCategories = ParseUser.getCurrentUser().getJSONArray("event_categories");
-        for (int i =0; i < interestedCategories.length(); i++) {
+        for (int i = 0; i < interestedCategories.length(); i++) {
             try {
-                Log.d(TAG, (String) interestedCategories.get(i));
+                bookmarkCategories.add(interestedCategories.get(i).toString());
+                userInterestedCategories.add(interestedCategories.get(i).toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -81,7 +89,7 @@ public class ExploreFragment extends Fragment {
         rvRecommendations.setLayoutManager(linearLayoutManager);
     }
 
-    public void queryUserBookmarksFromParse(ArrayList allBookmarkCategories) {
+    public void queryUserBookmarksFromParse(ArrayList allBookmarkCategories, ArrayList userInterestedCategories) {
         final int POST_LIMIT = 10;
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
         query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
@@ -94,28 +102,85 @@ public class ExploreFragment extends Fragment {
             }
             bookmarksList.clear();
             bookmarksList.addAll(bookmarks);
-            queryUserBookmarkCategories(allBookmarkCategories);
+            queryUserBookmarkCategories(allBookmarkCategories, userInterestedCategories);
         });
     }
 
-    private void queryUserBookmarkCategories(ArrayList allBookmarkCategories) {
+    private void queryUserBookmarkCategories(ArrayList allBookmarkCategories, ArrayList userInterestedCategories) {
         for (int i = 0; i < bookmarksList.size(); i++) {
             Bookmark bookmark = bookmarksList.get(i);
             String bookmarkedEventCategory = bookmark.getEventCategory();
             allBookmarkCategories.add(bookmarkedEventCategory);
             bookmarkCategories.add(bookmarkedEventCategory);
         }
-        getCategoryOccurrence(allBookmarkCategories);
+        calculatePoints(allBookmarkCategories, userInterestedCategories);
     }
 
-    private void getCategoryOccurrence(ArrayList allBookmarkCategories) {
-        Log.d(TAG, bookmarkCategories.toString());
-        Log.d(TAG, allBookmarkCategories.toString());
+    private void calculatePoints(ArrayList allBookmarkCategories, ArrayList userInterestedCategories) {
+        Double totalBookmarks = 0.0 + allBookmarkCategories.size();
+        HashMap<String, Double> categoryCount = new HashMap<String, Double>();
+        Double totalPoints = 0.0;
         for (String category : bookmarkCategories) {
             int occurrences = Collections.frequency(allBookmarkCategories, category);
-            Log.d(TAG, category + " : " + String.valueOf(occurrences));
+            boolean isUserInterestedCategory = userInterestedCategories.contains(category);
+            Double points = 0.0;
+            if (isUserInterestedCategory) {
+                points += occurrences * POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST;
+                points += POINTS_FOR_CATEGORY_OF_INTEREST;
+            }
+            else {
+                points += occurrences * POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST;
+            }
+            totalPoints += points;
+            categoryCount.put(category, points);
         }
+
+        calculateEventsOfEachCategoryToQuery(categoryCount, totalPoints);
     }
 
+    private void calculateEventsOfEachCategoryToQuery(HashMap<String, Double> categoryCount, Double totalPoints) {
+        for (String category : bookmarkCategories) {
+            Integer count = (int) (Math.floor(10 * (categoryCount.get(category) / totalPoints)));
+            categoryCount.put(category, Math.floor(10 * (categoryCount.get(category) / totalPoints)));
+            getAPIEvents(category, Integer.toString(count));
+        }
+        Log.d(TAG, "Category count : " + categoryCount.toString());
+    }
 
+    public void getAPIEvents(String category, String numberOfEventsToRetrieve) {
+        String eventSearchRegion = "en_US";
+        Long eventSearchRadiusFromUserInMeters = 40000L;
+        Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
+        RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
+                numberOfEventsToRetrieve,
+                upcomingEventsOnly,
+                eventSearchRadiusFromUserInMeters,
+                category,
+                ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, response.toString());
+                } else {
+                    Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+//    private Collection<? extends Event> convertToList(JsonArray result) {
+//        List<Event> res = new ArrayList<>();
+//        for (int i = 0; i < result.size(); i++) {
+//            JsonObject temp = (JsonObject) result.get(i);
+//            Event event = new Event();
+//            ((MainActivity) requireActivity()).populateEventInfo(event, temp);
+//            res.add(event);
+//        }
+//        return res;
+//    }
 }
