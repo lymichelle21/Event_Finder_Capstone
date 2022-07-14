@@ -65,13 +65,13 @@ public class ExploreFragment extends Fragment {
         setUpRecyclerView(view);
         bookmarksList.clear();
         bookmarkCategories.clear();
-        getUserInterestedCategories();
-    }
-
-    private void getUserInterestedCategories() {
         ArrayList<String> allBookmarkCategories = new ArrayList<>();
         ArrayList<String> userInterestedCategories = new ArrayList<>();
+        includeUserInterestedCategories(userInterestedCategories);
         queryUserBookmarksFromParse(allBookmarkCategories, userInterestedCategories);
+    }
+
+    private void includeUserInterestedCategories(ArrayList<String> userInterestedCategories) {
         JSONArray interestedCategories = ParseUser.getCurrentUser().getJSONArray("event_categories");
         for (int i = 0; i < Objects.requireNonNull(interestedCategories).length(); i++) {
             try {
@@ -141,6 +141,7 @@ public class ExploreFragment extends Fragment {
         recommendationList.clear();
         for (String category : bookmarkCategories) {
             int count = (int) (Math.ceil(10 * (categoryCount.get(category) / totalPoints)));
+            categoryCount.put(category, (double) count);
             getAPIEvents(category, Integer.toString(count));
         }
     }
