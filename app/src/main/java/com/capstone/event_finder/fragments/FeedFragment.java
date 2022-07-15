@@ -1,13 +1,16 @@
 package com.capstone.event_finder.fragments;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -98,6 +101,19 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
                     addEventsToDatabase(response);
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(getContext()).
+                                    setIcon(R.mipmap.ic_error_round).
+                                    setTitle("Oh no!").
+                                    setMessage("There are no events currently near you!").
+                                    setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                    builder.create().show();
                 }
             }
 
