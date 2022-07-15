@@ -32,4 +32,6 @@
     <string name="bio_here">Bio here</string>
     <string name="interest_categories">Interests:</string>
     <string name="example_categories">lectures-books, fashion</string>
+    <string name="events_for_you">Events for you</string>
+    <string name="recommendations_curated_just_for_you">Recommendations curated just for you!</string>
 </resources>

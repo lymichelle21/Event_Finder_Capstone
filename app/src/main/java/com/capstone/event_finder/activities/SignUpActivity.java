@@ -101,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
         if (categoryListOfStrings == null) {
-            Toast.makeText(SignUpActivity.this, "Error: Sign up failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
             return;
         }
         user.put("event_categories", categoryListOfStrings);
@@ -109,7 +109,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         user.signUpInBackground(e -> {
             if (e != null) {
-                Toast.makeText(SignUpActivity.this, "Error: Sign up failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
                 return;
             }
             Toast.makeText(SignUpActivity.this, "Sign up success!", Toast.LENGTH_LONG).show();
