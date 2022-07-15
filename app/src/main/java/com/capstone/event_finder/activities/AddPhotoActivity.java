@@ -42,11 +42,11 @@ public class AddPhotoActivity extends AppCompatActivity {
     public String photoFileName = "photo.jpg";
     Event event;
     String TAG = "AddPhotoActivity";
+    LottieAnimationView animatedPortal;
     private EditText etDescription;
     private ImageView ivPostImage;
     private File photoFile;
     private ProgressBar pb;
-    LottieAnimationView animatedPortal;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

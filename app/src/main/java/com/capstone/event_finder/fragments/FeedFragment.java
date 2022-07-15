@@ -85,13 +85,12 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
-        String categories = "music, visual-arts, performing-arts, film, lectures-books, fashion, food-and-drink, festivals-fairs, charities, sports-active-life, nightlife, kids-family, other";
         Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
         RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
                 numberOfEventsToRetrieve,
                 upcomingEventsOnly,
                 eventSearchRadiusFromUserInMeters,
-                categories,
+                null,
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {

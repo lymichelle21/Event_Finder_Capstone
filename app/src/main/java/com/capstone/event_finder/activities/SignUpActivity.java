@@ -25,7 +25,6 @@ import java.util.Collections;
 public class SignUpActivity extends AppCompatActivity {
 
     LottieAnimationView animatedConfetti;
-    ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
     private EditText etUsername;
     private EditText etPassword;
     private EditText etZip;
@@ -53,12 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void startCheckAnimationLogo() {
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(3000);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                animatedConfetti.setProgress((Float) animation.getAnimatedValue());
-            }
-        });
+        animator.addUpdateListener(animation -> animatedConfetti.setProgress((Float) animation.getAnimatedValue()));
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
