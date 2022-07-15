@@ -25,7 +25,6 @@ public class ErrorActivity extends AppCompatActivity {
         etZip = findViewById(R.id.etZip);
         btnEditZip = findViewById(R.id.btnEditZip);
         btnEditZip.setOnClickListener(v -> updateZip());
-
     }
 
     private void updateZip() {
