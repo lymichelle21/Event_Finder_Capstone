@@ -34,4 +34,7 @@
     <string name="example_categories">lectures-books, fashion</string>
     <string name="events_for_you">Events for you</string>
     <string name="recommendations_curated_just_for_you">Recommendations curated just for you!</string>
+    <string name="error_image">Error image</string>
+    <string name="oops_there_are_no_events_near_you">Oops.. there are no events near you</string>
+    <string name="try_a_different_zip_code">Try a different zip code!</string>
 </resources>

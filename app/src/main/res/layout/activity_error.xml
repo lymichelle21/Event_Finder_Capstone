@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+
+    <ImageView
+        android:id="@+id/ivErrorImage"
+        android:layout_width="match_parent"
+        android:layout_height="206dp"
+        android:layout_marginTop="100dp"
+        android:contentDescription="@string/error_image"
+        app:srcCompat="@mipmap/ic_error_foreground"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="70dp" />
+
+    <TextView
+        android:id="@+id/tvErrorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivErrorImage"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="-18dp"
+        android:text="@string/oops_there_are_no_events_near_you"
+        android:textStyle="bold"
+        tools:text="Oops.. there are no events near you" />
+
+    <TextView
+        android:id="@+id/tvNewZip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivErrorImage"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="6dp"
+        android:text="@string/try_a_different_zip_code"
+        android:textStyle="italic"
+        tools:text="Try a different zip code!" />
+
+    <EditText
+        android:id="@+id/etZip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvErrorMessage"
+        android:layout_marginTop="50dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/zip_code"
+        android:inputType="textPersonName"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/btnEditZip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etZip"
+        android:layout_marginStart="135dp"
+        android:layout_marginTop="38dp"
+        android:text="@string/submit" />
+
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.capstone.event_finder.fragments;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.activities.ErrorActivity;
+import com.capstone.event_finder.activities.LoginActivity;
 import com.capstone.event_finder.activities.MainActivity;
+import com.capstone.event_finder.activities.SignUpActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.interfaces.EventFetcherInterface;
 import com.capstone.event_finder.models.Event;
@@ -111,6 +115,8 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
+                                            Intent intent = new Intent(getContext(), ErrorActivity.class);
+                                            startActivity(intent);
                                         }
                                     });
                     builder.create().show();

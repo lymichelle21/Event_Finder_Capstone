@@ -13,6 +13,7 @@
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_add_photo.xml" value="0.33541666666666664" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.33099060058593766" />
+        <entry key="app/src/main/res/layout/activity_error.xml" value="0.24365942028985507" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24230072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2107762654622396" />
         <entry key="app/src/main/res/layout/activity_photo_album.xml" value="0.33541666666666664" />
