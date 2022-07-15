@@ -119,12 +119,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void signUpUser() {
         ParseUser user = new ParseUser();
-        String strPattern = "^\\d{5}$";
+
         user.setUsername(etUsername.getText().toString());
         user.setPassword(etPassword.getText().toString());
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
-        if (!etZip.getText().toString().matches(strPattern)) {
+        String zipPattern = "^\\d{5}$";
+        if (!etZip.getText().toString().matches(zipPattern)) {
             Toast.makeText(SignUpActivity.this, "Invalid zip", Toast.LENGTH_LONG).show();
             return;
         }

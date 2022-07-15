@@ -1,9 +1,12 @@
 package com.capstone.event_finder.fragments;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +104,7 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && String.valueOf(convertToList(response.body())) != "[]") {
                     addEventsToDatabase(response);
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
