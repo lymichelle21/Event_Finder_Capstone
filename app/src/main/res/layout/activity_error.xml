@@ -10,9 +10,9 @@
         android:id="@+id/ivErrorImage"
         android:layout_width="match_parent"
         android:layout_height="206dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:contentDescription="@string/error_image"
-        app:srcCompat="@mipmap/ic_error_foreground"
+        app:srcCompat="@drawable/ic_error"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="70dp" />
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivErrorImage"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="-18dp"
+        android:layout_marginTop="29dp"
         android:text="@string/oops_there_are_no_events_near_you"
         android:textStyle="bold"
         tools:text="Oops.. there are no events near you" />
@@ -31,9 +31,9 @@
         android:id="@+id/tvNewZip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivErrorImage"
+        android:layout_below="@+id/tvErrorMessage"
         android:layout_marginStart="110dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:text="@string/try_a_different_zip_code"
         android:textStyle="italic"
         tools:text="Try a different zip code!" />

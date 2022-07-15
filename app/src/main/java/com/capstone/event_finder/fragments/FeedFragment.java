@@ -1,16 +1,11 @@
 package com.capstone.event_finder.fragments;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,9 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.ErrorActivity;
-import com.capstone.event_finder.activities.LoginActivity;
 import com.capstone.event_finder.activities.MainActivity;
-import com.capstone.event_finder.activities.SignUpActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.interfaces.EventFetcherInterface;
 import com.capstone.event_finder.models.Event;
@@ -104,23 +97,19 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body() != null && String.valueOf(convertToList(response.body())) != "[]") {
+                if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
                     addEventsToDatabase(response);
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
-
                     AlertDialog.Builder builder =
-                            new AlertDialog.Builder(getContext()).
+                            new AlertDialog.Builder(requireContext()).
                                     setIcon(R.mipmap.ic_error_round).
                                     setTitle("Oh no!").
                                     setMessage("There are no events currently near you!").
-                                    setPositiveButton("Close", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                            Intent intent = new Intent(getContext(), ErrorActivity.class);
-                                            startActivity(intent);
-                                        }
+                                    setPositiveButton("Change Zip", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        Intent intent = new Intent(getContext(), ErrorActivity.class);
+                                        startActivity(intent);
                                     });
                     builder.create().show();
                 }

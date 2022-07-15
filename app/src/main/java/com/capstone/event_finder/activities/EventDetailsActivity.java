@@ -158,7 +158,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         tvEventDetailsCost.setText(event.getCost());
         tvEventDetailsStartDate.setText(event.getTimeStart());
         tvEventDetailsEndDate.setText(event.getTimeEnd());
-        Glide.with(this).load(event.getImageUrl()).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
+        Glide.with(this).load(event.getImageUrl()).placeholder(R.drawable.ic_logo).transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventDetailsImage);
         formatAndSetEventURL();
         if (isEventAlreadyBookmarked(event.getId())) {
             ivBookmark.setVisibility(View.VISIBLE);
