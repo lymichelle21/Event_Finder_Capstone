@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment feedFragment = new FeedFragment();
         Fragment exploreFragment = new ExploreFragment();
         Fragment profileFragment = new ProfileFragment();
-        initialCallToEventApi((EventFetcherInterface) feedFragment);
+        //initialCallToEventApi((EventFetcherInterface) feedFragment);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
