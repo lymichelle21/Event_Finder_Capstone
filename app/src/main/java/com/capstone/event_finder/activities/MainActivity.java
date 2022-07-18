@@ -15,7 +15,6 @@ import com.capstone.event_finder.R;
 import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.fragments.ProfileFragment;
-import com.capstone.event_finder.interfaces.EventFetcherInterface;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.EventViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,7 +27,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
-    private EventFetcherInterface feedFragmentListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +38,11 @@ public class MainActivity extends AppCompatActivity {
         setUpBottomNavigation(fragmentManager);
     }
 
-    public void setFeedFragmentListener(EventFetcherInterface feedFragmentListener) {
-        this.feedFragmentListener = feedFragmentListener;
-    }
-
     private void setUpBottomNavigation(FragmentManager fragmentManager) {
-        Fragment feedFragment = new FeedFragment();
-        Fragment exploreFragment = new ExploreFragment();
-        Fragment profileFragment = new ProfileFragment();
-        //initialCallToEventApi((EventFetcherInterface) feedFragment);
+        FeedFragment feedFragment = new FeedFragment();
+        ExploreFragment exploreFragment = new ExploreFragment();
+        ProfileFragment profileFragment = new ProfileFragment();
+        makeInitialCallGetEvents(feedFragment);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
@@ -69,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
+    }
+
+    private void makeInitialCallGetEvents(FeedFragment feedFragment) {
+        List<Event> eventsList = new ArrayList<>();
+        eventViewModel.refreshEvents(eventsList, feedFragment);
     }
 
     public void populateEventInfo(Event event, JsonObject temp) {
@@ -107,11 +106,6 @@ public class MainActivity extends AppCompatActivity {
             formattedLocationString.append(formattedLocation.get(i).getAsString()).append(" ");
         }
         event.setLocation(formattedLocationString.toString());
-    }
-
-    private void initialCallToEventApi(EventFetcherInterface feedFragment) {
-        setFeedFragmentListener(feedFragment);
-        feedFragmentListener.getAPIEvents();
     }
 
     @Override

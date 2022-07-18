@@ -32,11 +32,11 @@ public class EventViewModel extends AndroidViewModel {
         eventRepository.deleteAllEvents();
     }
 
-    public LiveData<List<Event>> getCachedEvents() {
+    public LiveData<List<Event>> getEvents() {
         return getEvents;
     }
 
-    public LiveData<List<Event>> getEventsFromApi(List<Event> eventsList, FeedFragment activity) {
+    public LiveData<List<Event>> refreshEvents(List<Event> eventsList, FeedFragment activity) {
         return eventRepository.getEventsFromApi(eventsList, activity);
     }
 

@@ -1,12 +1,9 @@
 package com.capstone.event_finder.network;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.app.Application;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -32,8 +29,6 @@ import retrofit2.Response;
 public class EventRepository {
 
     public EventDao eventDao;
-    public List<Event> eventsList = new ArrayList<>();
-    public FeedFragment activity;
 
     public EventRepository(Application application) {
         EventDatabase eventDatabase = EventDatabase.getInstance(application);
@@ -75,7 +70,7 @@ public class EventRepository {
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
                     addEventsToDatabase(response, activity);
-                    Log.d(TAG, "dino " + response.body().toString());
+                    //Log.d(TAG, "dino " + response.body().toString());
                 } else {
                     Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                     AlertDialog.Builder builder =
@@ -127,7 +122,6 @@ public class EventRepository {
 
     private void addEventsToDatabase(@NonNull Response<JsonObject> response, FeedFragment activity) {
         if (activity != null) {
-//            activity.runOnUiThread(() -> {
             try {
                 JsonObject result = response.body();
                 //eventsList.clear();
@@ -136,7 +130,7 @@ public class EventRepository {
                 insert((List<Event>) convertToList(result));
                 //eventsAdapter.notifyDataSetChanged();
             } catch (Exception e) {
-                //Toast.makeText(getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity.getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
             }
 //            });
         }
