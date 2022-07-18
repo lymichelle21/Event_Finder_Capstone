@@ -69,4 +69,5 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.2.5"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation "com.airbnb.android:lottie:3.4.0"
 }
