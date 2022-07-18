@@ -23,6 +23,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
     private EventFetcherInterface feedFragmentListener;

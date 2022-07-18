@@ -149,8 +149,7 @@ public class FeedFragment extends Fragment {
 //        LiveData<List<Event>> x = eventViewModel.getEventsFromApi(eventsList, FeedFragment.this);
 //        Log.d(TAG, "hiya " + String.valueOf(x));
 
-        eventViewModel.getEvents().observe(getViewLifecycleOwner(), events -> {
-            Log.d(TAG, "what's up : " + events.toString());
+        eventViewModel.getCachedEvents().observe(getViewLifecycleOwner(), events -> {
             eventsList.addAll(events);
             eventsAdapter.notifyDataSetChanged();
         });
