@@ -1,10 +1,14 @@
 package com.capstone.event_finder.network;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.interfaces.EventDao;
 import com.capstone.event_finder.models.Event;
@@ -40,6 +44,10 @@ public class EventRepository {
 
     public LiveData<List<Event>> getEventsFromApi(List<Event> eventsList, FeedFragment activity) {
         return eventApi.getAPIEvents(eventsList, activity);
+    }
+
+    public List<Event> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+        return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
     }
 
     private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {

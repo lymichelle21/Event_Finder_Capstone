@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.ErrorActivity;
+import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.models.Event;
 import com.google.gson.JsonArray;
@@ -136,6 +137,45 @@ public class EventApi {
             formattedLocationString.append(formattedLocation.get(i).getAsString()).append(" ");
         }
         event.setLocation(formattedLocationString.toString());
+    }
+
+    public List<Event> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+        String eventSearchRegion = "en_US";
+        Long eventSearchRadiusFromUserInMeters = 40000L;
+        Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
+        RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
+                numberOfEventsToRetrieve,
+                upcomingEventsOnly,
+                eventSearchRadiusFromUserInMeters,
+                category,
+                ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        JsonObject result = response.body();
+                        recommendationList.addAll(convertToList(result));
+                        Log.d(TAG, "inside: " + recommendationList.toString());
+                    } catch (Exception e) {
+                        Log.e("error", "JSON exception error");
+                    }
+                } else {
+                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+                Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        while (recommendationList.isEmpty()) {
+
+        }
+
+        Log.d(TAG, "rec list: " + recommendationList.toString());
+        return recommendationList;
     }
 
 }

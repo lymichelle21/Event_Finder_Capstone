@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.models.Event;
 
@@ -43,6 +44,12 @@ public class EventViewModel extends AndroidViewModel {
     public LiveData<List<Event>> eventInCache(String eventId) {
         return eventRepository.eventInCache(eventId);
     }
+
+    public List<Event> getRecommendations(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+        return eventRepository.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
+    }
+
+
 }
 
 
