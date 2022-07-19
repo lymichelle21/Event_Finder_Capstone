@@ -1,6 +1,9 @@
 package com.capstone.event_finder.fragments;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,8 +119,10 @@ public class ProfileFragment extends Fragment {
 
     private void queryAndSetUserBookmarksToFeed(JsonArray allBookmarks) {
         for (int i = 0; i < bookmarkIds.size(); i++) {
+            //eventViewModel.tryRetrieveEventInCache(bookmarkList, bookmarkIds.get(i), allBookmarks, ProfileFragment.this);
             tryRetrieveEventInCache(bookmarkIds.get(i), allBookmarks);
         }
+        bookmarkAdapter.notifyDataSetChanged();
     }
 
     public void lookupEventsAndSetEvents(String bookmarkId, JsonArray allBookmarks) {

@@ -148,8 +148,8 @@ public class ExploreFragment extends Fragment {
         for (String category : userInterestedAndBookmarkedEventCategories) {
             int count = (int) (Math.ceil(10 * (categoryCount.get(category) / totalPoints)));
             categoryCount.put(category, (double) count);
-            //eventViewModel.getRecommendations(recommendationList, category, Integer.toString(count), ExploreFragment.this);
-            getAPIEvents(category, Integer.toString(count));
+            eventViewModel.getRecommendations(recommendationList, category, Integer.toString(count), ExploreFragment.this);
+            //getAPIEvents(category, Integer.toString(count));
             recommendationAdapter.notifyDataSetChanged();
         }
     }

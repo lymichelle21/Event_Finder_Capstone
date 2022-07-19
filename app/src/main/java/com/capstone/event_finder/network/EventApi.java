@@ -12,8 +12,11 @@ import androidx.lifecycle.LiveData;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.ErrorActivity;
+import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
+import com.capstone.event_finder.fragments.ProfileFragment;
+import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -107,7 +110,6 @@ public class EventApi {
                 eventRepository.deleteAllEvents();
                 eventRepository.insert((List<Event>) convertToList(result));
             } catch (Exception e) {
-                Log.d(TAG, "heya");
                 e.printStackTrace();
                 Toast.makeText(activity.getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
             }
@@ -139,6 +141,8 @@ public class EventApi {
         event.setLocation(formattedLocationString.toString());
     }
 
+    //TODO: Fix this for explore fragment
+    // Replicate callback idea to to view model
     public List<Event> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
@@ -170,12 +174,43 @@ public class EventApi {
             }
         });
 
-        while (recommendationList.isEmpty()) {
-
-        }
-
         Log.d(TAG, "rec list: " + recommendationList.toString());
         return recommendationList;
     }
 
+    // TODO: fix for Profile
+    public List<Event> lookupEventsAndSetEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
+        RetrofitClient.getInstance().getYelpAPI().lookupEvent(bookmarkId).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject result = response.body();
+                    allBookmarks.add(result);
+                } else {
+                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+                }
+                bookmarkList.addAll(convertBookmarksToList(allBookmarks));
+                Log.d(TAG, "hello " + bookmarkList.toString());
+                //bookmarkAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+                Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //Log.d(TAG, "hello " + bookmarkList.toString());
+        return bookmarkList;
+    }
+
+    private Collection<? extends Event> convertBookmarksToList(JsonArray result) {
+        List<Event> res = new ArrayList<>();
+        for (int i = 0; i < result.size(); i++) {
+            JsonObject temp = (JsonObject) result.get(i);
+            Event event = new Event();
+            populateEventInfo(event, temp);
+            res.add(event);
+        }
+        return res;
+    }
 }

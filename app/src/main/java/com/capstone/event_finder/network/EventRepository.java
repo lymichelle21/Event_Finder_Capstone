@@ -10,8 +10,12 @@ import androidx.lifecycle.LiveData;
 
 import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
+import com.capstone.event_finder.fragments.ProfileFragment;
 import com.capstone.event_finder.interfaces.EventDao;
 import com.capstone.event_finder.models.Event;
+import com.google.gson.JsonArray;
+
+import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.List;
 
@@ -50,6 +54,10 @@ public class EventRepository {
         return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
     }
 
+    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
+        return eventApi.lookupEventsAndSetEvents(bookmarkList, bookmarkId, allBookmarks, activity);
+    }
+
     private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {
         private final EventDao eventDao;
 
@@ -79,6 +87,5 @@ public class EventRepository {
             return null;
         }
     }
-
 
 }
