@@ -15,8 +15,6 @@ import com.capstone.event_finder.interfaces.EventDao;
 import com.capstone.event_finder.models.Event;
 import com.google.gson.JsonArray;
 
-import org.intellij.lang.annotations.PrintFormat;
-
 import java.util.List;
 
 public class EventRepository {
@@ -50,7 +48,7 @@ public class EventRepository {
         return eventApi.getAPIEvents(eventsList, activity);
     }
 
-    public List<Event> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
         return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
     }
 

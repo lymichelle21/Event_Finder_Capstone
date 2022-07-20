@@ -9,14 +9,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.ErrorActivity;
-import com.capstone.event_finder.activities.MainActivity;
+import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.fragments.ProfileFragment;
-import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -53,6 +53,7 @@ public class EventApi {
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
                     addEventsToDatabase(response, activity);
+
                 } else {
                     Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                     AlertDialog.Builder builder =
@@ -142,8 +143,12 @@ public class EventApi {
     }
 
     //TODO: Fix this for explore fragment
-    // Replicate callback idea to to view model
-    public List<Event> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+    private MutableLiveData<List<Event>> recommendationsResponseLiveData;
+
+    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity){
+        if (recommendationsResponseLiveData == null) {
+            recommendationsResponseLiveData = new MutableLiveData<>();
+        }
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
         Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
@@ -156,14 +161,19 @@ public class EventApi {
             @Override
             public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    try {
-                        JsonObject result = response.body();
-                        recommendationList.addAll(convertToList(result));
-                        Log.d(TAG, "inside: " + recommendationList.toString());
-                    } catch (Exception e) {
-                        Log.e("error", "JSON exception error");
-                    }
+                    activity.requireActivity().runOnUiThread(() -> {
+                        try {
+                            JsonObject result = response.body();
+                            //Log.d(TAG, "response " + result.toString());
+                            recommendationList.addAll(convertToList(result));
+                            Log.d(TAG, "api " + recommendationList.toString());
+                            recommendationsResponseLiveData.postValue(recommendationList);
+                        } catch (Exception e) {
+                            Log.e("error", "JSON exception error");
+                        }
+                    });
                 } else {
+                    recommendationsResponseLiveData.postValue(null);
                     Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -174,8 +184,8 @@ public class EventApi {
             }
         });
 
-        Log.d(TAG, "rec list: " + recommendationList.toString());
-        return recommendationList;
+        //Log.d(TAG, recommendationList.toString());
+        return recommendationsResponseLiveData;
     }
 
     // TODO: fix for Profile
@@ -189,8 +199,7 @@ public class EventApi {
                 } else {
                     Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
-                bookmarkList.addAll(convertBookmarksToList(allBookmarks));
-                Log.d(TAG, "hello " + bookmarkList.toString());
+                bookmarkList.addAll(convertToBookmarkList(allBookmarks));
                 //bookmarkAdapter.notifyDataSetChanged();
             }
 
@@ -199,11 +208,32 @@ public class EventApi {
                 Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
             }
         });
-        //Log.d(TAG, "hello " + bookmarkList.toString());
+
+//        RetrofitClient.getInstance().getYelpAPI().lookupEvent(bookmarkId).enqueue(new Callback<JsonObject>() {
+//            @Override
+//            public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    JsonObject result = response.body();
+//                    allBookmarks.add(result);
+//                    bookmarkList.addAll(convertToBookmarkList(allBookmarks));
+//                } else {
+//                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+//                }
+//                //bookmarkList.addAll(convertToBookmarkList(allBookmarks));
+//                //bookmarkAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+//                Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        Log.d(TAG, "hello " + bookmarkList.toString());
+
         return bookmarkList;
     }
 
-    private Collection<? extends Event> convertBookmarksToList(JsonArray result) {
+    private Collection<? extends Event> convertToBookmarkList(JsonArray result) {
         List<Event> res = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
             JsonObject temp = (JsonObject) result.get(i);
