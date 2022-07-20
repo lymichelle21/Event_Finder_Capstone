@@ -1,7 +1,5 @@
 package com.capstone.event_finder.fragments;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,17 +74,6 @@ public class ExploreFragment extends Fragment {
 
         includeUserInterestedCategories(userInterestedCategories);
         queryUserBookmarksFromParse(userBookmarkedCategories, userInterestedCategories);
-
-//        TODO: Fix this so ignore for now
-//        eventViewModel.getRecommendations(userInterestedAndBookmarkedEventCategories, bookmarksList,
-//                userBookmarkedCategories, userInterestedCategories, ExploreFragment.this)
-//                .observe(getViewLifecycleOwner(), events -> {
-//                    recommendationList.addAll(events);
-//                    recommendationAdapter.notifyDataSetChanged();
-//            recommendationList.addAll(events);
-//            recommendationAdapter.notifyDataSetChanged();
-//        });
-
     }
 
     private void setUpRecyclerView(@NonNull View view) {
