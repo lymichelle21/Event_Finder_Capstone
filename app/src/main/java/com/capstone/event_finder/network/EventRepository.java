@@ -37,8 +37,8 @@ public class EventRepository {
         new DeleteAsyncTask(eventDao).execute();
     }
 
-    public LiveData<List<Event>> getEventsFromApi(List<Event> eventsList) {
-        return eventApi.getAPIEvents(eventsList);
+    public LiveData<List<Event>> getEventsFromApi() {
+        return eventApi.getAPIEvents();
     }
 
     private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {
@@ -70,13 +70,4 @@ public class EventRepository {
             return null;
         }
     }
-
-//    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
-//        return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
-//    }
-//
-//    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
-//        return eventApi.lookupEventsAndSetEvents(bookmarkList, bookmarkId, allBookmarks, activity);
-//    }
-
 }

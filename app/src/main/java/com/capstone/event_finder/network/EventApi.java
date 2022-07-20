@@ -30,7 +30,7 @@ public class EventApi {
         this.eventRepository = eventRepository;
     }
 
-    public LiveData<List<Event>> getAPIEvents(List<Event> eventsList) {
+    public LiveData<List<Event>> getAPIEvents() {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
@@ -45,25 +45,12 @@ public class EventApi {
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
                     addEventsToDatabase(response);
-                } else {
-//                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
-//                    AlertDialog.Builder builder =
-//                            new AlertDialog.Builder(activity.getContext()).
-//                                    setIcon(R.mipmap.ic_error_round).
-//                                    setTitle("Oh no!").
-//                                    setMessage("There are no events currently near you!").
-//                                    setPositiveButton("Change Zip", (dialog, which) -> {
-//                                        dialog.dismiss();
-//                                        Intent intent = new Intent(activity.getContext(), ErrorActivity.class);
-//                                        activity.startActivity(intent);
-//                                    });
-//                    builder.create().show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                //Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
         return null;
@@ -102,7 +89,6 @@ public class EventApi {
             eventRepository.insert((List<Event>) convertToList(result));
         } catch (Exception e) {
             e.printStackTrace();
-            //Toast.makeText(activity.getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -130,105 +116,4 @@ public class EventApi {
         }
         event.setLocation(formattedLocationString.toString());
     }
-
-//    //TODO: Fix this so ignore
-//    private MutableLiveData<List<Event>> recommendationsResponseLiveData;
-//
-//    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity){
-//        if (recommendationsResponseLiveData == null) {
-//            recommendationsResponseLiveData = new MutableLiveData<>();
-//        }
-//        recommendationList.clear();
-//        String eventSearchRegion = "en_US";
-//        Long eventSearchRadiusFromUserInMeters = 40000L;
-//        Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
-//        RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
-//                numberOfEventsToRetrieve,
-//                upcomingEventsOnly,
-//                eventSearchRadiusFromUserInMeters,
-//                category,
-//                ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    activity.requireActivity().runOnUiThread(() -> {
-//                        try {
-//                            JsonObject result = response.body();
-//                            //Log.d(TAG, "response " + result.toString());
-//                            recommendationList.addAll(convertToList(result));
-//                            Log.d(TAG, "api " + recommendationList.toString());
-//                            recommendationsResponseLiveData.postValue(recommendationList);
-//                        } catch (Exception e) {
-//                            Log.e("error", "JSON exception error");
-//                        }
-//                    });
-//                } else {
-//                    recommendationsResponseLiveData.postValue(null);
-//                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
-//                Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        return recommendationsResponseLiveData;
-//    }
-//
-//    public List<Event> lookupEventsAndSetEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
-//        RetrofitClient.getInstance().getYelpAPI().lookupEvent(bookmarkId).enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    JsonObject result = response.body();
-//                    allBookmarks.add(result);
-//                } else {
-//                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
-//                }
-//                bookmarkList.addAll(convertToBookmarkList(allBookmarks));
-//                //bookmarkAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
-//                Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        RetrofitClient.getInstance().getYelpAPI().lookupEvent(bookmarkId).enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    JsonObject result = response.body();
-//                    allBookmarks.add(result);
-//                    bookmarkList.addAll(convertToBookmarkList(allBookmarks));
-//                } else {
-//                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
-//                }
-//                //bookmarkList.addAll(convertToBookmarkList(allBookmarks));
-//                //bookmarkAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
-//                Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        Log.d(TAG, "hello " + bookmarkList.toString());
-//
-//        return bookmarkList;
-//    }
-//
-//    private Collection<? extends Event> convertToBookmarkList(JsonArray result) {
-//        List<Event> res = new ArrayList<>();
-//        for (int i = 0; i < result.size(); i++) {
-//            JsonObject temp = (JsonObject) result.get(i);
-//            Event event = new Event();
-//            populateEventInfo(event, temp);
-//            res.add(event);
-//        }
-//        return res;
-//    }
 }
