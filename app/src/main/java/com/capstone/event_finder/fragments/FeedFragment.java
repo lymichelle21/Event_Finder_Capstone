@@ -51,7 +51,7 @@ public class FeedFragment extends Fragment {
         swipeContainer = view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
             Toast.makeText(getContext(), "Finding new events!", Toast.LENGTH_SHORT).show();
-            eventViewModel.refreshEvents(eventsList, FeedFragment.this);
+            eventsList = eventViewModel.refreshEvents(FeedFragment.this);
             swipeContainer.setRefreshing(false);
         });
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,

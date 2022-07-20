@@ -38,8 +38,8 @@ public class EventViewModel extends AndroidViewModel {
     private final EventRepository eventRepository;
     public LiveData<List<Event>> getEvents;
     public LiveData<List<Event>> eventInCache;
-    public List<Event> recommendationList = new ArrayList<>();
-    public HashMap<String, Double> categoryCount = new HashMap<>();
+//    public List<Event> recommendationList = new ArrayList<>();
+//    public HashMap<String, Double> categoryCount = new HashMap<>();
 
     public EventViewModel(@NonNull Application application) {
         super(application);
@@ -48,11 +48,7 @@ public class EventViewModel extends AndroidViewModel {
         eventInCache = eventInCache("");
     }
 
-    public void insert(List<Event> events) {
-        eventRepository.insert(events);
-    }
-
-    public void delete() {
+    public void clearCache() {
         eventRepository.deleteAllEvents();
     }
 
@@ -60,8 +56,10 @@ public class EventViewModel extends AndroidViewModel {
         return getEvents;
     }
 
-    public LiveData<List<Event>> refreshEvents(List<Event> eventsList, FeedFragment activity) {
-        return eventRepository.getEventsFromApi(eventsList, activity);
+    public List<Event> refreshEvents(FeedFragment activity) {
+        List<Event> eventsList = new ArrayList<>();
+        eventRepository.getEventsFromApi(eventsList, activity);
+        return eventsList;
     }
 
     public LiveData<List<Event>> eventInCache(String eventId) {

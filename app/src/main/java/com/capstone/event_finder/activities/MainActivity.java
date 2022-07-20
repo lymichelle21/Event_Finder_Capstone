@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeInitialCallGetEvents(FeedFragment feedFragment) {
-        List<Event> eventsList = new ArrayList<>();
-        eventViewModel.refreshEvents(eventsList, feedFragment);
+        eventViewModel.refreshEvents(feedFragment);
     }
 
     public void populateEventInfo(Event event, JsonObject temp) {
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void onLogoutButton() {
-        eventViewModel.delete();
+        eventViewModel.clearCache();
         Toast.makeText(MainActivity.this, "Logged out!", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
         Intent i = new Intent(this, LoginActivity.class);

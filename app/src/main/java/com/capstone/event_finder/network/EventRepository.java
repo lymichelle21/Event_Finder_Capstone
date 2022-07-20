@@ -1,19 +1,13 @@
 package com.capstone.event_finder.network;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
-import com.capstone.event_finder.fragments.ProfileFragment;
 import com.capstone.event_finder.interfaces.EventDao;
 import com.capstone.event_finder.models.Event;
-import com.google.gson.JsonArray;
 
 import java.util.List;
 
@@ -48,14 +42,6 @@ public class EventRepository {
         return eventApi.getAPIEvents(eventsList, activity);
     }
 
-//    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
-//        return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
-//    }
-//
-//    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
-//        return eventApi.lookupEventsAndSetEvents(bookmarkList, bookmarkId, allBookmarks, activity);
-//    }
-
     private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {
         private final EventDao eventDao;
 
@@ -85,5 +71,13 @@ public class EventRepository {
             return null;
         }
     }
+
+    //    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+//        return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
+//    }
+//
+//    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
+//        return eventApi.lookupEventsAndSetEvents(bookmarkList, bookmarkId, allBookmarks, activity);
+//    }
 
 }
