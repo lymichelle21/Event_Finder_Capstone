@@ -1,14 +1,9 @@
 package com.capstone.event_finder.network;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 
-import com.capstone.event_finder.R;
-import com.capstone.event_finder.activities.ErrorActivity;
 import com.capstone.event_finder.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

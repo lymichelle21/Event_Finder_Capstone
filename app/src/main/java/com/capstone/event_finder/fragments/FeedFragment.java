@@ -85,7 +85,7 @@ public class FeedFragment extends Fragment {
     private void alert() {
         Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder =
-                new AlertDialog.Builder(getContext()).
+                new AlertDialog.Builder(requireContext()).
                         setIcon(R.mipmap.ic_error_round).
                         setTitle("Oh no!").
                         setMessage("There are no events currently near you!").

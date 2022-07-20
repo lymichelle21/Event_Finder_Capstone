@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData;
 
 import com.capstone.event_finder.models.Event;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventViewModel extends AndroidViewModel {
