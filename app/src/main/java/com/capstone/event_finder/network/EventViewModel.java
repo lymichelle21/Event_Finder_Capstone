@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.capstone.event_finder.fragments.ExploreFragment;
@@ -67,119 +68,101 @@ public class EventViewModel extends AndroidViewModel {
         return eventRepository.eventInCache(eventId);
     }
 
-    //MutableLiveData<List<Event>> recommendationsResponseLiveData;
-    public LiveData<List<Event>> getRecommendations(Set<String> userInterestedAndBookmarkedEventCategories, List<Bookmark> bookmarksList, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
-        queryUserBookmarksFromParse(userInterestedAndBookmarkedEventCategories, bookmarksList, userBookmarkedCategories, userInterestedCategories, activity);
-
-        eventRepository.getRecommendedEventsFromApi(recommendationList, "lectures-books", "1", activity);
-        return eventRepository.getRecommendedEventsFromApi(recommendationList, "music", "2", activity);
-    }
-
-    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
-        return eventRepository.getBookmarkedEvents(bookmarkList, bookmarkId, allBookmarks, activity);
-    }
-
-    // TODO: Explore
-    public void queryUserBookmarksFromParse(Set<String> userInterestedAndBookmarkedEventCategories, List<Bookmark> bookmarksList, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
-        includeUserInterestedCategories(userInterestedAndBookmarkedEventCategories, userInterestedCategories);
-        final int POST_LIMIT = 10;
-        ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
-        query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
-        query.setLimit(POST_LIMIT);
-        query.addDescendingOrder("createdAt");
-        query.findInBackground((bookmarks, e) -> {
-            if (e != null) {
-                Toast.makeText(activity.getContext(), "Failed to find bookmarks", Toast.LENGTH_LONG).show();
-                return;
-            }
-            bookmarksList.clear();
-            bookmarksList.addAll(bookmarks);
-            queryUserBookmarkCategories(userInterestedAndBookmarkedEventCategories,bookmarksList, userBookmarkedCategories, userInterestedCategories, activity);
-        });
-    }
-
-    private void queryUserBookmarkCategories(Set<String> userInterestedAndBookmarkedEventCategories, List<Bookmark> bookmarksList, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
-        for (int i = 0; i < bookmarksList.size(); i++) {
-            Bookmark bookmark = bookmarksList.get(i);
-            String bookmarkedEventCategory = bookmark.getEventCategory();
-            userBookmarkedCategories.add(bookmarkedEventCategory);
-            userInterestedAndBookmarkedEventCategories.add(bookmarkedEventCategory);
-        }
-        calculatePoints(userInterestedAndBookmarkedEventCategories, userBookmarkedCategories, userInterestedCategories, activity);
-    }
-
-    private void calculatePoints(Set<String> userInterestedAndBookmarkedEventCategories, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
-        final int POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST = 3;
-        final int POINTS_FOR_CATEGORY_OF_INTEREST = 1;
-        final int POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST = 2;
-        double totalPoints = 0.0;
-        for (String category : userInterestedAndBookmarkedEventCategories) {
-            int occurrences = Collections.frequency(userBookmarkedCategories, category);
-            boolean isUserInterestedCategory = userInterestedCategories.contains(category);
-            double points = 0.0;
-            if (isUserInterestedCategory) {
-                points += occurrences * POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST;
-                points += POINTS_FOR_CATEGORY_OF_INTEREST;
-            } else {
-                points += occurrences * POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST;
-            }
-            totalPoints += points;
-            categoryCount.put(category, points);
-        }
-        calculateEventsOfEachCategoryToQuery(userInterestedAndBookmarkedEventCategories, categoryCount, totalPoints, activity);
-    }
-
-    private void calculateEventsOfEachCategoryToQuery(Set<String> userInterestedAndBookmarkedEventCategories, HashMap<String, Double> categoryCount, Double totalPoints, ExploreFragment activity) {
-        recommendationList.clear();
-
-        Log.d(TAG, "category count in function " + categoryCount.toString());
-
-        for (String category : userInterestedAndBookmarkedEventCategories) {
-            int count = (int) (Math.ceil(10 * (categoryCount.get(category) / totalPoints)));
-            categoryCount.put(category, (double) 2);
-            // make new live data with list of categories and once all added
-            // Outside of loop, observe all categories have returned, then all
-
-            // chaining network events in java
-            // zipping network events
-            // updating UI after multiple network calls
-
-            eventRepository.getRecommendedEventsFromApi(recommendationList, category, Integer.toString(count), activity);
-        }
-
-        //getAPIEvents(category, Integer.toString(count));
-        //recommendationAdapter.notifyDataSetChanged();
-
-    }
-
-    private void includeUserInterestedCategories(Set<String> userInterestedAndBookmarkedEventCategories, ArrayList<String> userInterestedCategories) {
-        JSONArray interestedCategories = ParseUser.getCurrentUser().getJSONArray("event_categories");
-        for (int i = 0; i < Objects.requireNonNull(interestedCategories).length(); i++) {
-            try {
-                userInterestedAndBookmarkedEventCategories.add(interestedCategories.get(i).toString());
-                userInterestedCategories.add(interestedCategories.get(i).toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-
-
-
-    // TODO: Start here for bookmarks
-    public List<Event> tryRetrieveEventInCache(List<Event> bookmarkList, String eventId, JsonArray allBookmarks, ProfileFragment activity) {
-        eventInCache(eventId).observe(activity.getViewLifecycleOwner(), events -> {
-            if (events.isEmpty()) {
-                //events = getBookmarkedEvents(bookmarkList, eventId, allBookmarks, activity);
-                eventRepository.eventApi.lookupEventsAndSetEvents(bookmarkList, eventId, allBookmarks, activity);
-            }
-            bookmarkList.addAll(events);
-            //bookmarkAdapter.notifyDataSetChanged();
-        });
-        return bookmarkList;
-    }
+//    TODO: Fix this so ignore
+//    public LiveData<List<Event>> getRecommendations(Set<String> userInterestedAndBookmarkedEventCategories, List<Bookmark> bookmarksList, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
+//        queryUserBookmarksFromParse(userInterestedAndBookmarkedEventCategories, bookmarksList, userBookmarkedCategories, userInterestedCategories, activity);
+//        return eventRepository.getRecommendedEventsFromApi(recommendationList, "", "", activity);
+//    }
+//
+//    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
+//        return eventRepository.getBookmarkedEvents(bookmarkList, bookmarkId, allBookmarks, activity);
+//    }
+//
+//    public void queryUserBookmarksFromParse(Set<String> userInterestedAndBookmarkedEventCategories, List<Bookmark> bookmarksList, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
+//        includeUserInterestedCategories(userInterestedAndBookmarkedEventCategories, userInterestedCategories);
+//        final int POST_LIMIT = 10;
+//        ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
+//        query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
+//        query.setLimit(POST_LIMIT);
+//        query.addDescendingOrder("createdAt");
+//        query.findInBackground((bookmarks, e) -> {
+//            if (e != null) {
+//                Toast.makeText(activity.getContext(), "Failed to find bookmarks", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//            bookmarksList.clear();
+//            bookmarksList.addAll(bookmarks);
+//            queryUserBookmarkCategories(userInterestedAndBookmarkedEventCategories,bookmarksList, userBookmarkedCategories, userInterestedCategories, activity);
+//        });
+//    }
+//
+//    private void queryUserBookmarkCategories(Set<String> userInterestedAndBookmarkedEventCategories, List<Bookmark> bookmarksList, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
+//        for (int i = 0; i < bookmarksList.size(); i++) {
+//            Bookmark bookmark = bookmarksList.get(i);
+//            String bookmarkedEventCategory = bookmark.getEventCategory();
+//            userBookmarkedCategories.add(bookmarkedEventCategory);
+//            userInterestedAndBookmarkedEventCategories.add(bookmarkedEventCategory);
+//        }
+//        calculatePoints(userInterestedAndBookmarkedEventCategories, userBookmarkedCategories, userInterestedCategories, activity);
+//    }
+//
+//    private void calculatePoints(Set<String> userInterestedAndBookmarkedEventCategories, ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories, ExploreFragment activity) {
+//        final int POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST = 3;
+//        final int POINTS_FOR_CATEGORY_OF_INTEREST = 1;
+//        final int POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST = 2;
+//        double totalPoints = 0.0;
+//        for (String category : userInterestedAndBookmarkedEventCategories) {
+//            int occurrences = Collections.frequency(userBookmarkedCategories, category);
+//            boolean isUserInterestedCategory = userInterestedCategories.contains(category);
+//            double points = 0.0;
+//            if (isUserInterestedCategory) {
+//                points += occurrences * POINTS_FOR_BOOKMARK_IN_CATEGORY_OF_INTEREST;
+//                points += POINTS_FOR_CATEGORY_OF_INTEREST;
+//            } else {
+//                points += occurrences * POINTS_FOR_BOOKMARK_NOT_IN_CATEGORY_OF_INTEREST;
+//            }
+//            totalPoints += points;
+//            categoryCount.put(category, points);
+//        }
+//        calculateEventsOfEachCategoryToQuery(userInterestedAndBookmarkedEventCategories, categoryCount, totalPoints, activity);
+//    }
+//
+//
+//    private void calculateEventsOfEachCategoryToQuery(Set<String> userInterestedAndBookmarkedEventCategories, HashMap<String, Double> categoryCount, Double totalPoints, ExploreFragment activity) {
+//        recommendationList.clear();
+//
+//        Log.d(TAG, "category count in function " + categoryCount.toString());
+//
+//        for (String category : userInterestedAndBookmarkedEventCategories) {
+//            int count = (int) (Math.ceil(10 * (categoryCount.get(category) / totalPoints)));
+//            categoryCount.put(category, (double) 2);
+//            eventRepository.getRecommendedEventsFromApi(recommendationList, category, Integer.toString(count), activity);
+//        }
+//    }
+//
+//    private void includeUserInterestedCategories(Set<String> userInterestedAndBookmarkedEventCategories, ArrayList<String> userInterestedCategories) {
+//        JSONArray interestedCategories = ParseUser.getCurrentUser().getJSONArray("event_categories");
+//        for (int i = 0; i < Objects.requireNonNull(interestedCategories).length(); i++) {
+//            try {
+//                userInterestedAndBookmarkedEventCategories.add(interestedCategories.get(i).toString());
+//                userInterestedCategories.add(interestedCategories.get(i).toString());
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+//
+//    public List<Event> tryRetrieveEventInCache(List<Event> bookmarkList, String eventId, JsonArray allBookmarks, ProfileFragment activity) {
+//        eventInCache(eventId).observe(activity.getViewLifecycleOwner(), events -> {
+//            if (events.isEmpty()) {
+//                //events = getBookmarkedEvents(bookmarkList, eventId, allBookmarks, activity);
+//                eventRepository.eventApi.lookupEventsAndSetEvents(bookmarkList, eventId, allBookmarks, activity);
+//            }
+//            bookmarkList.addAll(events);
+//            //bookmarkAdapter.notifyDataSetChanged();
+//        });
+//        return bookmarkList;
+//    }
 
 
 

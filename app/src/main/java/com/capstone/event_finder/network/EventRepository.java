@@ -48,13 +48,13 @@ public class EventRepository {
         return eventApi.getAPIEvents(eventsList, activity);
     }
 
-    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
-        return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
-    }
-
-    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
-        return eventApi.lookupEventsAndSetEvents(bookmarkList, bookmarkId, allBookmarks, activity);
-    }
+//    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+//        return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
+//    }
+//
+//    public List<Event> getBookmarkedEvents(List<Event> bookmarkList, String bookmarkId, JsonArray allBookmarks, ProfileFragment activity) {
+//        return eventApi.lookupEventsAndSetEvents(bookmarkList, bookmarkId, allBookmarks, activity);
+//    }
 
     private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {
         private final EventDao eventDao;
