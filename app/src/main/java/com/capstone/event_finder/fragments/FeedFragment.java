@@ -1,6 +1,7 @@
 package com.capstone.event_finder.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.activities.ErrorActivity;
 import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.interfaces.EventFetcherInterface;
@@ -94,10 +97,21 @@ public class FeedFragment extends Fragment implements EventFetcherInterface {
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
                     addEventsToDatabase(response);
                 } else {
                     Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(requireContext()).
+                                    setIcon(R.mipmap.ic_error_round).
+                                    setTitle("Oh no!").
+                                    setMessage("There are no events currently near you!").
+                                    setPositiveButton("Change Zip", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        Intent intent = new Intent(getContext(), ErrorActivity.class);
+                                        startActivity(intent);
+                                    });
+                    builder.create().show();
                 }
             }
 

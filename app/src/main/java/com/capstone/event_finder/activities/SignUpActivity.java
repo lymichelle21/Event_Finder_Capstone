@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.capstone.event_finder.R;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -123,15 +124,27 @@ public class SignUpActivity extends AppCompatActivity {
         user.setPassword(etPassword.getText().toString());
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
+        String zipPattern = "^\\d{5}$";
+        if (!etZip.getText().toString().matches(zipPattern)) {
+            Toast.makeText(SignUpActivity.this, "Invalid zip", Toast.LENGTH_LONG).show();
+            return;
+        }
         if (categoryListOfStrings == null) {
             Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
             return;
         }
         user.put("event_categories", categoryListOfStrings);
         user.put("event_categories_string", allInterestCategories);
+        registerUserToParse(user);
+    }
 
+    private void registerUserToParse(ParseUser user) {
         user.signUpInBackground(e -> {
             if (e != null) {
+                if (e.getCode() == ParseException.USERNAME_TAKEN) {
+                    Toast.makeText(SignUpActivity.this, "Error: Username already taken", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
                 return;
             }
