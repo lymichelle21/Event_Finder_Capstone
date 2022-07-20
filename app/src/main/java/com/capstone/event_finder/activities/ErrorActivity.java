@@ -32,6 +32,7 @@ public class ErrorActivity extends AppCompatActivity {
         currentUser.put("zip", etZip.getText().toString());
         currentUser.saveInBackground((e) -> {
             if (e != null) {
+                e.printStackTrace();
                 Toast.makeText(ErrorActivity.this, "Failed to update zip", Toast.LENGTH_LONG).show();
                 return;
             }

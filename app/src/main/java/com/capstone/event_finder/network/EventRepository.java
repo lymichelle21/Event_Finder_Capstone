@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.interfaces.EventDao;
 import com.capstone.event_finder.models.Event;
 
@@ -38,8 +37,8 @@ public class EventRepository {
         new DeleteAsyncTask(eventDao).execute();
     }
 
-    public LiveData<List<Event>> getEventsFromApi(List<Event> eventsList, FeedFragment activity) {
-        return eventApi.getAPIEvents(eventsList, activity);
+    public LiveData<List<Event>> getEventsFromApi(List<Event> eventsList) {
+        return eventApi.getAPIEvents(eventsList);
     }
 
     private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {
@@ -72,7 +71,7 @@ public class EventRepository {
         }
     }
 
-    //    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
+//    public LiveData<List<Event>> getRecommendedEventsFromApi(List<Event> recommendationList, String category, String numberOfEventsToRetrieve, ExploreFragment activity) {
 //        return eventApi.getRecommendedEventsFromApi(recommendationList, category, numberOfEventsToRetrieve, activity);
 //    }
 //

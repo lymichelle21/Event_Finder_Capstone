@@ -1,23 +1,14 @@
 package com.capstone.event_finder.network;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.ErrorActivity;
-import com.capstone.event_finder.adapters.EventsAdapter;
-import com.capstone.event_finder.fragments.ExploreFragment;
-import com.capstone.event_finder.fragments.FeedFragment;
-import com.capstone.event_finder.fragments.ProfileFragment;
 import com.capstone.event_finder.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -39,7 +30,7 @@ public class EventApi {
         this.eventRepository = eventRepository;
     }
 
-    public LiveData<List<Event>> getAPIEvents(List<Event> eventsList, FeedFragment activity) {
+    public LiveData<List<Event>> getAPIEvents(List<Event> eventsList) {
         String eventSearchRegion = "en_US";
         Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
@@ -53,27 +44,26 @@ public class EventApi {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
-                    addEventsToDatabase(response, activity);
-
+                    addEventsToDatabase(response);
                 } else {
-                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
-                    AlertDialog.Builder builder =
-                            new AlertDialog.Builder(activity.getContext()).
-                                    setIcon(R.mipmap.ic_error_round).
-                                    setTitle("Oh no!").
-                                    setMessage("There are no events currently near you!").
-                                    setPositiveButton("Change Zip", (dialog, which) -> {
-                                        dialog.dismiss();
-                                        Intent intent = new Intent(activity.getContext(), ErrorActivity.class);
-                                        activity.startActivity(intent);
-                                    });
-                    builder.create().show();
+//                    Toast.makeText(activity.getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+//                    AlertDialog.Builder builder =
+//                            new AlertDialog.Builder(activity.getContext()).
+//                                    setIcon(R.mipmap.ic_error_round).
+//                                    setTitle("Oh no!").
+//                                    setMessage("There are no events currently near you!").
+//                                    setPositiveButton("Change Zip", (dialog, which) -> {
+//                                        dialog.dismiss();
+//                                        Intent intent = new Intent(activity.getContext(), ErrorActivity.class);
+//                                        activity.startActivity(intent);
+//                                    });
+//                    builder.create().show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(activity.getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
             }
         });
         return null;
@@ -104,17 +94,15 @@ public class EventApi {
         formatAndSetEventLocation(temp, event);
     }
 
-    private void addEventsToDatabase(@NonNull Response<JsonObject> response, FeedFragment activity) {
-        if (activity != null) {
-            try {
-                JsonObject result = response.body();
-                assert result != null;
-                eventRepository.deleteAllEvents();
-                eventRepository.insert((List<Event>) convertToList(result));
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(activity.getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
-            }
+    private void addEventsToDatabase(@NonNull Response<JsonObject> response) {
+        try {
+            JsonObject result = response.body();
+            assert result != null;
+            eventRepository.deleteAllEvents();
+            eventRepository.insert((List<Event>) convertToList(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //Toast.makeText(activity.getContext(), "JSON exception error", Toast.LENGTH_SHORT).show();
         }
     }
 

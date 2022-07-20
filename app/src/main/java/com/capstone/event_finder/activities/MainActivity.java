@@ -22,9 +22,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
 
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         FeedFragment feedFragment = new FeedFragment();
         ExploreFragment exploreFragment = new ExploreFragment();
         ProfileFragment profileFragment = new ProfileFragment();
-        makeInitialCallGetEvents(feedFragment);
+        makeInitialCallGetEvents();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
@@ -65,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
     }
 
-    private void makeInitialCallGetEvents(FeedFragment feedFragment) {
-        eventViewModel.refreshEvents(feedFragment);
+    private void makeInitialCallGetEvents() {
+        eventViewModel.refreshEvents();
     }
 
     public void populateEventInfo(Event event, JsonObject temp) {

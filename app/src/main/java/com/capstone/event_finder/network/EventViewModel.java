@@ -56,10 +56,19 @@ public class EventViewModel extends AndroidViewModel {
         return getEvents;
     }
 
-    public List<Event> refreshEvents(FeedFragment activity) {
+//    public LiveData<List<Event>> refreshEvents(FeedFragment activity) {
+//        return eventRepository.getEventsFromApi(eventsList, activity);
+//    }
+//
+//    public List<Event> refreshEvents(FeedFragment activity) {
+//        List<Event> eventsList = new ArrayList<>();
+//        eventRepository.getEventsFromApi(eventsList, activity);
+//        return eventsList;
+//    }
+
+    public void refreshEvents() {
         List<Event> eventsList = new ArrayList<>();
-        eventRepository.getEventsFromApi(eventsList, activity);
-        return eventsList;
+        eventRepository.getEventsFromApi(eventsList);
     }
 
     public LiveData<List<Event>> eventInCache(String eventId) {
