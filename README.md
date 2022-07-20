@@ -1,4 +1,4 @@
-# Capstone Project - App Name Pending
+# Event Finder
 
 ## Table of Contents
 1. [Overview](#Overview)
@@ -37,7 +37,8 @@ App allows users to find events near them and upload and view photos. This app i
 * User can upload and view photos from the event
     * User can add a caption when uploading photos
     * User can select a photo to view and see a growing animation
-* User sees animated splash screen when opening app
+* User sees animations when navigating between screens 
+* User can see custom splash screen when opening app
 
 **Bolding** denotes difficult/ambiguous technical problems
 
@@ -81,9 +82,6 @@ App allows users to find events near them and upload and view photos. This app i
    * User can click on event on map to get details pop up
 * Creation 
    * User can add a photo for an event
-* Maps
-   * User can view events on a map
-   
 
 ### 3. Navigation
 
@@ -92,16 +90,12 @@ App allows users to find events near them and upload and view photos. This app i
 * Events Stream
 * Profile
 * Recommendations
-* Map
 
 **Flow Navigation** (Screen to Screen)
 * Events Stream
    * Event Details 
       * Photo Album
       * Add Photo
-      * SMS
-* Map
-   * Event Details
 * Profile - Bookmarked Events
    * Event Details  
 * Recommendations
@@ -160,6 +154,12 @@ User
    * (Delete) Delete existing bookmark
 * Map Screen
    * (Read/GET) Query events near user
+   
+### Third-Party Libraries
+* Lottie: Supports implementation of high-quality animations in a space-efficient way
+* Retrofit: Serves as a type-safe REST client for Android for authenticating and interacting with APIs and sending network requests with OkHttp
+* Room: Serves as an abstraction layer over SQLite that enables local database access using queries
+* Glide: Supports fetching, loading, and displaying images in a fast and efficent way 
 
 ### Parse Query Code Snippet Example - querying photos for each event
 ```java
