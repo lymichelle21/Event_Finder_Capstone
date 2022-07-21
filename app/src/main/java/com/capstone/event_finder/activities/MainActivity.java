@@ -15,7 +15,6 @@ import com.capstone.event_finder.R;
 import com.capstone.event_finder.fragments.ExploreFragment;
 import com.capstone.event_finder.fragments.FeedFragment;
 import com.capstone.event_finder.fragments.ProfileFragment;
-import com.capstone.event_finder.interfaces.EventFetcherInterface;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.EventViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,7 +24,6 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
-    private EventFetcherInterface feedFragmentListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +35,11 @@ public class MainActivity extends AppCompatActivity {
         setUpBottomNavigation(fragmentManager);
     }
 
-    public void setFeedFragmentListener(EventFetcherInterface feedFragmentListener) {
-        this.feedFragmentListener = feedFragmentListener;
-    }
-
     private void setUpBottomNavigation(FragmentManager fragmentManager) {
-        Fragment feedFragment = new FeedFragment();
-        Fragment exploreFragment = new ExploreFragment();
-        Fragment profileFragment = new ProfileFragment();
-        initialCallToEventApi((EventFetcherInterface) feedFragment);
+        FeedFragment feedFragment = new FeedFragment();
+        ExploreFragment exploreFragment = new ExploreFragment();
+        ProfileFragment profileFragment = new ProfileFragment();
+        eventViewModel.refreshEvents();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
@@ -106,11 +100,6 @@ public class MainActivity extends AppCompatActivity {
         event.setLocation(formattedLocationString.toString());
     }
 
-    private void initialCallToEventApi(EventFetcherInterface feedFragment) {
-        setFeedFragmentListener(feedFragment);
-        feedFragmentListener.getAPIEvents();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout, menu);
@@ -126,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void onLogoutButton() {
-        eventViewModel.delete();
+        eventViewModel.clearCache();
         Toast.makeText(MainActivity.this, "Logged out!", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
         Intent i = new Intent(this, LoginActivity.class);

@@ -116,8 +116,10 @@ public class ProfileFragment extends Fragment {
 
     private void queryAndSetUserBookmarksToFeed(JsonArray allBookmarks) {
         for (int i = 0; i < bookmarkIds.size(); i++) {
+            //eventViewModel.tryRetrieveEventInCache(bookmarkList, bookmarkIds.get(i), allBookmarks, ProfileFragment.this);
             tryRetrieveEventInCache(bookmarkIds.get(i), allBookmarks);
         }
+        bookmarkAdapter.notifyDataSetChanged();
     }
 
     public void lookupEventsAndSetEvents(String bookmarkId, JsonArray allBookmarks) {

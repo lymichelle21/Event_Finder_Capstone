@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
+import com.capstone.event_finder.network.EventViewModel;
 import com.capstone.event_finder.network.RetrofitClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -49,6 +51,7 @@ public class ExploreFragment extends Fragment {
     private final Set<String> userInterestedAndBookmarkedEventCategories = new HashSet<>();
     RecyclerView rvRecommendations;
     EventsAdapter recommendationAdapter;
+    EventViewModel eventViewModel;
 
     public ExploreFragment() {
     }
@@ -63,12 +66,22 @@ public class ExploreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUpRecyclerView(view);
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         bookmarksList.clear();
         userInterestedAndBookmarkedEventCategories.clear();
         ArrayList<String> userBookmarkedCategories = new ArrayList<>();
         ArrayList<String> userInterestedCategories = new ArrayList<>();
+
         includeUserInterestedCategories(userInterestedCategories);
         queryUserBookmarksFromParse(userBookmarkedCategories, userInterestedCategories);
+    }
+
+    private void setUpRecyclerView(@NonNull View view) {
+        rvRecommendations = view.findViewById(R.id.rvRecommendations);
+        recommendationAdapter = new EventsAdapter(getContext(), recommendationList);
+        rvRecommendations.setAdapter(recommendationAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvRecommendations.setLayoutManager(linearLayoutManager);
     }
 
     private void includeUserInterestedCategories(ArrayList<String> userInterestedCategories) {
@@ -83,13 +96,6 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    private void setUpRecyclerView(@NonNull View view) {
-        rvRecommendations = view.findViewById(R.id.rvRecommendations);
-        recommendationAdapter = new EventsAdapter(getContext(), recommendationList);
-        rvRecommendations.setAdapter(recommendationAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvRecommendations.setLayoutManager(linearLayoutManager);
-    }
 
     public void queryUserBookmarksFromParse(ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories) {
         final int POST_LIMIT = 10;
@@ -143,6 +149,7 @@ public class ExploreFragment extends Fragment {
             int count = (int) (Math.ceil(10 * (categoryCount.get(category) / totalPoints)));
             categoryCount.put(category, (double) count);
             getAPIEvents(category, Integer.toString(count));
+            recommendationAdapter.notifyDataSetChanged();
         }
     }
 
