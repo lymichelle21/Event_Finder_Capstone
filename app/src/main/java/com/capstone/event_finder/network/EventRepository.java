@@ -13,12 +13,10 @@ import java.util.List;
 public class EventRepository {
 
     public EventDao eventDao;
-    public EventApi eventApi;
 
     public EventRepository(Application application) {
         EventDatabase eventDatabase = EventDatabase.getInstance(application);
         eventDao = eventDatabase.eventDao();
-        eventApi = new EventApi(this);
     }
 
     public void insert(List<Event> events) {
@@ -35,10 +33,6 @@ public class EventRepository {
 
     public void deleteAllEvents() {
         new DeleteAsyncTask(eventDao).execute();
-    }
-
-    public LiveData<List<Event>> getEventsFromApi() {
-        return eventApi.getAPIEvents();
     }
 
     private static class InsertAsyncTask extends AsyncTask<List<Event>, Void, Void> {

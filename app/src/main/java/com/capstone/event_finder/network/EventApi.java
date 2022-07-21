@@ -17,19 +17,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventApi {
+public class EventApi implements GetAPIEventsHandler {
 
-    private final EventRepository eventRepository;
-
-    public EventApi(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    public EventApi() {
     }
 
-    public LiveData<List<Event>> getAPIEvents() {
+    public void eventsReceived(List<Event> events) {
+    }
+
+    public LiveData<List<Event>> getAPIEvents(GetAPIEventsHandler apiEventHandler) {
         String eventSearchRegion = "en_US";
-        Long eventSearchRadiusFromUserInMeters = 40000L;
         String numberOfEventsToRetrieve = "10";
         Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
+        Long eventSearchRadiusFromUserInMeters = 40000L;
         RetrofitClient.getInstance().getYelpAPI().getEvents(eventSearchRegion,
                 numberOfEventsToRetrieve,
                 upcomingEventsOnly,
@@ -39,7 +39,7 @@ public class EventApi {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
-                    addEventsToDatabase(response);
+                    addEventsToDatabase(response, apiEventHandler);
                 }
             }
 
@@ -76,12 +76,11 @@ public class EventApi {
         formatAndSetEventLocation(temp, event);
     }
 
-    private void addEventsToDatabase(@NonNull Response<JsonObject> response) {
+    private void addEventsToDatabase(@NonNull Response<JsonObject> response, GetAPIEventsHandler apiEventHandler) {
         try {
             JsonObject result = response.body();
             assert result != null;
-            eventRepository.deleteAllEvents();
-            eventRepository.insert((List<Event>) convertToList(result));
+            apiEventHandler.eventsReceived((List<Event>) convertToList(result));
         } catch (Exception e) {
             e.printStackTrace();
         }

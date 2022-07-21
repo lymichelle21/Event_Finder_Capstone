@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         FeedFragment feedFragment = new FeedFragment();
         ExploreFragment exploreFragment = new ExploreFragment();
         ProfileFragment profileFragment = new ProfileFragment();
-        makeInitialCallGetEvents();
+        eventViewModel.refreshEvents();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             Fragment fragment;
@@ -60,10 +60,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
-    }
-
-    private void makeInitialCallGetEvents() {
-        eventViewModel.refreshEvents();
     }
 
     public void populateEventInfo(Event event, JsonObject temp) {
