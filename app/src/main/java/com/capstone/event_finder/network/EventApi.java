@@ -2,8 +2,6 @@ package com.capstone.event_finder.network;
 
 import android.support.annotation.NonNull;
 
-import androidx.lifecycle.LiveData;
-
 import com.capstone.event_finder.models.Event;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -22,7 +20,7 @@ public class EventApi {
     public EventApi() {
     }
 
-    public LiveData<List<Event>> getAPIEvents(GetAPIEventsHandler apiEventHandler) {
+    public void getAPIEvents(GetAPIEventsHandler apiEventHandler) {
         String eventSearchRegion = "en_US";
         String numberOfEventsToRetrieve = "10";
         Long upcomingEventsOnly = (System.currentTimeMillis() / 1000L);
@@ -45,7 +43,6 @@ public class EventApi {
                 t.printStackTrace();
             }
         });
-        return null;
     }
 
     private Collection<? extends Event> convertToList(JsonObject result) {

@@ -126,7 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
 
-        if (ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), SignUpActivity.this) == false) {
+        if (!ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), SignUpActivity.this)) {
             return;
         }
         if (categoryListOfStrings == null) {
