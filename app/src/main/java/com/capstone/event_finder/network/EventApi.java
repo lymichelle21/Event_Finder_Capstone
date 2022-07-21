@@ -38,7 +38,7 @@ public class EventApi implements GetAPIEventsHandler {
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body() != null && !String.valueOf(convertToList(response.body())).equals("[]")) {
+                if (response.isSuccessful() && response.body() != null && !convertToList(response.body()).isEmpty()) {
                     addEventsToDatabase(response, apiEventHandler);
                 }
             }

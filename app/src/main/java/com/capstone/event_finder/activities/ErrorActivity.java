@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.utils.ZipFormatCheck;
 import com.parse.ParseUser;
 
 public class ErrorActivity extends AppCompatActivity {
@@ -36,18 +37,11 @@ public class ErrorActivity extends AppCompatActivity {
                 Toast.makeText(ErrorActivity.this, "Failed to update zip", Toast.LENGTH_LONG).show();
                 return;
             }
-            checkIfZipValid();
-            Toast.makeText(ErrorActivity.this, "Updated zip!", Toast.LENGTH_LONG).show();
+            if (ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), ErrorActivity.this)) {
+                goToMainActivity();
+                Toast.makeText(ErrorActivity.this, "Updated zip!", Toast.LENGTH_LONG).show();
+            }
         });
-    }
-
-    private void checkIfZipValid() {
-        String zipPattern = "^\\d{5}$";
-        if (!etZip.getText().toString().matches(zipPattern)) {
-            Toast.makeText(ErrorActivity.this, "Invalid zip", Toast.LENGTH_LONG).show();
-            return;
-        }
-        goToMainActivity();
     }
 
     private void goToMainActivity() {

@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.utils.ZipFormatCheck;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -124,9 +125,8 @@ public class SignUpActivity extends AppCompatActivity {
         user.setPassword(etPassword.getText().toString());
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
-        String zipPattern = "^\\d{5}$";
-        if (!etZip.getText().toString().matches(zipPattern)) {
-            Toast.makeText(SignUpActivity.this, "Invalid zip", Toast.LENGTH_LONG).show();
+
+        if (ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), SignUpActivity.this) == false) {
             return;
         }
         if (categoryListOfStrings == null) {
