@@ -17,12 +17,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventApi implements GetAPIEventsHandler {
+public class EventApi {
 
     public EventApi() {
-    }
-
-    public void eventsReceived(List<Event> events) {
     }
 
     public LiveData<List<Event>> getAPIEvents(GetAPIEventsHandler apiEventHandler) {
