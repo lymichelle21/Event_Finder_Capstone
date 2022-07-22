@@ -6,6 +6,8 @@
 1. [Wireframes](#Wireframes)
 2. [Schema](#Schema)
 
+<img src="https://user-images.githubusercontent.com/59234861/180371028-aaf075ee-d292-4025-bc4d-d51f8807888f.png" alt="event_finder_logo" width="200"/>
+
 ## Overview
 ### Description
 Event Finder is an Android app that encourages users to build community and connect with others by empowering them to find local events and share related photos. This app is a combination of event finding in EventBrite and photo sharing in Google Drive in a mobile-friendly format.
