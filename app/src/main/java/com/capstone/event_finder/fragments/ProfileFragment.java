@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
@@ -42,6 +47,7 @@ public class ProfileFragment extends Fragment {
     TextView tvProfileUsername;
     TextView tvProfileBio;
     TextView tvInterestCategories;
+    ImageView ivProfileImage;
     EventsAdapter bookmarkAdapter;
     private EventViewModel eventViewModel;
 
@@ -60,11 +66,13 @@ public class ProfileFragment extends Fragment {
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         tvProfileUsername = view.findViewById(R.id.tvProfileUsername);
         tvProfileBio = view.findViewById(R.id.tvProfileBio);
+        ivProfileImage = view.findViewById(R.id.ivProfileImage);
         tvInterestCategories = view.findViewById(R.id.tvInterestCategories);
         rvBookmarks = view.findViewById(R.id.rvBookmarks);
         tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvProfileBio.setText(ParseUser.getCurrentUser().getString("bio"));
         tvInterestCategories.setText(ParseUser.getCurrentUser().getString("event_categories_string"));
+        Glide.with(view.getContext()).load(ParseUser.getCurrentUser().getParseFile("profile_image").getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivProfileImage);
 
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);
