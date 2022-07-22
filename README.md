@@ -148,12 +148,12 @@ Bookmark
 
 | Property     | Type      | Description     |
 | ------------ | --------- | ----------------|
-| objectId | String | unique id for the photo (default field) |
+| objectId | String | unique id for the bookmark (default field) |
 | user | Pointer to User | user |
 | eventId | String | event id from API that photo is from |
 | category | String | category event belongs to |
-| createdAt | DateTime | date when photo is created (default field) |
-| updatedAt | DateTime | date when photo is last updated (default field) |
+| createdAt | DateTime | date when bookmark is created (default field) |
+| updatedAt | DateTime | date when bookmark is last updated (default field) |
 
 ### Networking
 * Event Feed Screen
