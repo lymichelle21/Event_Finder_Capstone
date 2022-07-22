@@ -72,7 +72,7 @@
         android:id="@+id/ivProfileImage"
         android:layout_width="105dp"
         android:layout_height="113dp"
-        tools:src="@tools:sample/avatars"
-        android:contentDescription="@string/profile_picture" />
+        android:contentDescription="@string/profile_picture"
+        tools:src="@tools:sample/avatars" />
 
 </RelativeLayout>

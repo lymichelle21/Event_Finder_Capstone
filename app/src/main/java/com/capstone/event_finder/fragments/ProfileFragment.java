@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
@@ -33,6 +32,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment {
         tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvProfileBio.setText(ParseUser.getCurrentUser().getString("bio"));
         tvInterestCategories.setText(ParseUser.getCurrentUser().getString("event_categories_string"));
-        Glide.with(view.getContext()).load(ParseUser.getCurrentUser().getParseFile("profile_image").getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivProfileImage);
+        Glide.with(view.getContext()).load(Objects.requireNonNull(ParseUser.getCurrentUser().getParseFile("profile_image")).getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivProfileImage);
 
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);

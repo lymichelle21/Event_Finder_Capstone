@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -46,7 +45,6 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageButton ibProfileImage;
     private TextView tvEventCategoryDropdown;
     private String allInterestCategories;
-    private Button btnSignUp;
     private ArrayList<String> categoryListOfStrings;
     private ParseFile file;
 
@@ -61,32 +59,25 @@ public class SignUpActivity extends AppCompatActivity {
         etBio = findViewById(R.id.etBio);
         ibProfileImage = findViewById(R.id.ibProfileImage);
         tvEventCategoryDropdown = findViewById(R.id.tvEventCategoryDropdown);
-        btnSignUp = findViewById(R.id.btnSignUp);
+        Button btnSignUp = findViewById(R.id.btnSignUp);
         animatedConfetti = findViewById(R.id.animatedConfetti);
 
         setUpEventCategoryDropdown();
         btnSignUp.setOnClickListener(v -> signUpUser());
 
-        ibProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PHOTO_PICKER_REQUEST_CODE);
-            }
+        ibProfileImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PHOTO_PICKER_REQUEST_CODE);
         });
     }
 
     public Bitmap loadImageFromUri(Uri photoUri) {
         Bitmap image = null;
         try {
-            if (Build.VERSION.SDK_INT > 27) {
-                ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoUri);
-                image = ImageDecoder.decodeBitmap(source);
-            } else {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-            }
+            ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoUri);
+            image = ImageDecoder.decodeBitmap(source);
         } catch (IOException e) {
-            e.printStackTrace();
+            Toast.makeText(SignUpActivity.this, "Error loading image uri", Toast.LENGTH_SHORT).show();
         }
         return image;
     }
@@ -111,12 +102,9 @@ public class SignUpActivity extends AppCompatActivity {
         selectedImage.compress(Bitmap.CompressFormat.JPEG, 40, stream);
         byte[] imageRec = stream.toByteArray();
         file = new ParseFile(photoFileName, imageRec);
-        file.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (null != e) {
-                    Toast.makeText(SignUpActivity.this, "Error saving profile image", Toast.LENGTH_SHORT).show();
-                }
+        file.saveInBackground((SaveCallback) e -> {
+            if (null != e) {
+                Toast.makeText(SignUpActivity.this, "Error saving profile image", Toast.LENGTH_SHORT).show();
             }
         });
     }
