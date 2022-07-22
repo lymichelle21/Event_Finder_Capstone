@@ -37,4 +37,10 @@
     <string name="error_image">Error image</string>
     <string name="oops_there_are_no_events_near_you">Oops.. there are no events near you</string>
     <string name="try_a_different_zip_code">Try a different zip code!</string>
+    <string name="select_profile_photo">Select profile photo</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="logo">logo</string>
+    <string name="photo_of_event">Photo of event</string>
+    <string name="poster_profile_image">Poster profile image</string>
+    <string name="posted_by">Posted by</string>
 </resources>

@@ -4,10 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,21 +24,29 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.utils.ZipFormatCheck;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    public static final int PHOTO_PICKER_REQUEST_CODE = 2022;
+    public String photoFileName = "profile.jpg";
     LottieAnimationView animatedConfetti;
     private EditText etUsername;
     private EditText etPassword;
     private EditText etZip;
     private EditText etBio;
+    private ImageButton ibProfileImage;
     private TextView tvEventCategoryDropdown;
     private String allInterestCategories;
     private ArrayList<String> categoryListOfStrings;
+    private ParseFile file;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,12 +57,56 @@ public class SignUpActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etZip = findViewById(R.id.etZip);
         etBio = findViewById(R.id.etBio);
+        ibProfileImage = findViewById(R.id.ibProfileImage);
         tvEventCategoryDropdown = findViewById(R.id.tvEventCategoryDropdown);
         Button btnSignUp = findViewById(R.id.btnSignUp);
         animatedConfetti = findViewById(R.id.animatedConfetti);
 
         setUpEventCategoryDropdown();
         btnSignUp.setOnClickListener(v -> signUpUser());
+
+        ibProfileImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PHOTO_PICKER_REQUEST_CODE);
+        });
+    }
+
+    public Bitmap loadImageFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoUri);
+            image = ImageDecoder.decodeBitmap(source);
+        } catch (IOException e) {
+            Toast.makeText(SignUpActivity.this, "Error loading image uri", Toast.LENGTH_SHORT).show();
+        }
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PHOTO_PICKER_REQUEST_CODE && data != null) {
+            if (resultCode == RESULT_OK) {
+                Uri currentUri = data.getData();
+                Bitmap selectedImage = loadImageFromUri(currentUri);
+                ibProfileImage.setImageBitmap(selectedImage);
+                compressAndGetImageAsParseFile(selectedImage);
+            } else {
+                Toast.makeText(SignUpActivity.this, "Error opening gallery", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void compressAndGetImageAsParseFile(Bitmap selectedImage) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        selectedImage.compress(Bitmap.CompressFormat.JPEG, 40, stream);
+        byte[] imageRec = stream.toByteArray();
+        file = new ParseFile(photoFileName, imageRec);
+        file.saveInBackground((SaveCallback) e -> {
+            if (null != e) {
+                Toast.makeText(SignUpActivity.this, "Error saving profile image", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void startCheckAnimationLogo() {
@@ -120,31 +177,40 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUpUser() {
+        if (file == null) {
+            Toast.makeText(SignUpActivity.this, "Error: No profile image added", Toast.LENGTH_LONG).show();
+        }
+
+        if (!ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), SignUpActivity.this)) {
+            return;
+        }
+
+        if (categoryListOfStrings == null) {
+            Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ParseUser user = new ParseUser();
         user.setUsername(etUsername.getText().toString());
         user.setPassword(etPassword.getText().toString());
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
-
-        if (!ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), SignUpActivity.this)) {
-            return;
-        }
-        if (categoryListOfStrings == null) {
-            Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
-            return;
-        }
         user.put("event_categories", categoryListOfStrings);
         user.put("event_categories_string", allInterestCategories);
+        user.put("profile_image", file);
+
         registerUserToParse(user);
     }
 
     private void registerUserToParse(ParseUser user) {
         user.signUpInBackground(e -> {
             if (e != null) {
+                e.printStackTrace();
                 if (e.getCode() == ParseException.USERNAME_TAKEN) {
                     Toast.makeText(SignUpActivity.this, "Error: Username already taken", Toast.LENGTH_LONG).show();
                     return;
                 }
+                e.printStackTrace();
                 Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
                 return;
             }

@@ -11,16 +11,19 @@
         android:id="@+id/tvPhotoDetailsUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_below="@+id/tvPhotoDetailsDescription"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="59dp"
+        android:layout_toEndOf="@+id/ivPosterProfileImage"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="28sp"
         tools:text="dino" />
 
     <ImageView
         android:id="@+id/ivPhotoDetailsImage"
         android:layout_width="match_parent"
-        android:layout_height="330dp"
-        android:layout_below="@+id/tvPhotoDetailsUsername"
-        android:layout_marginTop="8dp"
+        android:layout_height="386dp"
+        android:contentDescription="@string/photo_of_event"
         android:scaleType="centerCrop"
         android:transitionName="photo"
         tools:srcCompat="@tools:sample/avatars" />
@@ -30,8 +33,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPhotoDetailsImage"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="14dp"
+        android:maxLines="4"
         android:textSize="18sp"
         tools:text="Don't mind me - just coding and vibing to lo-fi" />
+
+    <ImageView
+        android:id="@+id/ivPosterProfileImage"
+        android:layout_width="86dp"
+        android:layout_height="69dp"
+        android:layout_below="@+id/tvPhotoDetailsDescription"
+        android:layout_marginTop="32dp"
+        android:contentDescription="@string/poster_profile_image"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvPostedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvPhotoDetailsDescription"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="38dp"
+        android:layout_toEndOf="@+id/ivPosterProfileImage"
+        android:text="@string/posted_by"
+        tools:text="Posted by" />
 
 </RelativeLayout>
