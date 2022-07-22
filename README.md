@@ -112,8 +112,7 @@ Event Finder is an Android app that encourages users to build community and conn
 <img src="wireframe2.jpeg" width=500>
 
 ### Final Flow
-![Wireframe](https://user-images.githubusercontent.com/59234861/180369865-72f007cc-2f73-41f6-a1a5-62124dc48347.png)
-
+![Wireframe](https://user-images.githubusercontent.com/59234861/180579595-17e7643c-8c3a-4027-b3ab-973d1147644a.png)
 
 ## Schema 
 
@@ -128,6 +127,7 @@ User
 | password	| String | user's account password |
 | bio	| String | user's bio |
 | zip	| Number | user zip code |
+| profile_image | File | user profile image |
 | event_categories_string	| String | user's selected event categories of interest |
 | event_categories | Array | user's selected event categories of interest |
 | createdAt | DateTime | date when account is created (default field) |
