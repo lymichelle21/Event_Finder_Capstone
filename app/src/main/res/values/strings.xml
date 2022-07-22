@@ -39,4 +39,5 @@
     <string name="try_a_different_zip_code">Try a different zip code!</string>
     <string name="select_profile_photo">Select profile photo</string>
     <string name="profile_picture">Profile picture</string>
+    <string name="logo">logo</string>
 </resources>

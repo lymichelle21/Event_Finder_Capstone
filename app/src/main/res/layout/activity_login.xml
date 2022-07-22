@@ -57,20 +57,23 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="New to Event Finder?" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvWelcomeMessage"
-        android:layout_marginStart="135dp"
+        android:layout_marginStart="140dp"
         android:layout_marginTop="12dp"
-        android:text="@string/sign_up" />
+        android:background="@drawable/gradient"
+        android:text="@string/sign_up"
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="365dp"
         android:layout_height="105dp"
         android:layout_marginTop="30dp"
+        android:contentDescription="@string/logo"
         app:srcCompat="@mipmap/ic_logo_round"
         tools:ignore="ImageContrastCheck"
         tools:srcCompat="@mipmap/ic_logo_round" />
