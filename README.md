@@ -105,9 +105,13 @@ Event Finder is an Android app that encourages users to build community and conn
    * Event Details
 
 ## Wireframes
-<img src="wireframe1.jpeg" width=600>
+### Original Sketch
+<img src="wireframe1.jpeg" width=500>
+<img src="wireframe2.jpeg" width=500>
 
-<img src="wireframe2.jpeg" width=600>
+### Final Flow
+![Wireframe](https://user-images.githubusercontent.com/59234861/180369865-72f007cc-2f73-41f6-a1a5-62124dc48347.png)
+
 
 ## Schema 
 
