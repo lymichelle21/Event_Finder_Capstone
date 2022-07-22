@@ -76,7 +76,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    public Bitmap loadFromUri(Uri photoUri) {
+    public Bitmap loadImageFromUri(Uri photoUri) {
         Bitmap image = null;
         try {
             if (Build.VERSION.SDK_INT > 27) {
@@ -97,24 +97,28 @@ public class SignUpActivity extends AppCompatActivity {
         if (requestCode == PHOTO_PICKER_REQUEST_CODE && data != null) {
             if (resultCode == RESULT_OK) {
                 Uri currentUri = data.getData();
-                Bitmap selectedImage = loadFromUri(currentUri);
+                Bitmap selectedImage = loadImageFromUri(currentUri);
                 ibProfileImage.setImageBitmap(selectedImage);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                selectedImage.compress(Bitmap.CompressFormat.JPEG, 40, stream);
-                byte[] imageRec = stream.toByteArray();
-                file = new ParseFile(photoFileName, imageRec);
-                file.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (null != e) {
-                            Toast.makeText(SignUpActivity.this, "Error saving profile image", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                compressAndGetImageAsParseFile(selectedImage);
             } else {
                 Toast.makeText(SignUpActivity.this, "Error opening gallery", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void compressAndGetImageAsParseFile(Bitmap selectedImage) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        selectedImage.compress(Bitmap.CompressFormat.JPEG, 40, stream);
+        byte[] imageRec = stream.toByteArray();
+        file = new ParseFile(photoFileName, imageRec);
+        file.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (null != e) {
+                    Toast.makeText(SignUpActivity.this, "Error saving profile image", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void startCheckAnimationLogo() {
@@ -189,19 +193,20 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(SignUpActivity.this, "Error: No profile image added", Toast.LENGTH_LONG).show();
         }
 
+        if (!ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), SignUpActivity.this)) {
+            return;
+        }
+
+        if (categoryListOfStrings == null) {
+            Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ParseUser user = new ParseUser();
         user.setUsername(etUsername.getText().toString());
         user.setPassword(etPassword.getText().toString());
         user.put("zip", etZip.getText().toString());
         user.put("bio", etBio.getText().toString());
-
-        if (!ZipFormatCheck.isZipValidFormat(etZip.getText().toString(), SignUpActivity.this)) {
-            return;
-        }
-        if (categoryListOfStrings == null) {
-            Toast.makeText(SignUpActivity.this, "Error: All fields are required", Toast.LENGTH_LONG).show();
-            return;
-        }
         user.put("event_categories", categoryListOfStrings);
         user.put("event_categories_string", allInterestCategories);
         user.put("profile_image", file);
