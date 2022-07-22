@@ -1,4 +1,4 @@
-# Event Finder
+# Event Finder 🦖🗓
 
 ## Table of Contents
 1. [Overview](#Overview)
