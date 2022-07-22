@@ -96,7 +96,6 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-
     public void queryUserBookmarksFromParse(ArrayList<String> userBookmarkedCategories, ArrayList<String> userInterestedCategories) {
         final int POST_LIMIT = 10;
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
