@@ -1,9 +1,10 @@
 package com.capstone.event_finder.adapters;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -27,7 +27,6 @@ import org.parceler.Parcels;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Objects;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
@@ -87,6 +86,52 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvStartDate.setText(event.getTimeStart());
             tvEndDate.setText(event.getTimeEnd());
             chipCategory.setText(event.getCategory());
+
+            String category = event.getCategory();
+            Log.d(TAG, category);
+            Integer color;
+            switch (category) {
+                case "music":
+                    color = R.color.pink;
+                    break;
+                case "visual-arts":
+                    color = R.color.dark_blue;
+                    break;
+                case "performing-arts":
+                    color = R.color.lime;
+                    break;
+                case "film":
+                    color = R.color.dark_purple;
+                    break;
+                case "lectures-books":
+                    color = R.color.orange;
+                    break;
+                case "fashion":
+                    color = R.color.purple;
+                    break;
+                case "food-and-drink":
+                    color = R.color.blue;
+                    break;
+                case "festivals-fairs":
+                    color = R.color.red;
+                    break;
+                case "charities":
+                    color = R.color.cerulean;
+                    break;
+                case "sports-active-life":
+                    color = R.color.pale_orange;
+                    break;
+                case "nightlife":
+                    color = R.color.prussian_blue;
+                    break;
+                case "kids-family":
+                    color = R.color.magenta;
+                    break;
+                default:
+                    color = R.color.sea_green;
+            }
+
+            chipCategory.setChipBackgroundColor(AppCompatResources.getColorStateList(context, color));
             Glide.with(context).load(event.getImageUrl()).placeholder(R.drawable.ic_logo).centerCrop().transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventPhoto);
         }
 
