@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,7 +18,7 @@
 
     <TextView
         android:id="@+id/tvEventTitle"
-        android:layout_width="266dp"
+        android:layout_width="202dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:layout_marginTop="0dp"
@@ -31,9 +32,9 @@
         android:id="@+id/tvEventDescription"
         android:layout_width="264dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvStartDate"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="8dp"
+        android:layout_below="@+id/chipCategory"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivEventPhoto"
         android:maxLines="2"
         tools:text="Insert a description here about the event" />
@@ -68,4 +69,20 @@
         android:layout_marginTop="7dp"
         android:layout_toEndOf="@+id/tvTo"
         tools:text="9/22" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chipCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEventTitle"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/tvEndDate"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:text="@string/category"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:chipMinTouchTargetSize="0dp"
+        tools:ignore="TouchTargetSizeCheck" />
 </RelativeLayout>
