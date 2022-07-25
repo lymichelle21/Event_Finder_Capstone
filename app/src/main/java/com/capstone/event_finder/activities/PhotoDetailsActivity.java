@@ -1,6 +1,8 @@
 package com.capstone.event_finder.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,7 +33,19 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         tvPhotoDetailsDescription = findViewById(R.id.tvPhotoDetailsDescription);
         ivPhotoDetailsImage = findViewById(R.id.ivPhotoDetailsImage);
         ivPosterProfileImage = findViewById(R.id.ivPosterProfileImage);
+        ivPosterProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPosterProfile();
+            }
+        });
         getAndSetPhotoContent();
+    }
+
+    private void viewPosterProfile() {
+        Intent i = new Intent(this, PosterProfileActivity.class);
+        startActivity(i);
+        finish();
     }
 
     private void getAndSetPhotoContent() {
@@ -42,7 +56,6 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         if (image != null) {
             Glide.with(getApplicationContext()).load(image.getUrl()).into(ivPhotoDetailsImage);
         }
-
         ParseFile profileImage = (photo.getUser()).getParseFile("profile_image");
         if (image != null) {
             Glide.with(getApplicationContext()).load(profileImage.getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivPosterProfileImage);
