@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.models.Photo;
 import com.parse.ParseFile;
@@ -19,6 +21,7 @@ public class PhotoDetailsActivity extends AppCompatActivity {
     TextView tvPhotoDetailsUsername;
     TextView tvPhotoDetailsDescription;
     ImageView ivPhotoDetailsImage;
+    ImageView ivPosterProfileImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         tvPhotoDetailsUsername = findViewById(R.id.tvPhotoDetailsUsername);
         tvPhotoDetailsDescription = findViewById(R.id.tvPhotoDetailsDescription);
         ivPhotoDetailsImage = findViewById(R.id.ivPhotoDetailsImage);
+        ivPosterProfileImage = findViewById(R.id.ivPosterProfileImage);
 
         getAndSetPhotoContent();
     }
@@ -38,6 +42,11 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         ParseFile image = photo.getImage();
         if (image != null) {
             Glide.with(getApplicationContext()).load(image.getUrl()).into(ivPhotoDetailsImage);
+        }
+
+        ParseFile profileImage = (photo.getUser()).getParseFile("profile_image");
+        if (image != null) {
+            Glide.with(getApplicationContext()).load(profileImage.getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivPosterProfileImage);
         }
     }
 

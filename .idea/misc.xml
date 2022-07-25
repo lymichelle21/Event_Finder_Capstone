@@ -5,25 +5,30 @@
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.116" />
         <entry key="app/src/main/res/drawable/bg_gradient.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/circle.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/gradient.xml" value="0.101" />
         <entry key="app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_person_pin_24.xml" value="0.101" />
+        <entry key="app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.101" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_error.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/rounded_corners.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_add_photo.xml" value="0.33541666666666664" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.33099060058593766" />
         <entry key="app/src/main/res/layout/activity_error.xml" value="0.33169500378594885" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24230072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2107762654622396" />
         <entry key="app/src/main/res/layout/activity_photo_album.xml" value="0.33541666666666664" />
-        <entry key="app/src/main/res/layout/activity_photo_details.xml" value="0.26132246376811596" />
-        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_photo_details.xml" value="0.21291548134624094" />
+        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2978240966796875" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_explore.xml" value="0.30745849609375003" />
         <entry key="app/src/main/res/layout/fragment_feed.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/fragment_photo_details.xml" value="0.32997695165323027" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.29846014492753625" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.3833569955134736" />
         <entry key="app/src/main/res/layout/item_event.xml" value="0.2668330307547928" />
         <entry key="app/src/main/res/layout/item_photo.xml" value="0.2703804347826087" />
         <entry key="app/src/main/res/layout/layout_animation.xml" value="0.26132246376811596" />
