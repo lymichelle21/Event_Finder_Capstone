@@ -92,7 +92,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         private void setCategoryChipColor(Event event) {
             String category = event.getCategory();
-            Log.d(TAG, category);
             Integer color;
             switch (category) {
                 case "music":

@@ -41,7 +41,7 @@ import retrofit2.Response;
 public class ProfileFragment extends Fragment {
 
     private final List<Bookmark> userBookmarks = new ArrayList<>();
-    private final List<Event> bookmarkList = new ArrayList<>();
+    private List<Event> bookmarkList = new ArrayList<>();
     private final ArrayList<String> bookmarkIds = new ArrayList<>();
     RecyclerView rvBookmarks;
     TextView tvProfileUsername;
@@ -76,6 +76,9 @@ public class ProfileFragment extends Fragment {
 
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);
+
+        //bookmarkList = eventViewModel.getBookmarks();
+        bookmarkAdapter.notifyDataSetChanged();
         getAndSetUserBookmarks(allBookmarks);
     }
 

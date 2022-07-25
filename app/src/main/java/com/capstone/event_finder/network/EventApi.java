@@ -57,6 +57,17 @@ public class EventApi {
         return res;
     }
 
+    private Collection<? extends Event> convertBookmarksToList(JsonArray result) {
+        List<Event> res = new ArrayList<>();
+        for (int i = 0; i < result.size(); i++) {
+            JsonObject temp = (JsonObject) result.get(i);
+            Event event = new Event();
+            populateEventInfo(event, temp);
+            res.add(event);
+        }
+        return res;
+    }
+
     public void populateEventInfo(Event event, JsonObject temp) {
         event.setName(temp.get("name").getAsString());
         event.setDescription(temp.get("description").getAsString());
@@ -103,5 +114,28 @@ public class EventApi {
             formattedLocationString.append(formattedLocation.get(i).getAsString()).append(" ");
         }
         event.setLocation(formattedLocationString.toString());
+    }
+
+    public void lookupEventsAndSetEvents(String bookmarkId, JsonArray allBookmarks, GetAPIEventsHandler apiEventHandler) {
+        RetrofitClient.getInstance().getYelpAPI().lookupEvent(bookmarkId).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject result = response.body();
+                    allBookmarks.add(result);
+//                    apiEventHandler.bookmarksReceived((List<Event>) convertBookmarksToList(allBookmarks));
+//                    allBookmarks.add(result);
+                } else {
+//                    Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
+                }
+//                bookmarkList.addAll(convertToList(allBookmarks));
+//                bookmarkAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+//                Toast.makeText(getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
