@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/tvEventTitle"
-        android:layout_width="202dp"
+        android:layout_width="272dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:layout_marginTop="0dp"
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEventTitle"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/tvEndDate"
         android:gravity="center_horizontal"
         android:maxLines="1"
