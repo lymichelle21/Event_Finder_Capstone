@@ -84,5 +84,5 @@
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         app:chipMinTouchTargetSize="0dp"
-        tools:ignore="TouchTargetSizeCheck" />
+        android:theme="@style/Theme.MaterialComponents.Light"/>
 </RelativeLayout>
