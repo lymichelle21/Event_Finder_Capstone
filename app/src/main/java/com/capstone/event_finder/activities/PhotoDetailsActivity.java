@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.models.Photo;
 import com.parse.ParseFile;
 
@@ -33,17 +34,18 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         tvPhotoDetailsDescription = findViewById(R.id.tvPhotoDetailsDescription);
         ivPhotoDetailsImage = findViewById(R.id.ivPhotoDetailsImage);
         ivPosterProfileImage = findViewById(R.id.ivPosterProfileImage);
+        getAndSetPhotoContent();
         ivPosterProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPosterProfile();
             }
         });
-        getAndSetPhotoContent();
     }
 
     private void viewPosterProfile() {
         Intent i = new Intent(this, PosterProfileActivity.class);
+        i.putExtra(Photo.class.getSimpleName(), Parcels.wrap(photo));
         startActivity(i);
         finish();
     }
