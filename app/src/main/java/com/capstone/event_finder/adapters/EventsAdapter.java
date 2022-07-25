@@ -143,6 +143,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 Event event = events.get(position);
                 Intent intent = new Intent(context, EventDetailsActivity.class);
                 intent.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         }
