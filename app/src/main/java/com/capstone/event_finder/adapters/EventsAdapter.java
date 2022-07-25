@@ -86,7 +86,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvStartDate.setText(event.getTimeStart());
             tvEndDate.setText(event.getTimeEnd());
             chipCategory.setText(event.getCategory());
+            setCategoryChipColor(event);
+            Glide.with(context).load(event.getImageUrl()).placeholder(R.drawable.ic_logo).centerCrop().transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventPhoto);
+        }
 
+        private void setCategoryChipColor(Event event) {
             String category = event.getCategory();
             Log.d(TAG, category);
             Integer color;
@@ -130,9 +134,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 default:
                     color = R.color.sea_green;
             }
-
             chipCategory.setChipBackgroundColor(AppCompatResources.getColorStateList(context, color));
-            Glide.with(context).load(event.getImageUrl()).placeholder(R.drawable.ic_logo).centerCrop().transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventPhoto);
         }
 
         public void onClick(View v) {

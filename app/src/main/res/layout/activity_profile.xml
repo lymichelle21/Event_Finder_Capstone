@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tvProfileUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        tools:text="Happy" />
+
+    <TextView
+        android:id="@+id/tvBookmarks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvInterestCategories"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/bookmarks"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        tools:text="Bookmarks" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBookmarks"
+        android:layout_width="match_parent"
+        android:layout_height="504dp"
+        android:layout_below="@+id/tvBookmarks"
+        android:layout_marginTop="3dp" />
+
+    <TextView
+        android:id="@+id/tvProfileBio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivProfileImage"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="-59dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:lineSpacingExtra="3sp"
+        android:maxLines="3"
+        android:text="@string/bio_here"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/tvInterestCategoriesHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivProfileImage"
+        android:layout_marginTop="21dp"
+        android:text="@string/interest_categories"
+        android:textStyle="bold"
+        tools:text="Interest Categories: " />
+
+    <TextView
+        android:id="@+id/tvInterestCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="135dp"
+        android:layout_toEndOf="@+id/tvInterestCategoriesHeader"
+        android:text="@string/example_categories" />
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="105dp"
+        android:layout_height="113dp"
+        android:contentDescription="@string/profile_picture"
+        tools:src="@tools:sample/avatars" />
+
+</RelativeLayout>

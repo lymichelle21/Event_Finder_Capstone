@@ -31,7 +31,6 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         tvPhotoDetailsDescription = findViewById(R.id.tvPhotoDetailsDescription);
         ivPhotoDetailsImage = findViewById(R.id.ivPhotoDetailsImage);
         ivPosterProfileImage = findViewById(R.id.ivPosterProfileImage);
-
         getAndSetPhotoContent();
     }
 
