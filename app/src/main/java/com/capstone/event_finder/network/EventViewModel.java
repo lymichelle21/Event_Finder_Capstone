@@ -1,6 +1,9 @@
 package com.capstone.event_finder.network;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,7 +52,6 @@ public class EventViewModel extends AndroidViewModel {
         });
     }
 
-
     public LiveData<List<Event>> eventInCache(String eventId) {
         return eventRepository.eventInCache(eventId);
     }
@@ -61,11 +63,9 @@ public class EventViewModel extends AndroidViewModel {
     }
 
     private void tryRetrieveEventInCache(String eventId, JsonArray allBookmarks) {
-        eventInCache(eventId).observeForever(events -> {
-            if (events.isEmpty()) {
-                //eventApi.lookupEventsAndSetEvents(eventId, allBookmarks);
-            }
+        eventApi.lookupEventsAndSetEvents(eventId, allBookmarks, events -> {
             bookmarkList.addAll(events);
+            Log.d(TAG, bookmarkList.toString());
         });
     }
 

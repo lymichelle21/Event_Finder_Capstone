@@ -123,8 +123,7 @@ public class EventApi {
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject result = response.body();
                     allBookmarks.add(result);
-//                    apiEventHandler.bookmarksReceived((List<Event>) convertBookmarksToList(allBookmarks));
-//                    allBookmarks.add(result);
+                    apiEventHandler.eventsReceived((List<Event>) convertBookmarksToList(allBookmarks));
                 } else {
 //                    Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }

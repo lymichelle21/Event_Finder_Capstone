@@ -1,6 +1,9 @@
 package com.capstone.event_finder.fragments;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,9 +80,16 @@ public class ProfileFragment extends Fragment {
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);
 
-        //bookmarkList = eventViewModel.getBookmarks();
-        bookmarkAdapter.notifyDataSetChanged();
-        getAndSetUserBookmarks(allBookmarks);
+        eventViewModel.getBookmarks();
+
+//        eventViewModel.getBookmarks().observe(getViewLifecycleOwner(), events -> {
+//            bookmarkList.clear();
+//            bookmarkList.addAll(events);
+//            bookmarkAdapter.notifyDataSetChanged();
+//        });
+
+//        bookmarkAdapter.notifyDataSetChanged();
+//        getAndSetUserBookmarks(allBookmarks);
     }
 
     public void getAndSetUserBookmarks(JsonArray allBookmarks) {

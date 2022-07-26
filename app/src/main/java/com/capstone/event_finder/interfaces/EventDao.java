@@ -24,4 +24,5 @@ public interface EventDao {
 
     @Query("SELECT * FROM event_table WHERE id == :eventId")
     LiveData<List<Event>> eventInCache(String eventId);
+
 }
