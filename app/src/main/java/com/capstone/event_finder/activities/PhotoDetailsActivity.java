@@ -1,6 +1,8 @@
 package com.capstone.event_finder.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.capstone.event_finder.R;
+import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.models.Photo;
 import com.parse.ParseFile;
 
@@ -31,8 +34,20 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         tvPhotoDetailsDescription = findViewById(R.id.tvPhotoDetailsDescription);
         ivPhotoDetailsImage = findViewById(R.id.ivPhotoDetailsImage);
         ivPosterProfileImage = findViewById(R.id.ivPosterProfileImage);
-
         getAndSetPhotoContent();
+        ivPosterProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPosterProfile();
+            }
+        });
+    }
+
+    private void viewPosterProfile() {
+        Intent i = new Intent(this, PosterProfileActivity.class);
+        i.putExtra(Photo.class.getSimpleName(), Parcels.wrap(photo));
+        startActivity(i);
+        finish();
     }
 
     private void getAndSetPhotoContent() {
@@ -43,7 +58,6 @@ public class PhotoDetailsActivity extends AppCompatActivity {
         if (image != null) {
             Glide.with(getApplicationContext()).load(image.getUrl()).into(ivPhotoDetailsImage);
         }
-
         ParseFile profileImage = (photo.getUser()).getParseFile("profile_image");
         if (image != null) {
             Glide.with(getApplicationContext()).load(profileImage.getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivPosterProfileImage);

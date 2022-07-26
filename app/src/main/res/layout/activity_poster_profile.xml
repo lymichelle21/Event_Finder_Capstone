@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    tools:context="com.capstone.event_finder.fragments.ProfileFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/tvProfileUsername"
@@ -15,7 +13,7 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        tools:text="Orlando" />
+        tools:text="Happy" />
 
     <TextView
         android:id="@+id/tvBookmarks"

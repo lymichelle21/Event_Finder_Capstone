@@ -1,7 +1,10 @@
 package com.capstone.event_finder.adapters;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +21,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.activities.EventDetailsActivity;
 import com.capstone.event_finder.models.Event;
+import com.google.android.material.chip.Chip;
 
 import org.parceler.Parcels;
 
@@ -62,6 +67,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         TextView tvEventDescription;
         TextView tvStartDate;
         TextView tvEndDate;
+        Chip chipCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +76,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvEventDescription = itemView.findViewById(R.id.tvEventDescription);
             tvStartDate = itemView.findViewById(R.id.tvStartDate);
             tvEndDate = itemView.findViewById(R.id.tvEndDate);
+            chipCategory = itemView.findViewById(R.id.chipCategory);
             itemView.setOnClickListener(this);
         }
 
@@ -78,7 +85,56 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvEventDescription.setText(event.getDescription());
             tvStartDate.setText(event.getTimeStart());
             tvEndDate.setText(event.getTimeEnd());
+            chipCategory.setText(event.getCategory());
+            setCategoryChipColor(event);
             Glide.with(context).load(event.getImageUrl()).placeholder(R.drawable.ic_logo).centerCrop().transform(new CenterCrop(), new RoundedCorners(30)).into(ivEventPhoto);
+        }
+
+        private void setCategoryChipColor(Event event) {
+            String category = event.getCategory();
+            Log.d(TAG, category);
+            Integer color;
+            switch (category) {
+                case "music":
+                    color = R.color.pink;
+                    break;
+                case "visual-arts":
+                    color = R.color.dark_blue;
+                    break;
+                case "performing-arts":
+                    color = R.color.lime;
+                    break;
+                case "film":
+                    color = R.color.dark_purple;
+                    break;
+                case "lectures-books":
+                    color = R.color.orange;
+                    break;
+                case "fashion":
+                    color = R.color.purple;
+                    break;
+                case "food-and-drink":
+                    color = R.color.blue;
+                    break;
+                case "festivals-fairs":
+                    color = R.color.red;
+                    break;
+                case "charities":
+                    color = R.color.cerulean;
+                    break;
+                case "sports-active-life":
+                    color = R.color.pale_orange;
+                    break;
+                case "nightlife":
+                    color = R.color.prussian_blue;
+                    break;
+                case "kids-family":
+                    color = R.color.magenta;
+                    break;
+                default:
+                    color = R.color.sea_green;
+            }
+            chipCategory.setChipBackgroundColor(AppCompatResources.getColorStateList(context, color));
         }
 
         public void onClick(View v) {
@@ -87,6 +143,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 Event event = events.get(position);
                 Intent intent = new Intent(context, EventDetailsActivity.class);
                 intent.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         }

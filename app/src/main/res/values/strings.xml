@@ -43,4 +43,5 @@
     <string name="photo_of_event">Photo of event</string>
     <string name="poster_profile_image">Poster profile image</string>
     <string name="posted_by">Posted by</string>
+    <string name="category">category</string>
 </resources>

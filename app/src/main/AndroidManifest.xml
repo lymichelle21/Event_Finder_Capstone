@@ -47,6 +47,7 @@
         <activity android:name="com.capstone.event_finder.activities.PhotoAlbumActivity" />
         <activity android:name="com.capstone.event_finder.activities.AddPhotoActivity" />
         <activity android:name="com.capstone.event_finder.activities.PhotoDetailsActivity" />
+        <activity android:name="com.capstone.event_finder.activities.PosterProfileActivity" />
         <activity android:name="com.capstone.event_finder.activities.ErrorActivity" />
     </application>
 </manifest>
