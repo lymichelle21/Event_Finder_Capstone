@@ -80,13 +80,13 @@ public class ProfileFragment extends Fragment {
         JsonArray allBookmarks = new JsonArray();
         setUpRecyclerView(view);
 
-        eventViewModel.getBookmarks();
+//        eventViewModel.getBookmarks();
 
-//        eventViewModel.getBookmarks().observe(getViewLifecycleOwner(), events -> {
-//            bookmarkList.clear();
-//            bookmarkList.addAll(events);
-//            bookmarkAdapter.notifyDataSetChanged();
-//        });
+        eventViewModel.getBookmarks().observe(getViewLifecycleOwner(), events -> {
+            bookmarkList.clear();
+            bookmarkList.addAll(events);
+            bookmarkAdapter.notifyDataSetChanged();
+        });
 
 //        bookmarkAdapter.notifyDataSetChanged();
 //        getAndSetUserBookmarks(allBookmarks);

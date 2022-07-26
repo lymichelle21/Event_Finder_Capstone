@@ -1,14 +1,11 @@
 package com.capstone.event_finder.network;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.app.Application;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
@@ -26,12 +23,13 @@ public class EventViewModel extends AndroidViewModel {
     public LiveData<List<Event>> getEvents;
     public LiveData<List<Event>> eventInCache;
     private final List<Bookmark> userBookmarks = new ArrayList<>();
-    private final List<Event> bookmarkList = new ArrayList<>();
+    private final MutableLiveData<List<Event>> bookmarkList;
     private final ArrayList<String> bookmarkIds = new ArrayList<>();
 
     public EventViewModel(@NonNull Application application) {
         super(application);
         eventRepository = new EventRepository(application);
+        bookmarkList = new MutableLiveData<>();
         eventApi = new EventApi();
         getEvents = eventRepository.getEvents();
         eventInCache = eventInCache("");
@@ -56,16 +54,25 @@ public class EventViewModel extends AndroidViewModel {
         return eventRepository.eventInCache(eventId);
     }
 
-    public List<Event> getBookmarks() {
+    public LiveData<List<Event>> getBookmarks() {
         JsonArray allBookmarks = new JsonArray();
         queryUserBookmarksFromParse(allBookmarks);
         return bookmarkList;
     }
 
     private void tryRetrieveEventInCache(String eventId, JsonArray allBookmarks) {
+
+//        eventInCache(eventId, events -> {
+//            if (events.isEmpty()) {
+//                eventApi.lookupEventsAndSetEvents(eventId, allBookmarks, calledEvents -> {
+//                    bookmarkList.postValue(calledEvents);
+//                });
+//            }
+//            bookmarkList.postValue(events);
+//        });
+
         eventApi.lookupEventsAndSetEvents(eventId, allBookmarks, events -> {
-            bookmarkList.addAll(events);
-            Log.d(TAG, bookmarkList.toString());
+            bookmarkList.postValue(events);
         });
     }
 

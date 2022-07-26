@@ -124,16 +124,12 @@ public class EventApi {
                     JsonObject result = response.body();
                     allBookmarks.add(result);
                     apiEventHandler.eventsReceived((List<Event>) convertBookmarksToList(allBookmarks));
-                } else {
-//                    Toast.makeText(getContext(), "Query Failed", Toast.LENGTH_SHORT).show();
                 }
-//                bookmarkList.addAll(convertToList(allBookmarks));
-//                bookmarkAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(@androidx.annotation.NonNull Call<JsonObject> call, @androidx.annotation.NonNull Throwable t) {
-//                Toast.makeText(getContext(), "Failed to get events", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
     }
