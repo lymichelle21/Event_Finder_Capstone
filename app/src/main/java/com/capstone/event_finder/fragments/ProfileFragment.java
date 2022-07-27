@@ -62,7 +62,7 @@ public class ProfileFragment extends Fragment {
 
         setUpRecyclerView(view);
 
-        eventViewModel.getBookmarks().observe(getViewLifecycleOwner(), events -> {
+        eventViewModel.getBookmarks(ParseUser.getCurrentUser()).observe(getViewLifecycleOwner(), events -> {
             bookmarkList.clear();
             bookmarkList.addAll(events);
             bookmarkAdapter.notifyDataSetChanged();

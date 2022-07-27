@@ -48,9 +48,9 @@ public class EventViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<List<Event>> getBookmarks() {
+    public LiveData<List<Event>> getBookmarks(ParseUser user) {
         JsonArray allBookmarks = new JsonArray();
-        queryUserBookmarksFromParse(allBookmarks);
+        queryUserBookmarksFromParse(allBookmarks, user);
         return bookmarkList;
     }
 
@@ -68,10 +68,10 @@ public class EventViewModel extends AndroidViewModel {
         });
     }
 
-    public void queryUserBookmarksFromParse(JsonArray allBookmarks) {
+    public void queryUserBookmarksFromParse(JsonArray allBookmarks, ParseUser user) {
         final int POST_LIMIT = 10;
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
-        query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Bookmark.KEY_USER, user);
         query.setLimit(POST_LIMIT);
         query.addDescendingOrder("createdAt");
         query.findInBackground((bookmarks, e) -> {
