@@ -1,6 +1,9 @@
 package com.capstone.event_finder.network;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,11 +23,10 @@ public class EventViewModel extends AndroidViewModel {
 
     private final EventRepository eventRepository;
     private final EventApi eventApi;
-    public LiveData<List<Event>> getEvents;
-    public LiveData<List<Event>> eventInCache;
     private final List<Bookmark> userBookmarks = new ArrayList<>();
     private final MutableLiveData<List<Event>> bookmarkList;
     private final ArrayList<String> bookmarkIds = new ArrayList<>();
+    public LiveData<List<Event>> getEvents;
 
     public EventViewModel(@NonNull Application application) {
         super(application);
@@ -32,7 +34,6 @@ public class EventViewModel extends AndroidViewModel {
         bookmarkList = new MutableLiveData<>();
         eventApi = new EventApi();
         getEvents = eventRepository.getEvents();
-        eventInCache = eventInCache("");
     }
 
     public void clearCache() {
@@ -50,29 +51,25 @@ public class EventViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<List<Event>> eventInCache(String eventId) {
-        return eventRepository.eventInCache(eventId);
-    }
-
     public LiveData<List<Event>> getBookmarks() {
         JsonArray allBookmarks = new JsonArray();
         queryUserBookmarksFromParse(allBookmarks);
         return bookmarkList;
     }
 
-    private void tryRetrieveEventInCache(String eventId, JsonArray allBookmarks) {
-
-//        eventInCache(eventId, events -> {
-//            if (events.isEmpty()) {
-//                eventApi.lookupEventsAndSetEvents(eventId, allBookmarks, calledEvents -> {
-//                    bookmarkList.postValue(calledEvents);
-//                });
-//            }
-//            bookmarkList.postValue(events);
-//        });
-
-        eventApi.lookupEventsAndSetEvents(eventId, allBookmarks, events -> {
-            bookmarkList.postValue(events);
+    private void tryRetrieveEventInCache(String eventId, JsonArray allBookmarks, List<Event> bookmarks) {
+        eventRepository.eventInCache(eventId).observeForever(events -> {
+            if (events.isEmpty()) {
+                Log.d(TAG, "api call");
+                eventApi.lookupEventsAndSetEvents(eventId, allBookmarks, x -> {
+                    bookmarks.addAll(x);
+                    bookmarkList.postValue(bookmarks);
+                });
+            } else {
+                Log.d(TAG, "cache");
+                bookmarks.addAll(events);
+            }
+            bookmarkList.postValue(bookmarks);
         });
     }
 
@@ -84,7 +81,7 @@ public class EventViewModel extends AndroidViewModel {
         query.addDescendingOrder("createdAt");
         query.findInBackground((bookmarks, e) -> {
             if (e != null) {
-                //Toast.makeText(getContext(), "Failed to find bookmarks", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
                 return;
             }
             userBookmarks.clear();
@@ -103,8 +100,9 @@ public class EventViewModel extends AndroidViewModel {
     }
 
     private void queryAndSetUserBookmarksToFeed(JsonArray allBookmarks) {
+        List<Event> bookmarks = new ArrayList();
         for (int i = 0; i < bookmarkIds.size(); i++) {
-            tryRetrieveEventInCache(bookmarkIds.get(i), allBookmarks);
+            tryRetrieveEventInCache(bookmarkIds.get(i), allBookmarks, bookmarks);
         }
     }
 }
