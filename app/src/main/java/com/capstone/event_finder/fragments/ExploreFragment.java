@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capstone.event_finder.R;
-import com.capstone.event_finder.activities.MainActivity;
 import com.capstone.event_finder.adapters.EventsAdapter;
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
 import com.capstone.event_finder.network.EventViewModel;
 import com.capstone.event_finder.network.RetrofitClient;
+import com.capstone.event_finder.utils.SetEventInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.parse.ParseQuery;
@@ -192,7 +192,7 @@ public class ExploreFragment extends Fragment {
         for (int i = 0; i < events.size(); i++) {
             JsonObject temp = (JsonObject) events.get(i);
             Event event = new Event();
-            ((MainActivity) requireActivity()).populateEventInfo(event, temp);
+            SetEventInfo.populateEvent(event, temp);
             res.add(event);
         }
         return res;
