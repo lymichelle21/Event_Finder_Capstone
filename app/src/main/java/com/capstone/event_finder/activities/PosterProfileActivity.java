@@ -58,7 +58,10 @@ public class PosterProfileActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(Objects.requireNonNull(photo.getUser().getParseFile("profile_image")).getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivProfileImage);
 
         setUpRecyclerView();
+        getPosterBookmarks();
+    }
 
+    private void getPosterBookmarks() {
         eventViewModel.getBookmarks(photo.getUser()).observe(this, events -> {
             bookmarkList.clear();
             bookmarkList.addAll(events);

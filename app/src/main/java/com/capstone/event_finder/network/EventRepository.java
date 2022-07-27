@@ -9,7 +9,6 @@ import com.capstone.event_finder.interfaces.EventDao;
 import com.capstone.event_finder.models.Event;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 public class EventRepository {
 

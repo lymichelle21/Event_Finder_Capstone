@@ -34,7 +34,7 @@ public class ProfileFragment extends Fragment {
     TextView tvInterestCategories;
     ImageView ivProfileImage;
     EventsAdapter bookmarkAdapter;
-    private List<Event> bookmarkList = new ArrayList<>();
+    private final List<Event> bookmarkList = new ArrayList<>();
     private EventViewModel eventViewModel;
 
     public ProfileFragment() {
@@ -61,7 +61,10 @@ public class ProfileFragment extends Fragment {
         Glide.with(view.getContext()).load(Objects.requireNonNull(ParseUser.getCurrentUser().getParseFile("profile_image")).getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivProfileImage);
 
         setUpRecyclerView(view);
+        getUserBookmarks();
+    }
 
+    private void getUserBookmarks() {
         eventViewModel.getBookmarks(ParseUser.getCurrentUser()).observe(getViewLifecycleOwner(), events -> {
             bookmarkList.clear();
             bookmarkList.addAll(events);

@@ -7,7 +7,7 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcel;
 
-@Parcel (analyze = {Photo.class})
+@Parcel(analyze = {Photo.class})
 @ParseClassName("Photo")
 public class Photo extends ParseObject {
     public static final String KEY_DESCRIPTION = "description";
@@ -37,10 +37,6 @@ public class Photo extends ParseObject {
 
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
-    }
-
-    public String getEventId() {
-        return getString(KEY_EVENT_ID);
     }
 
     public void setEventId(String eventId) {
