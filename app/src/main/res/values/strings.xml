@@ -45,4 +45,5 @@
     <string name="posted_by">Posted by</string>
     <string name="category">category</string>
     <string name="make_my_bookmarks_private_to_other_users">Make my bookmarks private to other users</string>
+    <string name="privacy">private</string>
 </resources>
