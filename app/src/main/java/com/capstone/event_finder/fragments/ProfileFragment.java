@@ -28,13 +28,13 @@ import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
+    private final List<Event> bookmarkList = new ArrayList<>();
     RecyclerView rvBookmarks;
     TextView tvProfileUsername;
     TextView tvProfileBio;
     TextView tvInterestCategories;
     ImageView ivProfileImage;
     EventsAdapter bookmarkAdapter;
-    private final List<Event> bookmarkList = new ArrayList<>();
     private EventViewModel eventViewModel;
 
     public ProfileFragment() {
@@ -55,6 +55,7 @@ public class ProfileFragment extends Fragment {
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         tvInterestCategories = view.findViewById(R.id.tvInterestCategories);
         rvBookmarks = view.findViewById(R.id.rvBookmarks);
+
         tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
         tvProfileBio.setText(ParseUser.getCurrentUser().getString("bio"));
         tvInterestCategories.setText(ParseUser.getCurrentUser().getString("event_categories_string"));
