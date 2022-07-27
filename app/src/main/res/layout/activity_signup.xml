@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/swPrivacy"
         android:layout_marginStart="135dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="20dp"
         android:text="@string/sign_up" />
 
     <TextView
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="65dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="36dp"
         android:text="@string/join_a_community_of_event_seekers"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="Join a community of event seekers!" />
@@ -113,8 +113,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEventCategoryDropdown"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:text="   Make my bookmarks private to other users"
+        android:minHeight="48dp"
+        android:text="@string/make_my_bookmarks_private_to_other_users"
         android:textColor="#575555" />
 
 </RelativeLayout>
