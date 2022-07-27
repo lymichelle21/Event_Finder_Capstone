@@ -38,7 +38,6 @@ public class PosterProfileActivity extends AppCompatActivity {
     Photo photo;
     private EventViewModel eventViewModel;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
