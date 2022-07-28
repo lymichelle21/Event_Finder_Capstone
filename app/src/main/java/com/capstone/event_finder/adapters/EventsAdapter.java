@@ -1,10 +1,7 @@
 package com.capstone.event_finder.adapters;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,8 +89,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         private void setCategoryChipColor(Event event) {
             String category = event.getCategory();
-            Log.d(TAG, category);
-            Integer color;
+            int color;
             switch (category) {
                 case "music":
                     color = R.color.pink;
