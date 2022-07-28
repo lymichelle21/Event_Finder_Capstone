@@ -20,9 +20,7 @@ public class EventViewModel extends AndroidViewModel {
 
     private final EventRepository eventRepository;
     private final EventApi eventApi;
-    private final List<Bookmark> userBookmarks = new ArrayList<>();
     private final MutableLiveData<List<Event>> bookmarkList;
-    private final ArrayList<String> bookmarkIds = new ArrayList<>();
     public LiveData<List<Event>> getEvents;
 
     public EventViewModel(@NonNull Application application) {
@@ -68,8 +66,9 @@ public class EventViewModel extends AndroidViewModel {
         });
     }
 
-    public void queryUserBookmarksFromParse(JsonArray allBookmarks, ParseUser user) {
+    private void queryUserBookmarksFromParse(JsonArray allBookmarks, ParseUser user) {
         final int POST_LIMIT = 10;
+        List<Bookmark> userBookmarks = new ArrayList<>();
         ParseQuery<Bookmark> query = ParseQuery.getQuery(Bookmark.class);
         query.whereEqualTo(Bookmark.KEY_USER, user);
         query.setLimit(POST_LIMIT);
@@ -81,20 +80,21 @@ public class EventViewModel extends AndroidViewModel {
             }
             userBookmarks.clear();
             userBookmarks.addAll(bookmarks);
-            queryUserBookmarkIds(allBookmarks);
+            queryUserBookmarkIds(allBookmarks, userBookmarks);
         });
     }
 
-    private void queryUserBookmarkIds(JsonArray allBookmarks) {
+    private void queryUserBookmarkIds(JsonArray allBookmarks, List<Bookmark> userBookmarks) {
+        ArrayList<String> bookmarkIds = new ArrayList<>();
         for (int i = 0; i < userBookmarks.size(); i++) {
             Bookmark bookmark = userBookmarks.get(i);
             String bookmarkId = bookmark.getEventId();
             bookmarkIds.add(bookmarkId);
         }
-        queryAndSetUserBookmarksToFeed(allBookmarks);
+        queryAndSetUserBookmarksToFeed(allBookmarks, bookmarkIds);
     }
 
-    private void queryAndSetUserBookmarksToFeed(JsonArray allBookmarks) {
+    private void queryAndSetUserBookmarksToFeed(JsonArray allBookmarks, ArrayList<String> bookmarkIds) {
         List<Event> bookmarks = new ArrayList();
         for (int i = 0; i < bookmarkIds.size(); i++) {
             tryRetrieveEventInCache(bookmarkIds.get(i), allBookmarks, bookmarks);

@@ -34,6 +34,7 @@ public class EventApi {
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                assert response.body() != null;
                 JsonArray events = response.body().getAsJsonArray("events");
                 if (response.isSuccessful() && response.body() != null && !convertToList(events).isEmpty()) {
                     addEventsToDatabase(response, apiEventHandler);
@@ -61,8 +62,8 @@ public class EventApi {
     private void addEventsToDatabase(@NonNull Response<JsonObject> response, GetAPIEventsHandler apiEventHandler) {
         try {
             JsonObject result = response.body();
-            JsonArray events = result.getAsJsonArray("events");
             assert result != null;
+            JsonArray events = result.getAsJsonArray("events");
             apiEventHandler.eventsReceived((List<Event>) convertToList(events));
         } catch (Exception e) {
             e.printStackTrace();

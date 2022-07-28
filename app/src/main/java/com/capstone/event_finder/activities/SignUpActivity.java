@@ -81,11 +81,7 @@ public class SignUpActivity extends AppCompatActivity {
         swPrivacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    isPrivate = true;
-                } else {
-                    isPrivate = false;
-                }
+                isPrivate = isChecked;
             }
         });
     }
