@@ -67,9 +67,9 @@ public class PosterProfileActivity extends AppCompatActivity {
     }
 
     private void checkIfUserSetPrivate() {
-        if (photo.getUser().get("private").equals(true)) {
+        if (Objects.equals(photo.getUser().get("private"), true)) {
             ivPrivate.setVisibility(View.VISIBLE);
-            tvBookmarks.setText("User's bookmarks on private mode");
+            tvBookmarks.setText(R.string.privacy_message);
         }
     }
 
