@@ -1,5 +1,7 @@
 package com.capstone.event_finder.activities;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -9,8 +11,10 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -19,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.capstone.event_finder.R;
@@ -43,10 +48,13 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText etZip;
     private EditText etBio;
     private ImageButton ibProfileImage;
+    private SwitchCompat swPrivacy;
     private TextView tvEventCategoryDropdown;
     private String allInterestCategories;
     private ArrayList<String> categoryListOfStrings;
     private ParseFile file;
+    private Boolean isPrivate = false;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
         etZip = findViewById(R.id.etZip);
         etBio = findViewById(R.id.etBio);
         ibProfileImage = findViewById(R.id.ibProfileImage);
+        swPrivacy = findViewById(R.id.swPrivacy);
         tvEventCategoryDropdown = findViewById(R.id.tvEventCategoryDropdown);
         Button btnSignUp = findViewById(R.id.btnSignUp);
         animatedConfetti = findViewById(R.id.animatedConfetti);
@@ -68,6 +77,12 @@ public class SignUpActivity extends AppCompatActivity {
         ibProfileImage.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, PHOTO_PICKER_REQUEST_CODE);
+        });
+        swPrivacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isPrivate = isChecked;
+            }
         });
     }
 
@@ -198,7 +213,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put("event_categories", categoryListOfStrings);
         user.put("event_categories_string", allInterestCategories);
         user.put("profile_image", file);
-
+        user.put("private", isPrivate);
         registerUserToParse(user);
     }
 

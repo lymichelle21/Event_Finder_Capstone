@@ -8,6 +8,20 @@
     android:orientation="vertical"
     tools:context="com.capstone.event_finder.activities.MainActivity">
 
+
+    <TextView
+        android:id="@+id/tvEventCategoryDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etZip"
+        android:layout_marginTop="12dp"
+        android:background="@android:drawable/editbox_background"
+        android:drawablePadding="16dp"
+        android:hint="@string/select_favorite_event_categories"
+        android:padding="12dp"
+        android:textColorHint="#757575"
+        app:drawableRightCompat="@android:drawable/arrow_down_float" />
+
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
@@ -36,9 +50,9 @@
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvEventCategoryDropdown"
+        android:layout_below="@+id/swPrivacy"
         android:layout_marginStart="135dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="20dp"
         android:text="@string/sign_up" />
 
     <TextView
@@ -46,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="65dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="36dp"
         android:text="@string/join_a_community_of_event_seekers"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="Join a community of event seekers!" />
@@ -68,33 +82,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="13dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/short_bio"
         android:inputType="textPersonName"
         android:minHeight="48dp" />
-
-    <TextView
-        android:id="@+id/tvEventCategoryDropdown"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etZip"
-        android:layout_marginTop="12dp"
-        android:background="@android:drawable/editbox_background"
-        android:drawablePadding="16dp"
-        android:hint="@string/select_favorite_event_categories"
-        android:padding="12dp"
-        android:textColorHint="#757575"
-        app:drawableRightCompat="@android:drawable/arrow_down_float" />
-
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animatedConfetti"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        app:lottie_rawRes="@raw/confetti_animation" />
 
     <ImageButton
         android:id="@+id/ibProfileImage"
@@ -107,5 +100,23 @@
         android:contentDescription="@string/select_profile_photo"
         android:scaleType="centerInside"
         tools:ignore="ImageContrastCheck" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animatedConfetti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:lottie_rawRes="@raw/confetti_animation" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swPrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEventCategoryDropdown"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:minHeight="48dp"
+        android:text="@string/make_my_bookmarks_private_to_other_users"
+        android:textColor="#575555" />
 
 </RelativeLayout>

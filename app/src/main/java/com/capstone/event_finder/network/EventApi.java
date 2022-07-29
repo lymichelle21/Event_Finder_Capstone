@@ -34,7 +34,9 @@ public class EventApi {
                 ParseUser.getCurrentUser().getString("zip")).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.isSuccessful() && response.body() != null && !convertToList(response.body()).isEmpty()) {
+                assert response.body() != null;
+                JsonArray events = response.body().getAsJsonArray("events");
+                if (response.isSuccessful() && response.body() != null && !convertToList(events).isEmpty()) {
                     addEventsToDatabase(response, apiEventHandler);
                 }
             }
@@ -46,19 +48,7 @@ public class EventApi {
         });
     }
 
-    private Collection<? extends Event> convertToList(JsonObject result) {
-        List<Event> res = new ArrayList<>();
-        JsonArray events = result.getAsJsonArray("events");
-        for (int i = 0; i < events.size(); i++) {
-            JsonObject temp = (JsonObject) events.get(i);
-            Event event = new Event();
-            SetEventInfo.populateEvent(event, temp);
-            res.add(event);
-        }
-        return res;
-    }
-
-    private Collection<? extends Event> convertBookmarksToList(JsonArray result) {
+    private Collection<? extends Event> convertToList(JsonArray result) {
         List<Event> res = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
             JsonObject temp = (JsonObject) result.get(i);
@@ -73,7 +63,8 @@ public class EventApi {
         try {
             JsonObject result = response.body();
             assert result != null;
-            apiEventHandler.eventsReceived((List<Event>) convertToList(result));
+            JsonArray events = result.getAsJsonArray("events");
+            apiEventHandler.eventsReceived((List<Event>) convertToList(events));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +77,7 @@ public class EventApi {
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject result = response.body();
                     allBookmarks.add(result);
-                    apiEventHandler.eventsReceived((List<Event>) convertBookmarksToList(allBookmarks));
+                    apiEventHandler.eventsReceived((List<Event>) convertToList(allBookmarks));
                 }
             }
 

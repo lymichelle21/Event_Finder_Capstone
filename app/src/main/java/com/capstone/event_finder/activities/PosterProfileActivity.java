@@ -1,6 +1,7 @@
 package com.capstone.event_finder.activities;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,9 +36,10 @@ public class PosterProfileActivity extends AppCompatActivity {
     TextView tvInterestCategories;
     ImageView ivProfileImage;
     EventsAdapter bookmarkAdapter;
+    ImageView ivPrivate;
+    TextView tvBookmarks;
     Photo photo;
     private EventViewModel eventViewModel;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,9 +50,11 @@ public class PosterProfileActivity extends AppCompatActivity {
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         tvProfileUsername = findViewById(R.id.tvProfileUsername);
         tvProfileBio = findViewById(R.id.tvProfileBio);
+        ivPrivate = findViewById(R.id.ivPrivate);
         ivProfileImage = findViewById(R.id.ivProfileImage);
         tvInterestCategories = findViewById(R.id.tvInterestCategories);
         rvBookmarks = findViewById(R.id.rvBookmarks);
+        tvBookmarks = findViewById(R.id.tvBookmarks);
 
         tvProfileUsername.setText(photo.getUser().getUsername());
         tvProfileBio.setText(photo.getUser().getString("bio"));
@@ -58,7 +62,15 @@ public class PosterProfileActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(Objects.requireNonNull(photo.getUser().getParseFile("profile_image")).getUrl()).centerCrop().transform(new CenterCrop(), new CircleCrop()).into(ivProfileImage);
 
         setUpRecyclerView();
+        checkIfUserSetPrivate();
         getPosterBookmarks();
+    }
+
+    private void checkIfUserSetPrivate() {
+        if (Objects.equals(photo.getUser().get("private"), true)) {
+            ivPrivate.setVisibility(View.VISIBLE);
+            tvBookmarks.setText(R.string.privacy_message);
+        }
     }
 
     private void getPosterBookmarks() {

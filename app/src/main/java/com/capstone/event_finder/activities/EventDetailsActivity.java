@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.capstone.event_finder.R;
 import com.capstone.event_finder.models.Bookmark;
 import com.capstone.event_finder.models.Event;
+import com.parse.ParseACL;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -127,14 +128,22 @@ public class EventDetailsActivity extends AppCompatActivity {
         String eventId = event.getId();
         String eventCategory = event.getCategory();
         ParseUser currentUser = ParseUser.getCurrentUser();
-        saveBookmark(eventId, eventCategory, currentUser);
+        ParseACL bookmarkAcl = new ParseACL();
+        if (currentUser.get("private").equals(true)) {
+            bookmarkAcl.setReadAccess(ParseUser.getCurrentUser(), true);
+            bookmarkAcl.setWriteAccess(ParseUser.getCurrentUser(), true);
+        } else {
+            bookmarkAcl.setPublicReadAccess(true);
+        }
+        saveBookmark(eventId, eventCategory, currentUser, bookmarkAcl);
     }
 
-    private void saveBookmark(String eventId, String eventCategory, ParseUser currentUser) {
+    private void saveBookmark(String eventId, String eventCategory, ParseUser currentUser, ParseACL bookmarkAcl) {
         Bookmark bookmark = new Bookmark();
         bookmark.setEventId(eventId);
         bookmark.setEventCategory(eventCategory);
         bookmark.setUser(currentUser);
+        bookmark.setACL(bookmarkAcl);
         bookmark.saveInBackground(e -> {
             if (e != null) {
                 Toast.makeText(EventDetailsActivity.this, "Error saving bookmark!", Toast.LENGTH_LONG).show();
